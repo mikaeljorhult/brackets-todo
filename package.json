@@ -1,0 +1,12 @@
+{
+    "name": "mikaeljorhult.brackets-todo",
+    "title": "Brackets Todo",
+    "description": "",
+    "homepage": "https://github.com/mikaeljorhult/brackets-todo", // URL for your project
+    "version": "0.1.0",
+    "author": "Mikael Jorhult",
+    "license": "MIT",
+    "engines": {
+        "brackets": ">=0.20.0"
+    }
+}
