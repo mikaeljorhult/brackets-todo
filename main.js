@@ -11,9 +11,10 @@ define( function( require, exports, module ) {
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
-		todoTemplate = require( 'text!html/panel.html' );
+		todoPanelTemplate = require( 'text!html/panel.html' ),
+		todoResultsTemplate = require( 'text!html/results.html' );
 	
-	// Setup application.
+	// Setup extension.
 	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		MENU_NAME = 'Todo',
 		regex = {
@@ -25,31 +26,46 @@ define( function( require, exports, module ) {
 		expression,
 		$todoPanel;
 	
-	/** Annotation 
-		description 
+	/** enableTodo 
+		Initialize extension.
 	*/
 	function enableTodo() {
 		expression = new RegExp( regex.prefix + regex.keywords.join( '|' ) + regex.suffix, 'gi' );
+		parseTodo();
+		printTodo();
 		Resizer.show( $todoPanel );
 	}
 	
-	/** Annotation 
-		description 
+	/** parseTodo 
+		Go through current document and find each comment. 
 	*/
 	function parseTodo() {
 		var currentDoc = DocumentManager.getCurrentDocument(),
-			documentText;
+			documentText,
+			matchArray;
 		
 		// Check for open documents.
 		if ( currentDoc !== null ) {
 			documentText = currentDoc.getText();
-			todos = documentText.match( expression );
 			
-			// Go through each todo.
-			todos.forEach( function( value, index ) {
-				console.log( value );
-			});
+			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
+				todos.push( {
+					todo: matchArray[ 0 ].replace( '\*\/', '' ).trimRight(),
+					index: matchArray.index
+				} );
+			}
 		}
+	}
+	
+	/** printTodo 
+		Take found todos and add them to panel. 
+	*/
+	function printTodo() {
+		var resultsHTML = Mustache.render( todoResultsTemplate, { results: todos } );
+		
+		$todoPanel.find( '.table-container' )
+			.empty()
+			.append( resultsHTML );
 	}
 	
 	// Register extension.
@@ -60,9 +76,15 @@ define( function( require, exports, module ) {
 	menu.addMenuDivider();
 	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	
-	AppInit.htmlReady(function () {
-		var todoHTML = Mustache.render( todoTemplate, {} ),
+	
+	AppInit.htmlReady( function() {
+		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
-		$todoPanel = $( '#brackets-todo' );		
+		
+		$todoPanel = $( '#brackets-todo' );
+		
+		$todoPanel.find( '.close' ).click( function() {
+            Resizer.hide( $todoPanel );
+        } );
 	} );
 } );
