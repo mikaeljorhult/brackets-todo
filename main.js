@@ -1,6 +1,10 @@
-/** Brackets Todos Extension 
-	description 
-*/
+/*!
+ * Brackets Todo 0.1.0
+ * Display all todo comments in current document.
+ *
+ * @author Mikael Jorhult
+ * @license http://mikaeljorhult.mit-license.org MIT
+ */
 define( function( require, exports, module ) {
 	'use strict';
 	
@@ -26,8 +30,9 @@ define( function( require, exports, module ) {
 		expression,
 		$todoPanel;
 	
-	/** enableTodo 
-		Initialize extension.
+	/**
+	 * enableTodo 
+	 * Initialize extension.
 	*/
 	function enableTodo() {
 		expression = new RegExp( regex.prefix + regex.keywords.join( '|' ) + regex.suffix, 'gi' );
@@ -36,9 +41,10 @@ define( function( require, exports, module ) {
 		Resizer.show( $todoPanel );
 	}
 	
-	/** parseTodo 
-		Go through current document and find each comment. 
-	*/
+	/**
+	 * parseTodo 
+	 * Go through current document and find each comment. 
+	 */
 	function parseTodo() {
 		var currentDoc = DocumentManager.getCurrentDocument(),
 			documentText,
@@ -57,9 +63,10 @@ define( function( require, exports, module ) {
 		}
 	}
 	
-	/** printTodo 
-		Take found todos and add them to panel. 
-	*/
+	/**
+	 * printTodo 
+	 * Take found todos and add them to panel. 
+	 */
 	function printTodo() {
 		var resultsHTML = Mustache.render( todoResultsTemplate, { results: todos } );
 		
