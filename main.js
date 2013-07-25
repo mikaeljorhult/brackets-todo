@@ -101,7 +101,7 @@ define( function( require, exports, module ) {
 	menu.addMenuDivider();
 	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	
-	
+	// Register panel and setup event listeners.
 	AppInit.htmlReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
@@ -109,7 +109,7 @@ define( function( require, exports, module ) {
 		$todoPanel = $( '#brackets-todo' );
 		
 		$todoPanel.find( '.close' ).click( function() {
-            Resizer.hide( $todoPanel );
-        } );
+			Resizer.hide( $todoPanel );
+		} );
 	} );
 } );
