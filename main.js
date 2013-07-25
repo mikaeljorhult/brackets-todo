@@ -30,25 +30,27 @@ define( function( require, exports, module ) {
 		expression,
 		$todoPanel;
 	
-	/**
-	 * enableTodo 
+	/** 
 	 * Initialize extension.
 	*/
 	function enableTodo() {
 		expression = new RegExp( regex.prefix + regex.keywords.join( '|' ) + regex.suffix, 'gi' );
 		parseTodo();
 		printTodo();
+		listeners();
 		Resizer.show( $todoPanel );
 	}
 	
 	/**
-	 * parseTodo 
 	 * Go through current document and find each comment. 
 	 */
 	function parseTodo() {
 		var currentDoc = DocumentManager.getCurrentDocument(),
 			documentText,
 			matchArray;
+		
+		// Assume no todos.
+		todos = [];
 		
 		// Check for open documents.
 		if ( currentDoc !== null ) {
@@ -63,8 +65,7 @@ define( function( require, exports, module ) {
 		}
 	}
 	
-	/**
-	 * printTodo 
+	/** 
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
@@ -73,6 +74,23 @@ define( function( require, exports, module ) {
 		$todoPanel.find( '.table-container' )
 			.empty()
 			.append( resultsHTML );
+	}
+	
+	/**
+	 * Listen for save or refresh and look for todos when needed.
+	 */
+	function listeners() {
+		$( DocumentManager )
+			.on( 'currentDocumentChange.todo', function() {
+				parseTodo();
+				printTodo();
+			} )
+			.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+				if ( document === DocumentManager.getCurrentDocument() ) {
+					parseTodo();
+					printTodo();
+				}
+			} );
 	}
 	
 	// Register extension.
