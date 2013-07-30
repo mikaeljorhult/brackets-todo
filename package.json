@@ -1,6 +1,6 @@
 {
 	"name": "mikaeljorhult.brackets-todo",
-	"title": "Brackets Todo",
+	"title": "Todo",
 	"description": "Display all TODO comments in current document.",
 	"homepage": "https://github.com/mikaeljorhult/brackets-todo",
 	"version": "0.1.2",
