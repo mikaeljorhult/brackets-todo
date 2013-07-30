@@ -1,7 +1,8 @@
 <table class="zebra-striped row-highlight condensed-table">
 	<tbody>
 		{{#results}}
-		<tr data-index="{{index}}">
+		<tr data-line="{{line}}" data-char="{{char}}">
+			<td class="line">{{line}}</td>
 			<td>{{todo}}</td>
 		</tr>
 		{{/results}}

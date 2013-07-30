@@ -1,4 +1,4 @@
-# Brackets Todo 0.1.0
+# Brackets Todo 0.1.1
 
 Brackets/Edge Code extension that displays all TODO comments in current document.
 

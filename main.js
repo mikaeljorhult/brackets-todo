@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.1.0
+ * Brackets Todo 0.1.1
  * Display all todo comments in current document.
  *
  * @author Mikael Jorhult
@@ -13,8 +13,10 @@ define( function( require, exports, module ) {
 		Menus = brackets.getModule( 'command/Menus' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
+		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
+		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' );
 	
@@ -47,6 +49,7 @@ define( function( require, exports, module ) {
 	function parseTodo() {
 		var currentDoc = DocumentManager.getCurrentDocument(),
 			documentText,
+			documentLines,
 			matchArray;
 		
 		// Assume no todos.
@@ -55,11 +58,15 @@ define( function( require, exports, module ) {
 		// Check for open documents.
 		if ( currentDoc !== null ) {
 			documentText = currentDoc.getText();
+			documentLines = StringUtils.getLines( documentText );
 			
+			// Go through each match in current document.
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
+				// Add match to array.
 				todos.push( {
 					todo: matchArray[ 0 ].replace( '\*\/', '' ).trimRight(),
-					index: matchArray.index
+					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ),
+					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
 			}
 		}
@@ -73,7 +80,14 @@ define( function( require, exports, module ) {
 		
 		$todoPanel.find( '.table-container' )
 			.empty()
-			.append( resultsHTML );
+			.append( resultsHTML )
+			.on( 'click', 'tr', function( e ) {
+				var $this = $( this ),
+					editor = EditorManager.getCurrentFullEditor();
+				
+				editor.setCursorPos( $this.data( 'line' ), $this.data( 'char' ) );
+				EditorManager.focusEditor();
+			} );
 	}
 	
 	/**
@@ -108,6 +122,7 @@ define( function( require, exports, module ) {
 		
 		$todoPanel = $( '#brackets-todo' );
 		
+		// Close panel when close button is clicked.
 		$todoPanel.find( '.close' ).click( function() {
 			Resizer.hide( $todoPanel );
 		} );
