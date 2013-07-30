@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.1.1
+ * Brackets Todo 0.1.2
  * Display all todo comments in current document.
  *
  * @author Mikael Jorhult
@@ -17,6 +17,7 @@ define( function( require, exports, module ) {
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
+		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' );
 	
@@ -120,6 +121,10 @@ define( function( require, exports, module ) {
 		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
+		// Load stylesheet.
+		ExtensionUtils.loadStyleSheet( module, 'todo.css' );
+		
+		// Cache todo panel.
 		$todoPanel = $( '#brackets-todo' );
 		
 		// Close panel when close button is clicked.

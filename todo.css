@@ -1,0 +1,9 @@
+#brackets-todo table {
+	width: 100%;
+}
+
+#brackets-todo .line {
+	width: 40px;
+	padding: 0 10px 0 0;
+	text-align: right;
+}
