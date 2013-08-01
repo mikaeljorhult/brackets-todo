@@ -26,7 +26,7 @@ define( function( require, exports, module ) {
 		MENU_NAME = 'Todo',
 		regex = {
 			prefix: '(?:\/\*\s*|\/\/\s*)(',
-			suffix: '):\ *.*(?=\n+)',
+			suffix: '):\ *(.*)(?=\n+)',
 			keywords: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
 		},
 		todos = [],
@@ -65,7 +65,8 @@ define( function( require, exports, module ) {
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
 				// Add match to array.
 				todos.push( {
-					todo: matchArray[ 0 ].replace( '\*\/', '' ).trimRight(),
+					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
+					tag: matchArray[ 1 ].toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ),
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
