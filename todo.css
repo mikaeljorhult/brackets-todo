@@ -16,7 +16,12 @@
 	background: #333;
 	color: #fff;
 	text-align: center;
+	text-transform: uppercase;
 	border-radius: 3px;
+}
+
+#brackets-todo .tag:after {
+	content: ':';
 }
 
 #brackets-todo .info {
