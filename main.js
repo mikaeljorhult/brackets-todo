@@ -65,7 +65,10 @@ define( function( require, exports, module ) {
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
 				// Add match to array.
 				todos.push( {
-					todo: matchArray[ 0 ].replace( '\*\/', '' ).trimRight(),
+                    style: matchArray[ 0 ].replace( '\*\/', '' ).trimRight().split(': ')[0].toLowerCase(),
+                    todo: matchArray[ 0 ].replace( '\*\/', '' ).trimRight().split(' ')[0].toUpperCase(),
+                    todoinfo: matchArray[ 0 ].replace(
+                        new RegExp("TODO:|NOTE:|FIX\s?ME:|CHANGES:","ig"),'').trimRight(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ),
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
