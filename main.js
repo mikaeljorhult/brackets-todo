@@ -66,7 +66,7 @@ define( function( require, exports, module ) {
 				// Add match to array.
 				todos.push( {
 					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
-					tag: matchArray[ 1 ].toLowerCase(),
+					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ),
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
