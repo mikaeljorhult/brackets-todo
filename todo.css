@@ -4,40 +4,49 @@
 
 #brackets-todo .line {
 	width: 2em;
-	padding: 0 0.5em 0 0;
 	text-align: right;
+	padding: 0 0 0 0.8em;
 }
 
 #brackets-todo .tag {
-    display: inline-block;
-    width: 4em;
-    padding: 0 0.5em;
-    margin: 0.2em 0;
-    text-align: center;
-    background: #333;
-    color: #FFF;
-    border-radius: 3px;
+	width: 5.2em;
+	height: 1.8em;
+	padding: 0 0.5em;
 }
 
-#brackets-todo .info {
-    display: inline-block;
-    text-align: left;
-    padding: 0 0 0 0.5em;
-    width: 80%;
+#brackets-todo .tag>span {
+	display: inline-block;
+	width: 	5.2em;
+	padding: 0;
+	margin: 0.1em;
+	text-align: center;
+	text-transform: uppercase;
+	border-radius: 0.5em;
 }
 
-#brackets-todo .fixme {
-    background: red;
+/* *** Styles for Tags *** */
+
+#brackets-todo .tag>.todo {
+	background: #D95;
+	color: #FFF;
 }
 
-#brackets-todo .note {
-    background: green;
+#brackets-todo .tag>.note {
+	background: #696;
+	color: #FFF;
 }
 
-#brackets-todo .changes {
-    background: #333;
+#brackets-todo .tag>.fixme {
+	background: #c95353;
+	color: #FFF;
 }
 
-#brackets-todo .todo {
-    background: blue;
+#brackets-todo .tag>.changes {
+	background: #555;
+	color: #FFF;
 }
+
+//TODO: Example thing you need to do.
+//NOTE: Something worth taking a note.
+//FIXME: Oh! Better fix this ASAP.
+//CHANGES: Look! I have changed something.
