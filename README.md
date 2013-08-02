@@ -65,17 +65,15 @@ bring your own in the form of plain comments in your language of choice.
 
 These are the default settings as they would be set in the `.todo` file.
 
-`
-{
-    "regex": {
-        "prefix": "(?:/*s*|//s*)(",
-        "suffix": "):? *(.*)(?=\n+)"
-    },
-    "tags": [
-        "TODO",
-        "NOTE",
-        "FIX ?ME",
-        "CHANGES"
-    ]
-}
-`
+	{
+		"regex": {
+			"prefix": "(?:/*s*|//s*)(",
+			"suffix": "):? *(.*)(?=\n+)"
+		},
+		"tags": [
+			"TODO",
+			"NOTE",
+			"FIX ?ME",
+			"CHANGES"
+		]
+	}
