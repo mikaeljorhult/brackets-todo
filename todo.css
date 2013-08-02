@@ -3,7 +3,38 @@
 }
 
 #brackets-todo .line {
-	width: 40px;
-	padding: 0 10px 0 0;
+	width: 2em;
+	padding: 0 0 0 .8em;
 	text-align: right;
+}
+
+#brackets-todo .tag {
+	width: 5.2em;
+	height: 1.8em;
+	padding: 0 .5em;
+}
+
+#brackets-todo span {
+	display: inline-block;
+	width: 	5.2em;
+	margin: .1em;
+	padding: 0;
+	background: #555;
+	color: #fff;
+	text-align: center;
+	text-transform: uppercase;
+	border-radius: .5em;
+}
+
+/* --- Styles for Tags --- */
+#brackets-todo .todo {
+	background: #d95;
+}
+
+#brackets-todo .note {
+	background: #696;
+}
+
+#brackets-todo .fixme {
+	background: #c95353;
 }

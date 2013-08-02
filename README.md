@@ -1,6 +1,8 @@
-# Brackets Todo 0.1.2
+# Brackets Todo
 
 Brackets/Edge Code extension that displays all TODO comments in current document.
+
+![Brackets Todo colors](http://numeroserabiscos.com/out/brackets-todo-colors.png)
 
 ## Install from URL
 
