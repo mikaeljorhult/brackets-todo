@@ -9,9 +9,13 @@
 }
 
 #brackets-todo .tag {
+	width: 5em;
+	padding: 0 0 0 .5em;
+}
+
+#brackets-todo table span {
 	display: inline-block;
 	width: 4em;
-	margin: .2em 0;
 	padding: 0 .5em;
 	background: #333;
 	color: #fff;
@@ -20,15 +24,8 @@
 	border-radius: 3px;
 }
 
-#brackets-todo .tag:after {
+#brackets-todo table span:after {
 	content: ':';
-}
-
-#brackets-todo .info {
-	display: inline-block;
-	width: 80%;
-	padding: 0 0 0 .5em;
-	text-align: left;
 }
 
 #brackets-todo .fixme {

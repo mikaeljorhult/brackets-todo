@@ -3,8 +3,10 @@
 		{{#results}}
 		<tr data-line="{{line}}" data-char="{{char}}">
 			<td class="line">{{line}}</td>
-			<td class="tag {{tag}}">{{tag}}</td>
-			<td class="info">{{todo}}</td>
+			<td class="tag">
+				<span class="{{tag}}">{{tag}}</span>
+			</td>
+			<td>{{todo}}</td>
 		</tr>
 		{{/results}}
 	</tbody>
