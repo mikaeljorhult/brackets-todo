@@ -42,8 +42,8 @@ Clicking on one of the comments in the list will move the cursor to that point i
 
 ## Comment Syntax
 
-Todo will recognize C-style comments using the [tags](http://en.wikipedia.org/wiki/Comment_%28computer_programming%29#Tags)
-`TODO`, `NOTE`, `FIXME` or `CHANGES` followed by a colon as shown in examples below.
+Todo will by default recognize C-style comments using the [tags](http://en.wikipedia.org/wiki/Comment_%28computer_programming%29#Tags)
+`TODO`, `NOTE`, `FIXME` or `CHANGES` as shown in examples below.
 
 Please note that multiline comments will not work. Todo will only return the first line of the comment.
 
@@ -52,5 +52,30 @@ Please note that multiline comments will not work. Todo will only return the fir
 `
 
 `
-/* NOTE: This is a comment. */
+/* NOTE The colon after the tag i optional. */
+`
+
+## Custom Settings
+The extensions settings can be overridden by adding a `.todo` file in your project folder. This is a simple 
+JSON that override default settings with its own.
+
+Custom settings will let you customize what tags are used or the style of comments you wish to use. This will 
+allow you to use the extension with other commenting syntaxes including standards like JSDoc and phpDoc or 
+bring your own in the form of plain comments in your language of choice.
+
+These are the default settings as they would be set in the `.todo` file.
+
+`
+{
+    "regex": {
+        "prefix": "(?:/*s*|//s*)(",
+        "suffix": "):? *(.*)(?=\n+)"
+    },
+    "tags": [
+        "TODO",
+        "NOTE",
+        "FIX ?ME",
+        "CHANGES"
+    ]
+}
 `
