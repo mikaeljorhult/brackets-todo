@@ -3,41 +3,7 @@
 }
 
 #brackets-todo .line {
-	width: 2em;
-	padding: 0 0.5em 0 0;
+	width: 40px;
+	padding: 0 10px 0 0;
 	text-align: right;
-}
-
-#brackets-todo .tag {
-    display: inline-block;
-    width: 4em;
-    padding: 0 0.5em;
-    margin: 0.2em 0;
-    text-align: center;
-    background: #333;
-    color: #FFF;
-    border-radius: 3px;
-}
-
-#brackets-todo .info {
-    display: inline-block;
-    text-align: left;
-    padding: 0 0 0 0.5em;
-    width: 80%;
-}
-
-#brackets-todo .fixme {
-    background: red;
-}
-
-#brackets-todo .note {
-    background: green;
-}
-
-#brackets-todo .changes {
-    background: #333;
-}
-
-#brackets-todo .todo {
-    background: blue;
 }
