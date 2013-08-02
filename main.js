@@ -42,33 +42,51 @@ define( function( require, exports, module ) {
 	 * Initialize extension.
 	 */
 	function enableTodo() {
-		loadSettings();
-		expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
-		parseTodo();
-		printTodo();
-		listeners();
-		Resizer.show( $todoPanel );
+		loadSettings( function() {
+			// Setup regular expression.
+			expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
+			
+			// Parse and print todos.
+			parseTodo();
+			printTodo();
+			
+			// Setup listeners.
+			listeners();
+			
+			// Show panel.
+			Resizer.show( $todoPanel );
+		} );
 	}
 	
 	/**
 	 * Check for settings file and load if it exists.
 	 */
-	function loadSettings() {
+	function loadSettings( callback ) {
 		var projectRoot = ProjectManager.getProjectRoot(),
 			fileEntry = new NativeFileSystem.FileEntry( projectRoot.fullPath + '.todo' ),
-			fileContent = FileUtils.readAsText( fileEntry );
+			fileContent = FileUtils.readAsText( fileEntry ),
+			userSettings = {};
 		
 		// File is loaded asynchronous.
 		fileContent.done( function( content ) {
 			// Catch error if JSON is invalid
 			try {
-				// Merge default settings with JSON.
-				jQuery.extend( settings, JSON.parse( content ) );
+				// Parse .todo file.
+				userSettings = JSON.parse( content );
 			} catch ( e ) {
 				// .todo exists but isn't valid JSON.
 			}
+			
+			// Merge default settings with JSON.
+			jQuery.extend( settings, userSettings );
+			
+			// Trigger callback when done.
+			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
+			
+			// Trigger callback.
+			callback();
 		} );
 	}
 	
