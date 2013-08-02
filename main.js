@@ -11,11 +11,14 @@ define( function( require, exports, module ) {
 	// Get module dependencies.
 	var CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Menus = brackets.getModule( 'command/Menus' ),
+		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
+		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
-		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
+		FileUtils = brackets.getModule( 'file/FileUtils' ),
+		NativeFileSystem = brackets.getModule( 'file/NativeFileSystem' ).NativeFileSystem,
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
 		todoPanelTemplate = require( 'text!html/panel.html' ),
@@ -24,24 +27,49 @@ define( function( require, exports, module ) {
 	// Setup extension.
 	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		MENU_NAME = 'Todo',
-		regex = {
-			prefix: '(?:\/\*\s*|\/\/\s*)(',
-			suffix: '):\ *(.*)(?=\n+)',
-			tags: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
-		},
 		todos = [],
 		expression,
-		$todoPanel;
+		$todoPanel,
+		settings = {
+			regex: {
+				prefix: '(?:\/\*\s*|\/\/\s*)(',
+				suffix: '):\ *(.*)(?=\n+)',
+			},
+			tags: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
+		};
 	
 	/** 
 	 * Initialize extension.
-	*/
+	 */
 	function enableTodo() {
-		expression = new RegExp( regex.prefix + regex.tags.join( '|' ) + regex.suffix, 'gi' );
+		loadSettings();
+		expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
 		parseTodo();
 		printTodo();
 		listeners();
 		Resizer.show( $todoPanel );
+	}
+	
+	/**
+	 * Check for settings file and load if it exists.
+	 */
+	function loadSettings() {
+		var projectRoot = ProjectManager.getProjectRoot(),
+			fileEntry = new NativeFileSystem.FileEntry( projectRoot.fullPath + '.todo' ),
+			fileContent = FileUtils.readAsText( fileEntry );
+		
+		// File is loaded asynchronous.
+		fileContent.done( function( content ) {
+			// Catch error if JSON is invalid
+			try {
+				// Merge default settings with JSON.
+				jQuery.extend( settings, JSON.parse( content ) );
+			} catch ( e ) {
+				// .todo exists but isn't valid JSON.
+			}
+		} ).fail( function( error ) {
+			// .todo doesn't exists or couldn't be accessed.
+		} );
 	}
 	
 	/**
