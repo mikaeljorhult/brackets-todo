@@ -4,49 +4,37 @@
 
 #brackets-todo .line {
 	width: 2em;
+	padding: 0 0 0 .8em;
 	text-align: right;
-	padding: 0 0 0 0.8em;
 }
 
 #brackets-todo .tag {
 	width: 5.2em;
 	height: 1.8em;
-	padding: 0 0.5em;
+	padding: 0 .5em;
 }
 
-#brackets-todo .tag>span {
+#brackets-todo span {
 	display: inline-block;
 	width: 	5.2em;
+	margin: .1em;
 	padding: 0;
-	margin: 0.1em;
+	background: #555;
+	color: #fff;
 	text-align: center;
 	text-transform: uppercase;
-	border-radius: 0.5em;
+	border-radius: .5em;
 }
 
-/* *** Styles for Tags *** */
-
-#brackets-todo .tag>.todo {
-	background: #D95;
-	color: #FFF;
+/* --- Styles for Tags --- */
+#brackets-todo .todo {
+	background: #d95;
 }
 
-#brackets-todo .tag>.note {
+#brackets-todo .note {
 	background: #696;
-	color: #FFF;
 }
 
-#brackets-todo .tag>.fixme {
+#brackets-todo .fixme {
 	background: #c95353;
-	color: #FFF;
 }
-
-#brackets-todo .tag>.changes {
-	background: #555;
-	color: #FFF;
-}
-
-//TODO: Example thing you need to do.
-//NOTE: Something worth taking a note.
-//FIXME: Oh! Better fix this ASAP.
-//CHANGES: Look! I have changed something.
