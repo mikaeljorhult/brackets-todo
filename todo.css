@@ -3,6 +3,7 @@
 }
 
 #brackets-todo .line {
+<<<<<<< HEAD
 	width: 2em;
 	text-align: right;
 	padding: 0 0 0 0.8em;
@@ -50,3 +51,9 @@
 //NOTE: Something worth taking a note.
 //FIXME: Oh! Better fix this ASAP.
 //CHANGES: Look! I have changed something.
+=======
+	width: 40px;
+	padding: 0 10px 0 0;
+	text-align: right;
+}
+>>>>>>> c1e55a17ab525c7692e13af1075d8ba495a65d62
