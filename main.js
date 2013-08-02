@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.1.2
+ * Brackets Todo 0.1.3
  * Display all todo comments in current document.
  *
  * @author Mikael Jorhult
