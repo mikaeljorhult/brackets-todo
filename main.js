@@ -35,7 +35,7 @@ define( function( require, exports, module ) {
 				prefix: '(?:\/\*\s*|\/\/\s*)(',
 				suffix: '):\ *(.*)(?=\n+)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
+			tags: [ 'TODO', 'NOTE', 'FIX\ ?ME', 'CHANGES' ]
 		};
 	
 	/** 
