@@ -113,7 +113,7 @@ define( function( require, exports, module ) {
 				todos.push( {
 					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ),
+					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
 			}
@@ -133,7 +133,7 @@ define( function( require, exports, module ) {
 				var $this = $( this ),
 					editor = EditorManager.getCurrentFullEditor();
 				
-				editor.setCursorPos( $this.data( 'line' ), $this.data( 'char' ) );
+				editor.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
 				EditorManager.focusEditor();
 			} );
 	}
