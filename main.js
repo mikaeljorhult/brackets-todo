@@ -27,7 +27,7 @@ define( function( require, exports, module ) {
 		regex = {
 			prefix: '(?:\/\*\s*|\/\/\s*)(',
 			suffix: '):\ *(.*)(?=\n+)',
-			keywords: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
+			tags: [ 'TODO', 'NOTE', 'FIX\s?ME', 'CHANGES' ]
 		},
 		todos = [],
 		expression,
@@ -37,7 +37,7 @@ define( function( require, exports, module ) {
 	 * Initialize extension.
 	*/
 	function enableTodo() {
-		expression = new RegExp( regex.prefix + regex.keywords.join( '|' ) + regex.suffix, 'gi' );
+		expression = new RegExp( regex.prefix + regex.tags.join( '|' ) + regex.suffix, 'gi' );
 		parseTodo();
 		printTodo();
 		listeners();
