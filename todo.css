@@ -3,7 +3,57 @@
 }
 
 #brackets-todo .line {
+<<<<<<< HEAD
+	width: 2em;
+	text-align: right;
+	padding: 0 0 0 0.8em;
+}
+
+#brackets-todo .tag {
+	width: 5.2em;
+	height: 1.8em;
+	padding: 0 0.5em;
+}
+
+#brackets-todo .tag>span {
+	display: inline-block;
+	width: 	5.2em;
+	padding: 0;
+	margin: 0.1em;
+	text-align: center;
+	text-transform: uppercase;
+	border-radius: 0.5em;
+}
+
+/* *** Styles for Tags *** */
+
+#brackets-todo .tag>.todo {
+	background: #D95;
+	color: #FFF;
+}
+
+#brackets-todo .tag>.note {
+	background: #696;
+	color: #FFF;
+}
+
+#brackets-todo .tag>.fixme {
+	background: #c95353;
+	color: #FFF;
+}
+
+#brackets-todo .tag>.changes {
+	background: #555;
+	color: #FFF;
+}
+
+//TODO: Example thing you need to do.
+//NOTE: Something worth taking a note.
+//FIXME: Oh! Better fix this ASAP.
+//CHANGES: Look! I have changed something.
+=======
 	width: 40px;
 	padding: 0 10px 0 0;
 	text-align: right;
 }
+>>>>>>> c1e55a17ab525c7692e13af1075d8ba495a65d62
