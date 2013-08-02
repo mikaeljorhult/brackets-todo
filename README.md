@@ -1,10 +1,8 @@
-# Brackets Todo 0.1.2
+# Brackets Todo
 
 Brackets/Edge Code extension that displays all TODO comments in current document.
 
-### Added Colors to tags
-Now the TODO, FIXME, NOTE and CHANGES tags will have colors for an improved experience.
-![BracketsTODO Colors](http://numeroserabiscos.com/out/brackets-todo-colors.png)
+![Brackets Todo colors](http://numeroserabiscos.com/out/brackets-todo-colors.png)
 
 ## Install from URL
 
