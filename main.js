@@ -9,9 +9,11 @@ define( function( require, exports, module ) {
 	'use strict';
 	
 	// Get module dependencies.
-	var CommandManager = brackets.getModule( 'command/CommandManager' ),
+	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
+		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
+		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
@@ -47,7 +49,7 @@ define( function( require, exports, module ) {
 			expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
 			
 			// Parse and print todos.
-			parseTodo();
+			findTodo();
 			printTodo();
 			
 			// Setup listeners.
@@ -93,30 +95,39 @@ define( function( require, exports, module ) {
 	/**
 	 * Go through current document and find each comment. 
 	 */
-	function parseTodo() {
-		var currentDoc = DocumentManager.getCurrentDocument(),
-			documentText,
-			documentLines,
-			matchArray;
-		
+	function findTodo() {
 		// Assume no todos.
 		todos = [];
 		
+		todos = parseTodo( DocumentManager.getCurrentDocument() );
+	}
+	
+	/**
+	 *
+	 */
+	function parseTodo( currentDocument ) {
+		var documentText,
+			documentLines,
+			matchArray,
+			documentTodos = [];
+		
 		// Check for open documents.
-		if ( currentDoc !== null ) {
-			documentText = currentDoc.getText();
+		if ( currentDocument !== null ) {
+			documentText = currentDocument.getText();
 			documentLines = StringUtils.getLines( documentText );
 			
 			// Go through each match in current document.
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
 				// Add match to array.
-				todos.push( {
+				documentTodos.push( {
 					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
 			}
+			
+			return documentTodos;
 		}
 	}
 	
@@ -144,12 +155,12 @@ define( function( require, exports, module ) {
 	function listeners() {
 		$( DocumentManager )
 			.on( 'currentDocumentChange.todo', function() {
-				parseTodo();
+				findTodo();
 				printTodo();
 			} )
 			.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
 				if ( document === DocumentManager.getCurrentDocument() ) {
-					parseTodo();
+					findTodo();
 					printTodo();
 				}
 			} );
