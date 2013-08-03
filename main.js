@@ -55,9 +55,8 @@ define( function( require, exports, module ) {
 				'g' + ( settings.case !== false ? '' : 'i' )
 			);
 			
-			// Parse and print todos.
-			findTodo();
-			printTodo();
+			// Call parsing function.
+			run();
 			
 			// Setup listeners.
 			listeners();
@@ -100,24 +99,64 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
+	 * Main functionality: Find and show comments.
+	 */
+	function run() {
+		// Parse and print todos.
+		findTodo( function() {
+			printTodo();
+		} );
+	}
+	
+	/**
 	 * Go through current document and find each comment. 
 	 */
-	function findTodo() {
+	function findTodo( callback ) {
 		// Assume no todos.
 		todos = [];
 		
 		// Check what scope to search.
 		if ( settings.search.scope === 'project' ) {
 			// Search entire project.
-			todos = {};
+			FileIndexManager.getFileInfoList( 'all' ).done( function( fileListResult ) {
+				// Go through each file asynchronously.
+				Async.doInParallel( fileListResult, function( fileInfo ) {
+					var result = new $.Deferred();
+					
+					// Search one file
+					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
+						// Get any matches and merge with previously found comments.
+						todos.push.apply( todos, parseTodo( currentDocument ) );
+						
+						// Move on to next file.
+						result.resolve();
+					} )
+					.fail( function( error ) {
+						// File could not be read. Move on to next file.
+						result.resolve();
+					} );
+					
+					return result.promise();
+				} ).done( function() {
+					// Done! Trigger callback.
+					callback();
+				} )
+				.fail( function() {
+					// Something failed. Trigger callback.
+					callback();
+				} );
+			} );
 		} else {
 			// Only search current file.
 			todos = parseTodo( DocumentManager.getCurrentDocument() );
+			
+			// Trigger callback.
+			callback();
 		}
 	}
 	
 	/**
-	 *
+	 * Go through passed in document and search for matches.
 	 */
 	function parseTodo( currentDocument ) {
 		var documentText,
@@ -136,11 +175,13 @@ define( function( require, exports, module ) {
 				documentTodos.push( {
 					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
+					path: currentDocument.file.fullPath,
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
 			}
 			
+			// Return found comments.
 			return documentTodos;
 		}
 	}
@@ -169,13 +210,11 @@ define( function( require, exports, module ) {
 	function listeners() {
 		$( DocumentManager )
 			.on( 'currentDocumentChange.todo', function() {
-				findTodo();
-				printTodo();
+				run();
 			} )
 			.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
 				if ( document === DocumentManager.getCurrentDocument() ) {
-					findTodo();
-					printTodo();
+					run();
 				}
 			} );
 	}

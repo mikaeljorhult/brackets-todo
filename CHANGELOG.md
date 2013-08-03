@@ -1,6 +1,7 @@
 # Brackets Todo Changelog
 
 ## 0.3.0
+* Scope of search can be set to currently open document or entire project.
 * Option for case sensitive searches.
 
 ## 0.2.0
