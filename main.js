@@ -32,10 +32,10 @@ define( function( require, exports, module ) {
 		$todoPanel,
 		settings = {
 			regex: {
-				prefix: '(?:\/\*\s*|\/\/\s*)(',
-				suffix: '):?\ *(.*)(?=\n+)',
+				prefix: '(?:\/\*|\/\/) *(',
+				suffix: '):? *(.*)(?=\n+)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX\ ?ME', 'CHANGES' ]
+			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
 		};
 	
 	/** 
