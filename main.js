@@ -78,7 +78,7 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			jQuery.extend( settings, userSettings );
+			jQuery.extend( true, settings, userSettings );
 			
 			// Trigger callback when done.
 			callback();
