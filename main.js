@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.1.3
+ * Brackets Todo 0.2.0
  * Display all todo comments in current document.
  *
  * @author Mikael Jorhult
@@ -34,10 +34,10 @@ define( function( require, exports, module ) {
 		$todoPanel,
 		settings = {
 			regex: {
-				prefix: '(?:\/\*\s*|\/\/\s*)(',
-				suffix: '):?\ *(.*)(?=\n+)',
+				prefix: '(?:\\/\\*|\\/\\/) *(',
+				suffix: '):? *(.*)(?=\\n+)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX\ ?ME', 'CHANGES' ]
+			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
 		};
 	
 	/** 
