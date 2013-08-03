@@ -32,8 +32,8 @@ define( function( require, exports, module ) {
 		$todoPanel,
 		settings = {
 			regex: {
-				prefix: '(?:\/\*|\/\/) *(',
-				suffix: '):? *(.*)(?=\n+)',
+				prefix: '(?:\\/\\*|\\/\\/) *(',
+				suffix: '):? *(.*)(?=\\n+)',
 			},
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
 		};
@@ -78,7 +78,7 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			jQuery.extend( true, settings, userSettings );
+			jQuery.extend( settings, userSettings );
 			
 			// Trigger callback when done.
 			callback();
