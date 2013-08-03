@@ -37,7 +37,11 @@ define( function( require, exports, module ) {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
 				suffix: '):? *(.*)(?=\\n+)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
+			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
+			case: false,
+			search: {
+				scope: 'current'
+			}
 		};
 	
 	/** 
@@ -46,7 +50,10 @@ define( function( require, exports, module ) {
 	function enableTodo() {
 		loadSettings( function() {
 			// Setup regular expression.
-			expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
+			expression = new RegExp(
+				settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+				'g' + ( settings.case !== false ? '' : 'i' )
+			);
 			
 			// Parse and print todos.
 			findTodo();
@@ -99,7 +106,14 @@ define( function( require, exports, module ) {
 		// Assume no todos.
 		todos = [];
 		
-		todos = parseTodo( DocumentManager.getCurrentDocument() );
+		// Check what scope to search.
+		if ( settings.search.scope === 'project' ) {
+			// Search entire project.
+			todos = {};
+		} else {
+			// Only search current file.
+			todos = parseTodo( DocumentManager.getCurrentDocument() );
+		}
 	}
 	
 	/**

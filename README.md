@@ -75,5 +75,6 @@ These are the default settings as they would be set in the `.todo` file.
 			"NOTE",
 			"FIX ?ME",
 			"CHANGES"
-		]
+		],
+		"case": "false"
 	}
