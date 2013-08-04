@@ -1,40 +1,56 @@
-#brackets-todo table {
+.brackets-todo table {
 	width: 100%;
 }
 
-#brackets-todo .line {
+.brackets-todo td {
+	vertical-align: middle;
+}
+
+.brackets-todo .disclosure-triangle {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	background-color: transparent;
+	background-position: 7px 5px;
+}
+
+.brackets-todo .disclosure-triangle.expanded {
+	-webkit-transform: translateZ( 0 ) rotate( 90deg );
+}
+
+.brackets-todo .line {
 	width: 2em;
 	padding: 0 0 0 .8em;
 	text-align: right;
 }
 
-#brackets-todo .tag {
+.brackets-todo .tag {
 	width: 5.2em;
 	height: 1.8em;
 	padding: 0 .5em;
 }
 
-#brackets-todo span {
+.brackets-todo span {
 	display: inline-block;
 	width: 	5.2em;
-	margin: .1em;
+	margin: 0 .1em;
 	padding: 0;
-	background: #555;
+	background-color: #555;
 	color: #fff;
 	text-align: center;
 	text-transform: uppercase;
 	border-radius: .5em;
 }
 
-/* --- Styles for Tags --- */
-#brackets-todo .todo {
-	background: #d95;
+/* --- Styling of tags --- */
+.brackets-todo .todo {
+	background-color: #d95;
 }
 
-#brackets-todo .note {
-	background: #696;
+.brackets-todo .note {
+	background-color: #696;
 }
 
-#brackets-todo .fixme {
-	background: #c95353;
+.brackets-todo .fixme {
+	background-color: #c95353;
 }
