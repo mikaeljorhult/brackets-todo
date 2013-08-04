@@ -125,8 +125,17 @@ define( function( require, exports, module ) {
 					
 					// Search one file
 					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
-						// Get any matches and merge with previously found comments.
-						todos.push.apply( todos, parseTodo( currentDocument ) );
+						var documentTodos = parseTodo( currentDocument );
+						
+						// Add file to array if any comments is found.
+						if ( documentTodos.length > 0 ) {
+							// Get any matches and merge with previously found comments.
+							todos.push( {
+								path: currentDocument.file.fullPath,
+								file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
+								todos: documentTodos
+							} );
+						}
 						
 						// Move on to next file.
 						result.resolve();
@@ -175,7 +184,6 @@ define( function( require, exports, module ) {
 				documentTodos.push( {
 					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-					path: currentDocument.file.fullPath,
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
@@ -190,7 +198,10 @@ define( function( require, exports, module ) {
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var resultsHTML = Mustache.render( todoResultsTemplate, { results: todos } );
+		var resultsHTML = Mustache.render( todoResultsTemplate, {
+			project: ( settings.scope === 'project' ? true : false ),
+			results: todos
+		} );
 		
 		$todoPanel.find( '.table-container' )
 			.empty()
@@ -208,15 +219,21 @@ define( function( require, exports, module ) {
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function listeners() {
-		$( DocumentManager )
-			.on( 'currentDocumentChange.todo', function() {
+		var $documentManager = $( DocumentManager );
+		
+		// Reparse files if document is saved or refreshed.
+		$documentManager.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+			if ( document === DocumentManager.getCurrentDocument() ) {
 				run();
-			} )
-			.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
-				if ( document === DocumentManager.getCurrentDocument() ) {
-					run();
-				}
+			}
+		} );
+		
+		// No need to reparse files if all files already is parsed (scope is project).
+		if ( settings.search.scope !== 'project' ) {
+			$documentManager.on( 'currentDocumentChange.todo', function() {
+				run();
 			} );
+		}
 	}
 	
 	// Register extension.
