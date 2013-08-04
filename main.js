@@ -157,7 +157,18 @@ define( function( require, exports, module ) {
 			} );
 		} else {
 			// Only search current file.
-			todos = parseTodo( DocumentManager.getCurrentDocument() );
+			var currentDocument = DocumentManager.getCurrentDocument(),
+				documentTodos = parseTodo( currentDocument );
+						
+			// Add file to array if any comments is found.
+			if ( documentTodos.length > 0 ) {
+				// Get any matches and merge with previously found comments.
+				todos.push( {
+					path: currentDocument.file.fullPath,
+					file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
+					todos: documentTodos
+				} );
+			}
 			
 			// Trigger callback.
 			callback();
