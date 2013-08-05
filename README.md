@@ -68,7 +68,7 @@ These are the default settings as they would be set in the `.todo` file.
 	{
 		"regex": {
 			"prefix": "(?:\\/\\*|\\/\\/) *(",
-			"suffix": "):? *(.*)(?=\\n+)"
+			"suffix": "):? *(.*?) ?(?=\\*/|$)"
 		},
 		"tags": [
 			"TODO",
