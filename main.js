@@ -33,7 +33,7 @@ define( function( require, exports, module ) {
 		settings = {
 			regex: {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
-				suffix: '):? *(.*)(?=\\n+)',
+				suffix: '):? *(.*?) ?(?=\\*/|$)',
 			},
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
 		};
@@ -111,7 +111,7 @@ define( function( require, exports, module ) {
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
 				// Add match to array.
 				todos.push( {
-					todo: matchArray[ 2 ].replace( '\*\/', '' ).trimRight(),
+					todo: matchArray[ 2 ],
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
