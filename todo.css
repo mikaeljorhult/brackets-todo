@@ -6,6 +6,11 @@
 	vertical-align: middle;
 }
 
+.brackets-todo .current tr.file {
+	display: none;
+}
+
+/*--- TABLE ROWS ---*/
 .brackets-todo .disclosure-triangle {
 	display: inline-block;
 	width: 18px;
@@ -42,7 +47,7 @@
 	border-radius: .5em;
 }
 
-/* --- Styling of tags --- */
+/*--- TAGS STYLING ---*/
 .brackets-todo .todo {
 	background-color: #d95;
 }

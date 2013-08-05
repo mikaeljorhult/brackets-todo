@@ -210,7 +210,7 @@ define( function( require, exports, module ) {
 	 */
 	function printTodo() {
 		var resultsHTML = Mustache.render( todoResultsTemplate, {
-			project: ( settings.scope === 'project' ? true : false ),
+			project: ( settings.search.scope === 'project' ? true : false ),
 			results: todos
 		} );
 		
