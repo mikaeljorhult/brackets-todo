@@ -1,11 +1,18 @@
 #brackets-todo table {
 	width: 100%;
+	vertical-align: middle;
+}
+
+#brackets-todo table tr,
+#brackets-todo table td {
+	vertical-align: middle;
 }
 
 #brackets-todo .line {
 	width: 2em;
 	padding: 0 0 0 .8em;
 	text-align: right;
+	vertical-align: middle;
 }
 
 #brackets-todo .tag {
@@ -22,6 +29,7 @@
 	background: #555;
 	color: #fff;
 	text-align: center;
+	vertical-align: middle;
 	text-transform: uppercase;
 	border-radius: .5em;
 }
