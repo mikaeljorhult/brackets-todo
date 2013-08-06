@@ -12,6 +12,7 @@ define( function( require, exports, module ) {
 	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
+		Commands = brackets.getModule( 'command/Commands' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
@@ -210,16 +211,31 @@ define( function( require, exports, module ) {
 			results: todos
 		} );
 		
+		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
 			.append( resultsHTML )
-			.on( 'click', 'tr', function( e ) {
-				var $this = $( this ),
-					editor = EditorManager.getCurrentFullEditor();
-				
-				editor.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
-				EditorManager.focusEditor();
-			} );
+				.on( 'click', '.file', function( e ) {
+					// Change classes and toggle visibility of todos.
+					$( this )
+						.toggleClass( 'expanded' )
+						.toggleClass( 'collapsed' )
+						.nextUntil( '.file' )
+							.toggle();
+				} )
+				.on( 'click', '.todo', function( e ) {
+					var $this = $( this );
+					
+					// Open file that todo originate from.
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
+						// Set cursor position at start of todo.
+						EditorManager.getCurrentFullEditor()
+							.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+						
+						// Set focus on editor.
+						EditorManager.focusEditor();
+					} );
+				} );
 	}
 	
 	/**

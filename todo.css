@@ -14,12 +14,13 @@
 .brackets-todo .disclosure-triangle {
 	display: inline-block;
 	width: 18px;
-	height: 18px;
+	height: 16px;
 	background-color: transparent;
-	background-position: 7px 5px;
+	background-position: -2px -5px;
 }
 
-.brackets-todo .disclosure-triangle.expanded {
+.brackets-todo .expanded .disclosure-triangle {
+	background-position: 0 0;
 	-webkit-transform: translateZ( 0 ) rotate( 90deg );
 }
 
