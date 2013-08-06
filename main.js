@@ -115,7 +115,6 @@ define( function( require, exports, module ) {
 		// Assume no todos.
 		todos = [];
 		
-		// Check what scope to search.
 		if ( settings.search.scope === 'project' ) {
 			// Search entire project.
 			FileIndexManager.getFileInfoList( 'all' ).done( function( fileListResult ) {
@@ -125,17 +124,8 @@ define( function( require, exports, module ) {
 					
 					// Search one file
 					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
-						var documentTodos = parseTodo( currentDocument );
-						
-						// Add file to array if any comments is found.
-						if ( documentTodos.length > 0 ) {
-							// Get any matches and merge with previously found comments.
-							todos.push( {
-								path: currentDocument.file.fullPath,
-								file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
-								todos: documentTodos
-							} );
-						}
+						// Pass file to parsing.
+						parseFile( currentDocument );
 						
 						// Move on to next file.
 						result.resolve();
@@ -156,29 +146,35 @@ define( function( require, exports, module ) {
 				} );
 			} );
 		} else {
-			// Only search current file.
-			var currentDocument = DocumentManager.getCurrentDocument(),
-				documentTodos = parseTodo( currentDocument );
-						
-			// Add file to array if any comments is found.
-			if ( documentTodos.length > 0 ) {
-				// Get any matches and merge with previously found comments.
-				todos.push( {
-					path: currentDocument.file.fullPath,
-					file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
-					todos: documentTodos
-				} );
-			}
+			// Pass current document for parsing.
+			parseFile( DocumentManager.getCurrentDocument() );
 			
-			// Trigger callback.
+			// Done! Trigger callback.
 			callback();
+		}
+	}
+	
+	/**
+	 * Pass file to parsing function.
+	 */
+	function parseFile( currentDocument ) {
+		var documentTodos = parseText( currentDocument );
+		
+		// Add file to array if any comments is found.
+		if ( documentTodos.length > 0 ) {
+			// Get any matches and merge with previously found comments.
+			todos.push( {
+				path: currentDocument.file.fullPath,
+				file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
+				todos: documentTodos
+			} );
 		}
 	}
 	
 	/**
 	 * Go through passed in document and search for matches.
 	 */
-	function parseTodo( currentDocument ) {
+	function parseText( currentDocument ) {
 		var documentText,
 			documentLines,
 			matchArray,
