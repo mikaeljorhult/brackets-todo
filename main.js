@@ -223,7 +223,7 @@ define( function( require, exports, module ) {
 						.nextUntil( '.file' )
 							.toggle();
 				} )
-				.on( 'click', '.todo', function( e ) {
+				.on( 'click', '.comment', function( e ) {
 					var $this = $( this );
 					
 					// Open file that todo originate from.
