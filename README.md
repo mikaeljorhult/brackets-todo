@@ -77,4 +77,7 @@ These are the default settings as they would be set in the `.todo` file.
 			"CHANGES"
 		],
 		"case": "false"
+		"search": {
+			"scope": "project"
+		}
 	}
