@@ -107,6 +107,8 @@ define( function( require, exports, module ) {
 		findTodo( function() {
 			printTodo();
 		} );
+		
+		console.log( 'run' );
 	}
 	
 	/**
@@ -196,10 +198,10 @@ define( function( require, exports, module ) {
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
 				} );
 			}
-			
-			// Return found comments.
-			return documentTodos;
 		}
+		
+		// Return found comments.
+		return documentTodos;
 	}
 	
 	/** 
