@@ -166,7 +166,7 @@ define( function( require, exports, module ) {
 			// Get any matches and merge with previously found comments.
 			todos.push( {
 				path: currentDocument.file.fullPath,
-				file: ( settings.search.scope === 'project' ? currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ) + ':' : '' ),
+				file: currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ),
 				todos: documentTodos
 			} );
 		}
