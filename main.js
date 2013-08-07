@@ -247,7 +247,7 @@ define( function( require, exports, module ) {
 		var $documentManager = $( DocumentManager );
 		
 		// Reparse files if document is saved or refreshed.
-		$documentManager.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+		$documentManager.on( 'documentSaved.todo', function( event, document ) {
 			if ( document === DocumentManager.getCurrentDocument() ) {
 				run();
 			}
@@ -255,7 +255,11 @@ define( function( require, exports, module ) {
 		
 		// No need to reparse files if all files already is parsed (scope is project).
 		if ( settings.search.scope !== 'project' ) {
-			$documentManager.on( 'currentDocumentChange.todo', function() {
+			$documentManager.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+				if ( document === DocumentManager.getCurrentDocument() ) {
+					run();
+				}
+			} ).on( 'currentDocumentChange.todo', function() {
 				run();
 			} );
 		}
