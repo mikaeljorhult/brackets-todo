@@ -33,7 +33,7 @@ define( function( require, exports, module ) {
 		settings = {
 			regex: {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
-				suffix: '):? *(.*?) ?(?=\\*/|$)',
+				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
 			},
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
 		};
