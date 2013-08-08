@@ -33,7 +33,7 @@ define( function( require, exports, module ) {
 		todos = [],
 		expression,
 		$todoPanel,
-		settings = {
+		defaultSettings = {
 			regex: {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
 				suffix: '):? *(.*)(?=\\n+)',
@@ -43,7 +43,8 @@ define( function( require, exports, module ) {
 			search: {
 				scope: 'current'
 			}
-		};
+		},
+		settings;
 	
 	/** 
 	 * Initialize extension.
@@ -51,10 +52,7 @@ define( function( require, exports, module ) {
 	function enableTodo() {
 		loadSettings( function() {
 			// Setup regular expression.
-			expression = new RegExp(
-				settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
-				'g' + ( settings.case !== false ? '' : 'i' )
-			);
+			setupRegExp();
 			
 			// Call parsing function.
 			run();
@@ -87,12 +85,13 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			jQuery.extend( settings, userSettings );
+			settings = jQuery.extend( {}, defaultSettings, userSettings );
 			
 			// Trigger callback when done.
 			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
+			settings = defaultSettings;
 			
 			// Trigger callback.
 			callback();
@@ -107,8 +106,6 @@ define( function( require, exports, module ) {
 		findTodo( function() {
 			printTodo();
 		} );
-		
-		console.log( 'run' );
 	}
 	
 	/**
@@ -243,8 +240,20 @@ define( function( require, exports, module ) {
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
+	function setupRegExp() {
+		// Setup regular expression.
+		expression = new RegExp(
+			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+			'g' + ( settings.case !== false ? '' : 'i' )
+		);
+	}
+	
+	/**
+	 * Listen for save or refresh and look for todos when needed.
+	 */
 	function listeners() {
-		var $documentManager = $( DocumentManager );
+		var $documentManager = $( DocumentManager ),
+			$projectManager = $( ProjectManager );
 		
 		// Reparse files if document is saved or refreshed.
 		$documentManager.on( 'documentSaved.todo', function( event, document ) {
@@ -263,6 +272,17 @@ define( function( require, exports, module ) {
 				run();
 			} );
 		}
+		
+		// Reload settings when new project is loaded.
+		$projectManager.on( 'projectOpen', function( event, projectRoot ) {
+			loadSettings( function() {
+				// Setup regular expression from settings.
+				setupRegExp();
+				
+				// Call parsing function.
+				run();
+			} );
+		} );
 	}
 	
 	// Register extension.
