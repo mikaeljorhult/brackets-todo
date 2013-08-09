@@ -1,40 +1,62 @@
-#brackets-todo table {
+.brackets-todo table {
 	width: 100%;
 }
 
-#brackets-todo .line {
+.brackets-todo td {
+	vertical-align: middle;
+}
+
+.brackets-todo .current tr.file {
+	display: none;
+}
+
+/*--- TABLE ROWS ---*/
+.brackets-todo .disclosure-triangle {
+	display: inline-block;
+	width: 18px;
+	height: 16px;
+	background-color: transparent;
+	background-position: -2px -5px;
+}
+
+.brackets-todo .expanded .disclosure-triangle {
+	background-position: 0 0;
+	-webkit-transform: translateZ( 0 ) rotate( 90deg );
+}
+
+.brackets-todo .line {
 	width: 2em;
 	padding: 0 0 0 .8em;
 	text-align: right;
 }
 
-#brackets-todo .tag {
+.brackets-todo .tag {
 	width: 5.2em;
 	height: 1.8em;
 	padding: 0 .5em;
 }
 
-#brackets-todo span {
+.brackets-todo span {
 	display: inline-block;
 	width: 	5.2em;
-	margin: .1em;
+	margin: 0 .1em;
 	padding: 0;
-	background: #555;
+	background-color: #555;
 	color: #fff;
 	text-align: center;
 	text-transform: uppercase;
 	border-radius: .5em;
 }
 
-/* --- Styles for Tags --- */
-#brackets-todo .todo {
-	background: #d95;
+/*--- TAGS STYLING ---*/
+.brackets-todo .todo {
+	background-color: #d95;
 }
 
-#brackets-todo .note {
-	background: #696;
+.brackets-todo .note {
+	background-color: #696;
 }
 
-#brackets-todo .fixme {
-	background: #c95353;
+.brackets-todo .fixme {
+	background-color: #c95353;
 }

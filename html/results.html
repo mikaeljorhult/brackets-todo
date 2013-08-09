@@ -1,13 +1,20 @@
-<table class="zebra-striped row-highlight condensed-table">
+<table class="table table-striped table-condensed row-highlight{{^project}} current{{/project}}">
 	<tbody>
 		{{#results}}
-		<tr data-line="{{line}}" data-char="{{char}}">
-			<td class="line">{{line}}</td>
-			<td class="tag">
-				<span class="{{tag}}">{{tag}}</span>
-			</td>
-			<td>{{todo}}</td>
-		</tr>
+			<tr class="file expanded" data-file="{{path}}">
+				<td colspan="3">
+					<span class="jstree-sprite disclosure-triangle"></span>{{{file}}}
+				</td>
+			</tr>
+			{{#todos}}
+				<tr class="comment" data-file="{{path}}" data-line="{{line}}" data-char="{{char}}">
+					<td class="line">{{line}}</td>
+					<td class="tag">
+						<span class="{{tag}}">{{tag}}</span>
+					</td>
+					<td>{{todo}}</td>
+				</tr>
+			{{/todos}}
 		{{/results}}
 	</tbody>
 </table>

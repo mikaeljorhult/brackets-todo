@@ -9,9 +9,12 @@ define( function( require, exports, module ) {
 	'use strict';
 	
 	// Get module dependencies.
-	var CommandManager = brackets.getModule( 'command/CommandManager' ),
+	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
+		CommandManager = brackets.getModule( 'command/CommandManager' ),
+		Commands = brackets.getModule( 'command/Commands' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
+		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
@@ -30,13 +33,18 @@ define( function( require, exports, module ) {
 		todos = [],
 		expression,
 		$todoPanel,
-		settings = {
+		defaultSettings = {
 			regex: {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
 				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ]
-		};
+			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
+			case: false,
+			search: {
+				scope: 'current'
+			}
+		},
+		settings;
 	
 	/** 
 	 * Initialize extension.
@@ -44,11 +52,10 @@ define( function( require, exports, module ) {
 	function enableTodo() {
 		loadSettings( function() {
 			// Setup regular expression.
-			expression = new RegExp( settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix, 'gi' );
+			setupRegExp();
 			
-			// Parse and print todos.
-			parseTodo();
-			printTodo();
+			// Call parsing function.
+			run();
 			
 			// Setup listeners.
 			listeners();
@@ -78,12 +85,13 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			jQuery.extend( settings, userSettings );
+			settings = jQuery.extend( {}, defaultSettings, userSettings );
 			
 			// Trigger callback when done.
 			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
+			settings = defaultSettings;
 			
 			// Trigger callback.
 			callback();
@@ -91,20 +99,90 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
+	 * Main functionality: Find and show comments.
+	 */
+	function run() {
+		// Parse and print todos.
+		findTodo( function() {
+			printTodo();
+		} );
+	}
+	
+	/**
 	 * Go through current document and find each comment. 
 	 */
-	function parseTodo() {
-		var currentDoc = DocumentManager.getCurrentDocument(),
-			documentText,
-			documentLines,
-			matchArray;
-		
+	function findTodo( callback ) {
 		// Assume no todos.
 		todos = [];
 		
+		if ( settings.search.scope === 'project' ) {
+			// Search entire project.
+			FileIndexManager.getFileInfoList( 'all' ).done( function( fileListResult ) {
+				// Go through each file asynchronously.
+				Async.doInParallel( fileListResult, function( fileInfo ) {
+					var result = new $.Deferred();
+					
+					// Search one file
+					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
+						// Pass file to parsing.
+						parseFile( currentDocument );
+						
+						// Move on to next file.
+						result.resolve();
+					} )
+					.fail( function( error ) {
+						// File could not be read. Move on to next file.
+						result.resolve();
+					} );
+					
+					return result.promise();
+				} ).done( function() {
+					// Done! Trigger callback.
+					callback();
+				} )
+				.fail( function() {
+					// Something failed. Trigger callback.
+					callback();
+				} );
+			} );
+		} else {
+			// Pass current document for parsing.
+			parseFile( DocumentManager.getCurrentDocument() );
+			
+			// Done! Trigger callback.
+			callback();
+		}
+	}
+	
+	/**
+	 * Pass file to parsing function.
+	 */
+	function parseFile( currentDocument ) {
+		var documentTodos = parseText( currentDocument );
+		
+		// Add file to array if any comments is found.
+		if ( documentTodos.length > 0 ) {
+			// Get any matches and merge with previously found comments.
+			todos.push( {
+				path: currentDocument.file.fullPath,
+				file: currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ),
+				todos: documentTodos
+			} );
+		}
+	}
+	
+	/**
+	 * Go through passed in document and search for matches.
+	 */
+	function parseText( currentDocument ) {
+		var documentText,
+			documentLines,
+			matchArray,
+			documentTodos = [];
+		
 		// Check for open documents.
-		if ( currentDoc !== null ) {
-			documentText = currentDoc.getText();
+		if ( currentDocument !== null ) {
+			documentText = currentDocument.getText();
 			documentLines = StringUtils.getLines( documentText );
 			
 			// Go through each match in current document.
@@ -118,41 +196,93 @@ define( function( require, exports, module ) {
 				} );
 			}
 		}
+		
+		// Return found comments.
+		return documentTodos;
 	}
 	
 	/** 
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var resultsHTML = Mustache.render( todoResultsTemplate, { results: todos } );
+		var resultsHTML = Mustache.render( todoResultsTemplate, {
+			project: ( settings.search.scope === 'project' ? true : false ),
+			results: todos
+		} );
 		
+		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
 			.append( resultsHTML )
-			.on( 'click', 'tr', function( e ) {
-				var $this = $( this ),
-					editor = EditorManager.getCurrentFullEditor();
-				
-				editor.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
-				EditorManager.focusEditor();
-			} );
+				.on( 'click', '.file', function( e ) {
+					// Change classes and toggle visibility of todos.
+					$( this )
+						.toggleClass( 'expanded' )
+						.toggleClass( 'collapsed' )
+						.nextUntil( '.file' )
+							.toggle();
+				} )
+				.on( 'click', '.comment', function( e ) {
+					var $this = $( this );
+					
+					// Open file that todo originate from.
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
+						// Set cursor position at start of todo.
+						EditorManager.getCurrentFullEditor()
+							.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+						
+						// Set focus on editor.
+						EditorManager.focusEditor();
+					} );
+				} );
+	}
+	
+	/**
+	 * Listen for save or refresh and look for todos when needed.
+	 */
+	function setupRegExp() {
+		// Setup regular expression.
+		expression = new RegExp(
+			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+			'g' + ( settings.case !== false ? '' : 'i' )
+		);
 	}
 	
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function listeners() {
-		$( DocumentManager )
-			.on( 'currentDocumentChange.todo', function() {
-				parseTodo();
-				printTodo();
-			} )
-			.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+		var $documentManager = $( DocumentManager ),
+			$projectManager = $( ProjectManager );
+		
+		// Reparse files if document is saved or refreshed.
+		$documentManager.on( 'documentSaved.todo', function( event, document ) {
+			if ( document === DocumentManager.getCurrentDocument() ) {
+				run();
+			}
+		} );
+		
+		// No need to reparse files if all files already is parsed (scope is project).
+		if ( settings.search.scope !== 'project' ) {
+			$documentManager.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
 				if ( document === DocumentManager.getCurrentDocument() ) {
-					parseTodo();
-					printTodo();
+					run();
 				}
+			} ).on( 'currentDocumentChange.todo', function() {
+				run();
 			} );
+		}
+		
+		// Reload settings when new project is loaded.
+		$projectManager.on( 'projectOpen', function( event, projectRoot ) {
+			loadSettings( function() {
+				// Setup regular expression from settings.
+				setupRegExp();
+				
+				// Call parsing function.
+				run();
+			} );
+		} );
 	}
 	
 	// Register extension.
