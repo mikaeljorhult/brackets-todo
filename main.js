@@ -188,8 +188,8 @@ define( function( require, exports, module ) {
 			// Go through each match in current document.
 			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
 				// Add match to array.
-				todos.push( {
-					todo: matchArray[ 2 ],
+				documentTodos.push( {
+					todo: matchArray[ 2 ].replace( doneRegExp, '' ),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
 					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
