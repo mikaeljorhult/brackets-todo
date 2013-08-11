@@ -61,7 +61,11 @@ JSON that override default settings with its own.
 
 Custom settings will let you customize what tags are used or the style of comments you wish to use. This will 
 allow you to use the extension with other commenting syntaxes including standards like JSDoc and phpDoc or 
-bring your own in the form of plain comments in your language of choice.
+bring your own in the form of plain comments in your language of choice. Settings for alternative syntaxes for 
+some common standards is listed below.
+
+Please note that backslashes in regular expressions need to be escaped themselves as these are first stored 
+within JavaScript strings before parsed as regular expressions.
 
 These are the default settings as they would be set in the `.todo` file.
 
@@ -78,6 +82,24 @@ These are the default settings as they would be set in the `.todo` file.
 		],
 		"case": "false"
 		"search": {
-			"scope": "project"
+			"scope": "current"
+		}
+	}
+
+### jsDoc / phpDoc Syntax
+
+	{
+		"regex": {
+			"prefix": "(?:\* *@)(",
+			"suffix": "):? *(.*?) ?(?=\n)"
+		}
+	}
+
+### HTML Comment Syntax
+
+	{
+		"regex": {
+			"prefix": "(?:<!--) *(",
+			"suffix": "):? *(.*?) ?(?=-->)"
 		}
 	}
