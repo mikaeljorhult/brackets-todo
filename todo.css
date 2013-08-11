@@ -10,6 +10,14 @@
 	display: none;
 }
 
+.brackets-todo .done {
+	opacity: .5;
+}
+
+.brackets-todo .done .message {
+	text-decoration: line-through;
+}
+
 /*--- TABLE ROWS ---*/
 .brackets-todo .disclosure-triangle {
 	display: inline-block;
