@@ -33,6 +33,7 @@ define( function( require, exports, module ) {
 		todos = [],
 		expression,
 		$todoPanel,
+		doneRegExp = /^\[x\]/i,
 		defaultSettings = {
 			regex: {
 				prefix: '(?:\\/\\*|\\/\\/) *(',
@@ -192,7 +193,8 @@ define( function( require, exports, module ) {
 					todo: matchArray[ 2 ].replace( doneRegExp, '' ),
 					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
-					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1
+					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1,
+					done: doneRegExp.test( matchArray[ 2 ] )
 				} );
 			}
 		}
