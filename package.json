@@ -3,7 +3,7 @@
 	"title": "Todo",
 	"description": "Display all TODO comments in current document.",
 	"homepage": "https://github.com/mikaeljorhult/brackets-todo",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"author": "Mikael Jorhult <mikael@jorhult.se> (http://jorhult.se)",
 	"license": "MIT",
 	"engines": {
