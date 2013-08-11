@@ -16,11 +16,11 @@
 	width: 18px;
 	height: 16px;
 	background-color: transparent;
-	background-position: -2px -5px;
+	background-position: 8px 4px;
 }
 
 .brackets-todo .expanded .disclosure-triangle {
-	background-position: 0 0;
+	background-position: 6px 4px;
 	-webkit-transform: translateZ( 0 ) rotate( 90deg );
 }
 
