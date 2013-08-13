@@ -2,7 +2,7 @@
 
 Brackets/Edge Code extension that displays all TODO comments in current document.
 
-![Brackets Todo colors](http://numeroserabiscos.com/out/brackets-todo-colors.png)
+![Brackets Todo colors](https://raw.github.com/apintocr/apintocr/master/brackets-todo-3.png)
 
 ## Installation
 You may download and install this extension in one of three ways. Using Extension Manager to find it through 
