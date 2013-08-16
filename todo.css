@@ -44,6 +44,10 @@
 	padding: 0 .5em;
 }
 
+.brackets-todo .actions {
+	text-align: right;
+}
+
 .brackets-todo span {
 	display: inline-block;
 	width: 	5.2em;

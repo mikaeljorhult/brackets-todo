@@ -2,7 +2,7 @@
 	<tbody>
 		{{#results}}
 			<tr class="file expanded" data-file="{{path}}">
-				<td colspan="3">
+				<td colspan="4">
 					<span class="jstree-sprite disclosure-triangle"></span>{{{file}}}
 				</td>
 			</tr>
@@ -13,6 +13,10 @@
 						<span class="{{tag}}">{{tag}}</span>
 					</td>
 					<td class="message">{{todo}}</td>
+					<td class="actions">
+						<span>&#10003;</span>
+						<span>&times;</span>
+					</td>
 				</tr>
 			{{/todos}}
 		{{/results}}
