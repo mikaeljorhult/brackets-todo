@@ -72,3 +72,19 @@
 .brackets-todo .fixme {
 	background-color: #c95353;
 }
+
+/*--- ACTIONS ---*/
+.brackets-todo .actions a {
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	margin-left: .2em;
+	border: 1px solid #999;
+	color: #999;
+	text-align: center;
+	border-radius: 2em;
+}
+
+.brackets-todo .actions a:hover {
+	text-decoration: none;
+}
