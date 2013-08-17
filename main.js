@@ -236,6 +236,15 @@ define( function( require, exports, module ) {
 						// Set focus on editor.
 						EditorManager.focusEditor();
 					} );
+				} )
+				.on( 'click', '.actions-resolve', function( e ) {
+					var $this = $( this );
+					
+					$this.parents( 'tr' ).toggleClass( 'done' );
+				} )
+				.on( 'click', '.actions-remove', function( e ) {
+					var $this = $( this );
+					
 				} );
 	}
 	
