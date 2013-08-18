@@ -336,7 +336,7 @@ define( function( require, exports, module ) {
 		
 		// Close panel when close button is clicked.
 		$todoPanel.find( '.close' ).click( function() {
-			Resizer.hide( $todoPanel );
+			enableTodo( false );
 		} );
 		
 		// Enable extension if loaded last time.
