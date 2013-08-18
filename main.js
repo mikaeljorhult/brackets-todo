@@ -240,28 +240,7 @@ define( function( require, exports, module ) {
 		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
-			.append( resultsHTML )
-				.on( 'click', '.file', function( e ) {
-					// Change classes and toggle visibility of todos.
-					$( this )
-						.toggleClass( 'expanded' )
-						.toggleClass( 'collapsed' )
-						.nextUntil( '.file' )
-							.toggle();
-				} )
-				.on( 'click', '.comment', function( e ) {
-					var $this = $( this );
-					
-					// Open file that todo originate from.
-					CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
-						// Set cursor position at start of todo.
-						EditorManager.getCurrentFullEditor()
-							.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
-						
-						// Set focus on editor.
-						EditorManager.focusEditor();
-					} );
-				} );
+			.append( resultsHTML );
 	}
 	
 	/**
@@ -335,9 +314,31 @@ define( function( require, exports, module ) {
 		$todoPanel = $( '#brackets-todo' );
 		
 		// Close panel when close button is clicked.
-		$todoPanel.find( '.close' ).click( function() {
-			enableTodo( false );
-		} );
+		$todoPanel
+			.on( 'click', '.close', function() {
+				enableTodo( false );
+			} )
+			.on( 'click', '.file', function( e ) {
+				// Change classes and toggle visibility of todos.
+				$( this )
+					.toggleClass( 'expanded' )
+					.toggleClass( 'collapsed' )
+					.nextUntil( '.file' )
+						.toggle();
+			} )
+			.on( 'click', '.comment', function( e ) {
+				var $this = $( this );
+				
+				// Open file that todo originate from.
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
+					// Set cursor position at start of todo.
+					EditorManager.getCurrentFullEditor()
+						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+					
+					// Set focus on editor.
+					EditorManager.focusEditor();
+				} );
+			} );
 		
 		// Enable extension if loaded last time.
 		if ( preferences.getValue( 'enabled' ) ) {
