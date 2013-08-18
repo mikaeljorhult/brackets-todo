@@ -13,6 +13,7 @@ define( function( require, exports, module ) {
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
+		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
@@ -30,6 +31,10 @@ define( function( require, exports, module ) {
 	// Setup extension.
 	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		MENU_NAME = 'Todo',
+		preferences = null,
+		defaultPreferences = {
+			enabled: false
+		},
 		todos = [],
 		expression,
 		$todoPanel,
@@ -48,22 +53,42 @@ define( function( require, exports, module ) {
 		settings;
 	
 	/** 
+	 * Set state of extension.
+	 */
+	function toggleTodo() {
+		var enabled = preferences.getValue( 'enabled' );
+		
+		enableTodo( !enabled );
+	}
+	
+	/** 
 	 * Initialize extension.
 	 */
-	function enableTodo() {
-		loadSettings( function() {
-			// Setup regular expression.
-			setupRegExp();
-			
-			// Call parsing function.
-			run();
-			
-			// Setup listeners.
-			listeners();
-			
-			// Show panel.
-			Resizer.show( $todoPanel );
-		} );
+	function enableTodo( enabled ) {
+		if ( enabled ) {
+			loadSettings( function() {
+				// Setup regular expression.
+				setupRegExp();
+				
+				// Call parsing function.
+				run();
+				
+				// Setup listeners.
+				listeners();
+				
+				// Show panel.
+				Resizer.show( $todoPanel );
+			} );
+		} else {
+			// Hide panel.
+			Resizer.hide( $todoPanel );
+		}
+		
+		// Save enabled state.
+		preferences.setValue( 'enabled', enabled );
+		
+		// Mark menu item as enabled/disabled.
+		CommandManager.get( COMMAND_ID ).setChecked( enabled );
 	}
 	
 	/**
@@ -288,15 +313,18 @@ define( function( require, exports, module ) {
 	}
 	
 	// Register extension.
-	CommandManager.register( MENU_NAME, COMMAND_ID, enableTodo );
+	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
 	menu.addMenuDivider();
 	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	
+	// Initialize PreferenceStorage.
+	preferences = PreferencesManager.getPreferenceStorage( module, defaultPreferences );
+	
 	// Register panel and setup event listeners.
-	AppInit.htmlReady( function() {
+	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
@@ -310,5 +338,10 @@ define( function( require, exports, module ) {
 		$todoPanel.find( '.close' ).click( function() {
 			Resizer.hide( $todoPanel );
 		} );
+		
+		// Enable extension if loaded last time.
+		if ( preferences.getValue( 'enabled' ) ) {
+			enableTodo( true );
+		}
 	} );
 } );
