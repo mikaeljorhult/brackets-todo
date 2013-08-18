@@ -263,6 +263,15 @@ define( function( require, exports, module ) {
 		
 		// Reparse files if document is saved or refreshed.
 		$documentManager.on( 'documentSaved.todo', function( event, document ) {
+			// Reload settings if .todo of current project was updated.
+			if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
+				loadSettings( function() {
+					// Setup regular expression.
+					setupRegExp();
+				} );
+			}
+			
+			// Reparse files if document is saved or refreshed.
 			if ( document === DocumentManager.getCurrentDocument() ) {
 				run();
 			}
