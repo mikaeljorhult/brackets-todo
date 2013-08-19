@@ -1,6 +1,6 @@
 /*!
- * Brackets Todo 0.3.0
- * Display all todo comments in current document.
+ * Brackets Todo 0.3.1
+ * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
  * @license http://mikaeljorhult.mit-license.org MIT
