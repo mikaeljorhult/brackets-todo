@@ -1,6 +1,6 @@
 /*!
- * Brackets Todo 0.2.0
- * Display all todo comments in current document.
+ * Brackets Todo 0.3.1
+ * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
  * @license http://mikaeljorhult.mit-license.org MIT
@@ -13,6 +13,7 @@ define( function( require, exports, module ) {
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
+		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
@@ -30,6 +31,10 @@ define( function( require, exports, module ) {
 	// Setup extension.
 	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		MENU_NAME = 'Todo',
+		preferences = null,
+		defaultPreferences = {
+			enabled: false
+		},
 		todos = [],
 		expression,
 		$todoPanel,
@@ -48,22 +53,42 @@ define( function( require, exports, module ) {
 		settings;
 	
 	/** 
+	 * Set state of extension.
+	 */
+	function toggleTodo() {
+		var enabled = preferences.getValue( 'enabled' );
+		
+		enableTodo( !enabled );
+	}
+	
+	/** 
 	 * Initialize extension.
 	 */
-	function enableTodo() {
-		loadSettings( function() {
-			// Setup regular expression.
-			setupRegExp();
-			
-			// Call parsing function.
-			run();
-			
-			// Setup listeners.
-			listeners();
-			
-			// Show panel.
-			Resizer.show( $todoPanel );
-		} );
+	function enableTodo( enabled ) {
+		if ( enabled ) {
+			loadSettings( function() {
+				// Setup regular expression.
+				setupRegExp();
+				
+				// Call parsing function.
+				run();
+				
+				// Setup listeners.
+				listeners();
+				
+				// Show panel.
+				Resizer.show( $todoPanel );
+			} );
+		} else {
+			// Hide panel.
+			Resizer.hide( $todoPanel );
+		}
+		
+		// Save enabled state.
+		preferences.setValue( 'enabled', enabled );
+		
+		// Mark menu item as enabled/disabled.
+		CommandManager.get( COMMAND_ID ).setChecked( enabled );
 	}
 	
 	/**
@@ -215,37 +240,7 @@ define( function( require, exports, module ) {
 		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
-			.append( resultsHTML )
-				.on( 'click', '.file', function( e ) {
-					// Change classes and toggle visibility of todos.
-					$( this )
-						.toggleClass( 'expanded' )
-						.toggleClass( 'collapsed' )
-						.nextUntil( '.file' )
-							.toggle();
-				} )
-				.on( 'click', '.comment', function( e ) {
-					var $this = $( this );
-					
-					// Open file that todo originate from.
-					CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
-						// Set cursor position at start of todo.
-						EditorManager.getCurrentFullEditor()
-							.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
-						
-						// Set focus on editor.
-						EditorManager.focusEditor();
-					} );
-				} )
-				.on( 'click', '.actions-resolve', function( e ) {
-					var $this = $( this );
-					
-					$this.parents( 'tr' ).toggleClass( 'done' );
-				} )
-				.on( 'click', '.actions-remove', function( e ) {
-					var $this = $( this );
-					
-				} );
+			.append( resultsHTML );
 	}
 	
 	/**
@@ -268,6 +263,15 @@ define( function( require, exports, module ) {
 		
 		// Reparse files if document is saved or refreshed.
 		$documentManager.on( 'documentSaved.todo', function( event, document ) {
+			// Reload settings if .todo of current project was updated.
+			if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
+				loadSettings( function() {
+					// Setup regular expression.
+					setupRegExp();
+				} );
+			}
+			
+			// Reparse files if document is saved or refreshed.
 			if ( document === DocumentManager.getCurrentDocument() ) {
 				run();
 			}
@@ -297,15 +301,18 @@ define( function( require, exports, module ) {
 	}
 	
 	// Register extension.
-	CommandManager.register( MENU_NAME, COMMAND_ID, enableTodo );
+	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
 	menu.addMenuDivider();
 	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	
+	// Initialize PreferenceStorage.
+	preferences = PreferencesManager.getPreferenceStorage( module, defaultPreferences );
+	
 	// Register panel and setup event listeners.
-	AppInit.htmlReady( function() {
+	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
@@ -316,8 +323,44 @@ define( function( require, exports, module ) {
 		$todoPanel = $( '#brackets-todo' );
 		
 		// Close panel when close button is clicked.
-		$todoPanel.find( '.close' ).click( function() {
-			Resizer.hide( $todoPanel );
-		} );
+		$todoPanel
+			.on( 'click', '.close', function() {
+				enableTodo( false );
+			} )
+			.on( 'click', '.file', function( e ) {
+				// Change classes and toggle visibility of todos.
+				$( this )
+					.toggleClass( 'expanded' )
+					.toggleClass( 'collapsed' )
+					.nextUntil( '.file' )
+						.toggle();
+			} )
+			.on( 'click', '.comment', function( e ) {
+				var $this = $( this );
+				
+				// Open file that todo originate from.
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
+					// Set cursor position at start of todo.
+					EditorManager.getCurrentFullEditor()
+						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+					
+					// Set focus on editor.
+					EditorManager.focusEditor();
+				} );
+			} )
+			.on( 'click', '.actions-resolve', function( e ) {
+				var $this = $( this );
+				
+				$this.parents( 'tr' ).toggleClass( 'done' );
+			} )
+			.on( 'click', '.actions-remove', function( e ) {
+				var $this = $( this );
+				
+			} );
+		
+		// Enable extension if loaded last time.
+		if ( preferences.getValue( 'enabled' ) ) {
+			enableTodo( true );
+		}
 	} );
 } );

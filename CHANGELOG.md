@@ -1,5 +1,8 @@
 # Brackets Todo Changelog
 
+## 0.4.0
+* Pane enabled state is now remembered.
+
 ## 0.3.0
 * Scope of search can be set to currently open document or entire project.
 * Option for case sensitive searches.
