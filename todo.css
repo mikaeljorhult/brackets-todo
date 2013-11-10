@@ -10,6 +10,14 @@
 	display: none;
 }
 
+.brackets-todo .done {
+	opacity: .5;
+}
+
+.brackets-todo .done .message {
+	text-decoration: line-through;
+}
+
 /*--- TABLE ROWS ---*/
 .brackets-todo .disclosure-triangle {
 	display: inline-block;
@@ -36,6 +44,10 @@
 	padding: 0 .5em;
 }
 
+.brackets-todo .actions {
+	text-align: right;
+}
+
 .brackets-todo span {
 	display: inline-block;
 	width: 	5.2em;
@@ -59,4 +71,20 @@
 
 .brackets-todo .fixme {
 	background-color: #c95353;
+}
+
+/*--- ACTIONS ---*/
+.brackets-todo .actions a {
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	margin-left: .2em;
+	border: 1px solid #999;
+	color: #999;
+	text-align: center;
+	border-radius: 2em;
+}
+
+.brackets-todo .actions a:hover {
+	text-decoration: none;
 }
