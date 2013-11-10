@@ -15,7 +15,6 @@ define( function( require, exports, module ) {
 		Commands = brackets.getModule( 'command/Commands' ),
 		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
-		FileIndexManager = brackets.getModule( 'project/FileIndexManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
@@ -144,7 +143,7 @@ define( function( require, exports, module ) {
 		
 		if ( settings.search.scope === 'project' ) {
 			// Search entire project.
-			FileIndexManager.getFileInfoList( 'all' ).done( function( fileListResult ) {
+			ProjectManager.getAllFiles().done( function( fileListResult ) {
 				// Go through each file asynchronously.
 				Async.doInParallel( fileListResult, function( fileInfo ) {
 					var result = new $.Deferred();
