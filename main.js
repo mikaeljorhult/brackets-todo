@@ -26,7 +26,8 @@ define( function( require, exports, module ) {
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
 		todoPanelTemplate = require( 'text!html/panel.html' ),
-		todoResultsTemplate = require( 'text!html/results.html' );
+		todoResultsTemplate = require( 'text!html/results.html' ),
+		todoRowTemplate = require( 'text!html/row.html' );
 	
 	// Setup extension.
 	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
@@ -234,13 +235,24 @@ define( function( require, exports, module ) {
 	function printTodo() {
 		var resultsHTML = Mustache.render( todoResultsTemplate, {
 			project: ( settings.search.scope === 'project' ? true : false ),
-			results: todos
+			todos: renderTodo()
 		} );
 		
 		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
 			.append( resultsHTML );
+	}
+	
+	/** 
+	 * Render HTML for each file row. 
+	 */
+	function renderTodo( files ) {
+		var resultsHTML = resultsHTML = Mustache.render( todoRowTemplate, {
+			files: ( files ? files : todos )
+		} );
+		
+		return resultsHTML;
 	}
 	
 	/**
