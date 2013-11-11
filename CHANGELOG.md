@@ -3,6 +3,7 @@
 ## 0.4.0
 * Use new filesystem API.
 * Pane enabled state is now remembered.
+* More efficient searches, especially for project scope.
 
 ## 0.3.0
 * Scope of search can be set to currently open document or entire project.
