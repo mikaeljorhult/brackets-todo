@@ -41,7 +41,7 @@ define( function( require, exports, module ) {
 		doneRegExp = /^\[x\]/i,
 		defaultSettings = {
 			regex: {
-				prefix: '(?:\\/\\*|\\/\\/) *(',
+				prefix: '(?:\\/\\*|\\/\\/) *@?(',
 				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
 			},
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
