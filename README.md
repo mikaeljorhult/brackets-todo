@@ -84,11 +84,17 @@ These are the default settings as they would be set in the `.todo` file.
 		],
 		"case": "false"
 		"search": {
-			"scope": "current"
+			"scope": "current",
+			"excludeFolders": [],
+			"excludeFiles": []
 		}
 	}
 
-### jsDoc / phpDoc Syntax
+
+### Comment Syntax
+By adding a prefix and a suffix Todo can recognize comments in other formats and languages. Examples below covers some common formats.
+
+#### jsDoc / phpDoc Syntax
 
 	{
 		"regex": {
@@ -97,11 +103,54 @@ These are the default settings as they would be set in the `.todo` file.
 		}
 	}
 
-### HTML Comment Syntax
+#### HTML Comment Syntax
 
 	{
 		"regex": {
 			"prefix": "(?:<!--) *(",
 			"suffix": "):? *(.*?) ?(?=-->)"
+		}
+	}
+
+
+### Exclude files and folders
+
+Files and folders may be excluded from searches by defining the properties excludeFolders and excludeFiles within the search object. These should both be an array of strings containing full, or part of, the file or folder names that should be excluded.
+
+Please note that excludes will only work with project wide search scope.
+
+#### Exclude SCSS files
+
+	{
+		"search": {
+			"scope": "project",
+			"excludeFiles": [ ".scss" ]
+		}
+	}
+
+#### Exclude files with names containing the word index
+
+	{
+		"search": {
+			"scope": "project",
+			"excludeFiles": [ "index" ]
+		}
+	}
+
+#### Exclude all vendor folders
+
+	{
+		"search": {
+			"scope": "project",
+			"excludeFolders": [ "vendor" ]
+		}
+	}
+
+#### Exclude ONLY root vendor folder
+
+	{
+		"search": {
+			"scope": "project",
+			"excludeFolders": [ "/vendor" ]
 		}
 	}

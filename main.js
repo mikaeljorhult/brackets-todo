@@ -47,7 +47,9 @@ define( function( require, exports, module ) {
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
 			case: false,
 			search: {
-				scope: 'current'
+				scope: 'current',
+				excludeFolders: [],
+				excludeFiles: []
 			}
 		},
 		settings;
@@ -143,7 +145,7 @@ define( function( require, exports, module ) {
 		
 		if ( settings.search.scope === 'project' ) {
 			// Search entire project.
-			ProjectManager.getAllFiles().done( function( fileListResult ) {
+			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
 				// Go through each file asynchronously.
 				Async.doInParallel( fileListResult, function( fileInfo ) {
 					var result = new $.Deferred();
@@ -177,6 +179,46 @@ define( function( require, exports, module ) {
 			
 			// Done! Trigger callback.
 			callback();
+		}
+	}
+	
+	/**
+	 * Return function with logic to getAllFiles() to exclude folders and files.
+	 */
+	function filter() {
+		return function filterFunction( file ) {
+			var projectRoot = ProjectManager.getProjectRoot().fullPath,
+				relativePath = '^' + file.parentPath.replace( projectRoot, '' ),
+				fileName = file.name,
+				searchString;
+			
+			// Go through all exclude filters for folders and compare to current file path.
+			for ( var i = 0, length = settings.search.excludeFolders.length; i < length; i++ ) {
+				searchString = settings.search.excludeFolders[ i ];
+				
+				// If root level is indicated (by first character being a slash) replace it with ^
+				// to prevent matching subdirectories.
+				if ( searchString.charAt( 0 ) === '/' ) {
+					searchString = searchString.replace ( /^\//, '^');
+				}
+				
+				// Check for matches in path.
+				if ( relativePath.indexOf( searchString + '/' ) > -1 ) {
+					return false;
+				}
+			}
+			
+			// Go through all exclude filters for files and compare to current file name.
+			for ( var i = 0, length = settings.search.excludeFiles.length; i < length; i++ ) {
+				searchString = settings.search.excludeFiles[ i ];
+				
+				// Check for matches in filename.
+				if ( fileName.indexOf( searchString ) > -1 ) {
+					return false;
+				}
+			}
+			
+			return true;
 		}
 	}
 	
