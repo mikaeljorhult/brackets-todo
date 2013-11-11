@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.3.1
+ * Brackets Todo 0.4.0
  * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
@@ -21,7 +21,7 @@ define( function( require, exports, module ) {
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
-		NativeFileSystem = brackets.getModule( 'file/NativeFileSystem' ).NativeFileSystem,
+		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
 		todoPanelTemplate = require( 'text!html/panel.html' ),
@@ -96,7 +96,7 @@ define( function( require, exports, module ) {
 	 */
 	function loadSettings( callback ) {
 		var projectRoot = ProjectManager.getProjectRoot(),
-			fileEntry = new NativeFileSystem.FileEntry( projectRoot.fullPath + '.todo' ),
+			fileEntry = FileSystem.getFileForPath( projectRoot.fullPath + '.todo' ),
 			fileContent = FileUtils.readAsText( fileEntry ),
 			userSettings = {};
 		
@@ -300,7 +300,7 @@ define( function( require, exports, module ) {
 		}
 		
 		// Reload settings when new project is loaded.
-		$projectManager.on( 'projectOpen', function( event, projectRoot ) {
+		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
 			loadSettings( function() {
 				// Setup regular expression from settings.
 				setupRegExp();

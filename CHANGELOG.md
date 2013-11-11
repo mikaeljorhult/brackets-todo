@@ -1,6 +1,7 @@
 # Brackets Todo Changelog
 
 ## 0.4.0
+* Use new filesystem API.
 * Pane enabled state is now remembered.
 
 ## 0.3.0
