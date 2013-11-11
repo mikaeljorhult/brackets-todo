@@ -184,16 +184,33 @@ define( function( require, exports, module ) {
 	 * Pass file to parsing function.
 	 */
 	function parseFile( currentDocument ) {
-		var documentTodos = parseText( currentDocument );
+		var documentTodos = parseText( currentDocument ),
+			index = -1,
+			fileToMatch = ( currentDocument === null || typeof( currentDocument ) === 'string' ? currentDocument : currentDocument.file.fullPath );
+		
+		// Check if file has already been added to array.
+		for ( var i = 0, length = todos.length; i < length; i++ ) {
+			if ( todos[ i ].path == fileToMatch ) {
+				// File found in array, store index.
+				index = i;
+				break;
+			}
+		}
 		
 		// Add file to array if any comments is found.
 		if ( documentTodos.length > 0 ) {
+			// Create object for new entry in array if none found.
+			if ( index == -1 ) {
+				todos.push( {} );
+				index = length;
+			}
+			
 			// Get any matches and merge with previously found comments.
-			todos.push( {
-				path: currentDocument.file.fullPath,
-				file: currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' ),
-				todos: documentTodos
-			} );
+			todos[ i ].path = currentDocument.file.fullPath;
+			todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
+			todos[ i ].todos = documentTodos;
+		} else if ( index > -1 ) {
+			todos.splice( i, 1 );
 		}
 	}
 	
@@ -207,7 +224,7 @@ define( function( require, exports, module ) {
 			documentTodos = [];
 		
 		// Check for open documents.
-		if ( currentDocument !== null ) {
+		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
 			documentText = currentDocument.getText();
 			documentLines = StringUtils.getLines( documentText );
 			
@@ -246,9 +263,9 @@ define( function( require, exports, module ) {
 	/** 
 	 * Render HTML for each file row. 
 	 */
-	function renderTodo( files ) {
+	function renderTodo() {
 		var resultsHTML = resultsHTML = Mustache.render( todoRowTemplate, {
-			files: ( files ? files : todos )
+			files: todos
 		} );
 		
 		return resultsHTML;
@@ -273,31 +290,56 @@ define( function( require, exports, module ) {
 			$projectManager = $( ProjectManager );
 		
 		// Reparse files if document is saved or refreshed.
-		$documentManager.on( 'documentSaved.todo', function( event, document ) {
-			// Reload settings if .todo of current project was updated.
-			if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
-				loadSettings( function() {
-					// Setup regular expression.
-					setupRegExp();
-				} );
-			}
-			
-			// Reparse files if document is saved or refreshed.
-			if ( document === DocumentManager.getCurrentDocument() ) {
-				run();
-			}
-		} );
-		
-		// No need to reparse files if all files already is parsed (scope is project).
-		if ( settings.search.scope !== 'project' ) {
-			$documentManager.on( 'documentSaved.todo documentRefreshed.todo', function( event, document ) {
+		$documentManager
+			.on( 'documentSaved.todo', function( event, document ) {
+				// Reload settings if .todo of current project was updated.
+				if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
+					loadSettings( function() {
+						// Setup regular expression.
+						setupRegExp();
+						
+						// Reparse all files.
+						run();
+					} );
+				}
+				
+				// Reparse current file.
 				if ( document === DocumentManager.getCurrentDocument() ) {
+					parseFile( document );
+					printTodo();
+				}
+			} )
+			.on( 'currentDocumentChange.todo', function( event ) {
+				// No need to do anything if scope is project.
+				if ( settings.search.scope !== 'project' ) {
+					// Empty stored todos and parse current document.
+					todos = [];
+					parseFile( DocumentManager.getCurrentDocument() );
+					printTodo();
+				}
+			} )
+			.on( 'fileNameChange.todo', function( event, oldName, newName ) {
+				var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
+				
+				// Reload settings if .todo of current project was updated.
+				if ( newName === todoPath || oldName === todoPath ) {
+					loadSettings( function() {
+						// Setup regular expression.
+						setupRegExp();
+						
+						// Reparse all files.
+						run();
+					} );
+				} else {
+					// If not .todo, parse all files.
 					run();
 				}
-			} ).on( 'currentDocumentChange.todo', function() {
-				run();
+			} )
+			.on( 'pathDeleted.todo', function( event, document ) {
+				// Parse path that was deleted to remove from list.
+				parseFile( document );
+				printTodo();
 			} );
-		}
 		
 		// Reload settings when new project is loaded.
 		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
@@ -305,7 +347,7 @@ define( function( require, exports, module ) {
 				// Setup regular expression from settings.
 				setupRegExp();
 				
-				// Call parsing function.
+				// Parse all files in project.
 				run();
 			} );
 		} );
