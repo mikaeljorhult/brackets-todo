@@ -57,6 +57,21 @@ Please note that multiline comments will not work. Todo will only return the fir
 /* NOTE The colon after the tag i optional. */
 `
 
+`
+/* @NOTE Preceding at sign is also optional. */
+`
+
+
+## Mark tasks as done
+
+To keep track of your, or your teams, progress you may mark tasks as done. This is achieved by adding `[x]` 
+before the text of the task.
+
+`
+// TODO: [x]This task is done.
+`
+
+
 ## Custom Settings
 The extensions settings can be overridden by adding a `.todo` file in your project folder. This is a simple 
 JSON that override default settings with its own.
@@ -73,7 +88,7 @@ These are the default settings as they would be set in the `.todo` file.
 
 	{
 		"regex": {
-			"prefix": "(?:\\/\\*|\\/\\/) *(",
+			"prefix": "(?:\\/\\*|\\/\\/) *@?(",
 			"suffix": "):? *(.*?) ?(?=\\*/|\\n|$)"
 		},
 		"tags": [
@@ -92,7 +107,8 @@ These are the default settings as they would be set in the `.todo` file.
 
 
 ### Comment Syntax
-By adding a prefix and a suffix Todo can recognize comments in other formats and languages. Examples below covers some common formats.
+By adding a prefix and a suffix Todo can recognize comments in other formats and languages. Examples below 
+covers some common formats.
 
 #### jsDoc / phpDoc Syntax
 
@@ -115,7 +131,9 @@ By adding a prefix and a suffix Todo can recognize comments in other formats and
 
 ### Exclude files and folders
 
-Files and folders may be excluded from searches by defining the properties excludeFolders and excludeFiles within the search object. These should both be an array of strings containing full, or part of, the file or folder names that should be excluded.
+Files and folders may be excluded from searches by defining the properties excludeFolders and excludeFiles 
+within the search object. These should both be an array of strings containing full, or part of, the file or 
+folder names that should be excluded.
 
 Please note that excludes will only work with project wide search scope.
 
