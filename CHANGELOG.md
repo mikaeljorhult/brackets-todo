@@ -5,6 +5,7 @@
 * Pane enabled state is now remembered.
 * More efficient searches, especially for project scope.
 * Files and folders can be excluded from search.
+* Tasks can now be marked as done.
 * At signs are now recognized and allowed by default. Thanks to John Blackbourn (@johnbillion).
 
 ## 0.3.0
