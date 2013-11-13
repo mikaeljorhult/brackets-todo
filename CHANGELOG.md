@@ -3,6 +3,7 @@
 ## 0.4.0
 * Use new filesystem API.
 * Pane enabled state is now remembered.
+* File visibility state is now remembered.
 * More efficient searches, especially for project scope.
 * Files and folders can be excluded from search.
 * Tasks can now be marked as done.

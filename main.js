@@ -33,7 +33,8 @@ define( function( require, exports, module ) {
 		MENU_NAME = 'Todo',
 		preferences = null,
 		defaultPreferences = {
-			enabled: false
+			enabled: false,
+			visible: []
 		},
 		todos = [],
 		visible = [],
@@ -335,14 +336,33 @@ define( function( require, exports, module ) {
 	 * Return if file should be expanded or not.
 	 */
 	function fileVisible( path ) {
-		return false;
+		return ( settings.search.scope === 'project' ? visible.indexOf( path ) > -1 : true );
 	}
 	
 	/**
 	 * Toggle if file should be expanded or not.
 	 */
-	function toggleFileVisible( path, visible ) {
+	function toggleFileVisible( path, state ) {
+		var alreadyVisible = fileVisible( path );
 		
+		// Check if already visible if visibility not provided as parameter.
+		state = ( state == 'undefined' ? !alreadyVisible : state );
+		
+		// Toggle visibility state.
+		if ( state ) {
+			// Show if already visible.
+			if ( !alreadyVisible ) {
+				visible.push( path );
+			}
+		} else {
+			// Hide if already visible.
+			if ( alreadyVisible ) {
+				visible.splice( visible.indexOf( path ), 1 );
+			}
+		}
+		
+		// Save visibility state.
+		preferences.setValue( 'visible', visible );
 	}
 	
 	/**
@@ -394,11 +414,18 @@ define( function( require, exports, module ) {
 						run();
 					} );
 				} else {
+					// Move visibility state to new file.
+					toggleFileVisible( newName, fileVisible( oldName ) );
+					toggleFileVisible( oldName, false );
+					
 					// If not .todo, parse all files.
 					run();
 				}
 			} )
 			.on( 'pathDeleted.todo', function( event, document ) {
+				// Remove file from visibility list.
+				toggleFileVisible( document, false );
+				
 				// Parse path that was deleted to remove from list.
 				parseFile( document );
 				printTodo();
@@ -409,6 +436,9 @@ define( function( require, exports, module ) {
 			loadSettings( function() {
 				// Setup regular expression from settings.
 				setupRegExp();
+				
+				// Reset file visibility.
+				visible = [];
 				
 				// Parse all files in project.
 				run();
@@ -444,12 +474,17 @@ define( function( require, exports, module ) {
 				enableTodo( false );
 			} )
 			.on( 'click', '.file', function( e ) {
+				var $this = $( this );
+				
 				// Change classes and toggle visibility of todos.
-				$( this )
+				$this
 					.toggleClass( 'expanded' )
 					.toggleClass( 'collapsed' )
 					.nextUntil( '.file' )
 						.toggle();
+				
+				// Toggle file visibility.
+				toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
 			} )
 			.on( 'click', '.comment', function( e ) {
 				var $this = $( this );
@@ -487,6 +522,9 @@ define( function( require, exports, module ) {
 				var $this = $( this );
 				
 			} );
+		
+		// Get saved visibility state.
+		visible = preferences.getValue( 'visible' );
 		
 		// Enable extension if loaded last time.
 		if ( preferences.getValue( 'enabled' ) ) {
