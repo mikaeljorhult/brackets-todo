@@ -38,6 +38,7 @@ define( function( require, exports, module ) {
 		},
 		todos = [],
 		visible = [],
+		todoFile,
 		expression,
 		$todoPanel,
 		doneRegExp = /^\[x\]/i,
@@ -108,20 +109,39 @@ define( function( require, exports, module ) {
 		fileContent.done( function( content ) {
 			// Catch error if JSON is invalid
 			try {
+				//.todo file exists.
+				todoFile = true;
+				
 				// Parse .todo file.
 				userSettings = JSON.parse( content );
 			} catch ( e ) {
 				// .todo exists but isn't valid JSON.
+				todoFile = false;
 			}
 			
 			// Merge default settings with JSON.
 			settings = jQuery.extend( {}, defaultSettings, userSettings );
 			
+			// Show or hide .todo indicator.
+			if ( todoFile ) {
+				$todoPanel.addClass( 'todo-file' );
+			} else {
+				$todoPanel.removeClass( 'todo-file' );
+			}
+			
 			// Trigger callback when done.
 			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
+			todoFile = false;
 			settings = defaultSettings;
+			
+			// Show or hide .todo indicator.
+			if ( todoFile ) {
+				$todoPanel.addClass( 'todo-file' );
+			} else {
+				$todoPanel.removeClass( 'todo-file' );
+			}
 			
 			// Trigger callback.
 			callback();
@@ -459,7 +479,7 @@ define( function( require, exports, module ) {
 	
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
-		var todoHTML = Mustache.render( todoPanelTemplate, {} ),
+		var todoHTML = Mustache.render( todoPanelTemplate, { todo: todoFile } ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
 		// Load stylesheet.
@@ -472,6 +492,13 @@ define( function( require, exports, module ) {
 		$todoPanel
 			.on( 'click', '.close', function() {
 				enableTodo( false );
+			} )
+			.on( 'click', '.indicator', function() {
+				// Open file that todo originate from.
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: ProjectManager.getProjectRoot().fullPath + '.todo' } ).done( function( currentDocument ) {
+					// Set focus on editor.
+					EditorManager.focusEditor();
+				} );
 			} )
 			.on( 'click', '.file', function( e ) {
 				var $this = $( this );

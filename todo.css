@@ -88,3 +88,27 @@
 .brackets-todo .actions a:hover {
 	text-decoration: none;
 }
+
+/*--- TOOLBAR ---*/
+.brackets-todo .indicator {
+	display: none;
+	position: absolute;
+	top: 50%;
+	right: 30px;
+	opacity: 0.3;
+	margin-top: -.71em;
+	padding: 1px .25em 2px;
+	border: 1px solid #444;
+	border-radius: 5px;
+	color: inherit;
+	font-size: .85em;
+	line-height: 1;
+}
+
+.brackets-todo .indicator:hover {
+	text-decoration: none;
+}
+
+.brackets-todo.todo-file .indicator {
+	display: block;
+}
