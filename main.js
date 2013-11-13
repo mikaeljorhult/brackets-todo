@@ -36,6 +36,7 @@ define( function( require, exports, module ) {
 			enabled: false
 		},
 		todos = [],
+		visible = [],
 		expression,
 		$todoPanel,
 		doneRegExp = /^\[x\]/i,
@@ -251,6 +252,7 @@ define( function( require, exports, module ) {
 			todos[ i ].path = currentDocument.file.fullPath;
 			todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
 			todos[ i ].todos = documentTodos;
+			todos[ i ].visible = fileVisible( todos[ i ].path );
 		} else if ( index > -1 ) {
 			todos.splice( i, 1 );
 		}
@@ -296,6 +298,11 @@ define( function( require, exports, module ) {
 			todos: renderTodo()
 		} );
 		
+		resultsHTML = $( resultsHTML );
+		
+		$( '.file.collapsed', resultsHTML )
+			.nextUntil( '.file' ).hide();
+		
 		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
 			.empty()
@@ -322,6 +329,20 @@ define( function( require, exports, module ) {
 			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
 			'g' + ( settings.case !== false ? '' : 'i' )
 		);
+	}
+	
+	/**
+	 * Return if file should be expanded or not.
+	 */
+	function fileVisible( path ) {
+		return false;
+	}
+	
+	/**
+	 * Toggle if file should be expanded or not.
+	 */
+	function toggleFileVisible( path, visible ) {
+		
 	}
 	
 	/**
