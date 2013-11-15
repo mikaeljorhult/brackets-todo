@@ -41,6 +41,7 @@ define( function( require, exports, module ) {
 		todoFile,
 		expression,
 		$todoPanel,
+		$todoIcon,
 		doneRegExp = /^\[x\]/i,
 		defaultSettings = {
 			regex: {
@@ -84,9 +85,15 @@ define( function( require, exports, module ) {
 				// Show panel.
 				Resizer.show( $todoPanel );
 			} );
+			
+			// Set active class on icon.
+			$todoIcon.addClass( 'active' );
 		} else {
 			// Hide panel.
 			Resizer.hide( $todoPanel );
+			
+			// Remove active class from icon.
+			$todoIcon.removeClass( 'active' );
 		}
 		
 		// Save enabled state.
@@ -572,6 +579,15 @@ define( function( require, exports, module ) {
 				var $this = $( this );
 				
 			} );
+		
+		// Add icon to toolbar.
+		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
+		
+		$todoIcon
+			.click( function( e ) {
+				CommandManager.execute( COMMAND_ID );
+			} )
+			.appendTo( '#main-toolbar .buttons' );
 		
 		// Get saved visibility state.
 		visible = preferences.getValue( 'visible' );

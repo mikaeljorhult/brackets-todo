@@ -91,6 +91,14 @@
 }
 
 /*--- TOOLBAR ---*/
+#brackets-todo-icon {
+	background-image: url( 'images/todo-icon.svg' );
+}
+
+#brackets-todo-icon.active {
+	background-position: 0 -24px;
+}
+
 .brackets-todo .indicator {
 	display: none;
 	position: absolute;
