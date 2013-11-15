@@ -9,6 +9,7 @@
 * Tasks can now be marked as done.
 * Panel toolbar now contains indicator when .todo file is used.
 * Panel scrolls to current open file when in project scope.
+* Extension can be toggled by toolbar icon.
 * At signs are now recognized and allowed by default. Thanks to John Blackbourn (@johnbillion).
 
 ## 0.3.0
