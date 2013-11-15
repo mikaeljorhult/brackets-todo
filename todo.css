@@ -1,5 +1,6 @@
 .brackets-todo table {
 	width: 100%;
+	position: relative;
 }
 
 .brackets-todo td {

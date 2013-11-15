@@ -413,12 +413,35 @@ define( function( require, exports, module ) {
 				}
 			} )
 			.on( 'currentDocumentChange.todo', function( event ) {
+				var currentDocument = DocumentManager.getCurrentDocument(),
+					$scrollTarget;
+				
 				// No need to do anything if scope is project.
 				if ( settings.search.scope !== 'project' ) {
 					// Empty stored todos and parse current document.
 					todos = [];
-					parseFile( DocumentManager.getCurrentDocument() );
+					parseFile( currentDocument );
 					printTodo();
+				} else {
+					// Look for current file in list.
+					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
+					
+					// If there's a target, scroll to it.
+					if ( $scrollTarget.length > 0 ) {
+						// Close all auto-opened files before opening another.
+						$scrollTarget.siblings( '.auto-opened' )
+							.trigger( 'click' )
+							.removeClass( 'auto-opened' );
+						
+						// No need to open it if already open.
+						if ( !$scrollTarget.hasClass( 'expanded' ) ) {
+							$scrollTarget.trigger( 'click' );
+							$scrollTarget.addClass( 'auto-opened' );
+						}
+						
+						// Scroll to target.
+						$todoPanel.children( '.table-container' ).scrollTop( $scrollTarget.position().top );
+					}
 				}
 			} )
 			.on( 'fileNameChange.todo', function( event, oldName, newName ) {
