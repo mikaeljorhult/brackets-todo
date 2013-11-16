@@ -55,7 +55,7 @@ Please note that multiline comments will not work. Todo will only return the fir
 `
 
 `
-/* NOTE The colon after the tag i optional. */
+/* NOTE The colon after the tag is optional. */
 `
 
 `
