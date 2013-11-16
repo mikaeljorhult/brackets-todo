@@ -127,7 +127,8 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			settings = jQuery.extend( {}, defaultSettings, userSettings );
+			settings = jQuery.extend( true, {}, defaultSettings, userSettings );
+			console.log( settings );
 			
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
