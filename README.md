@@ -36,8 +36,9 @@ from the repository. This allows you to try new features that might not have bee
 
 ## Usage
 
-Go to the View menu and click on Todo to enable the extension. A panel will be displayed in the bottom of 
-the Brackets window displaying all TODO comments within the document in a list.
+The extension can be activated by going to the View menu and click on Todo, by using the key command 
+CTRL/CMD+ALT+T or by clicking the icon in the toolbar. A panel will be displayed in the bottom of the 
+Brackets window displaying all TODO comments within the document in a list.
 
 Clicking on one of the comments in the list will move the cursor to that point in the document.
 
