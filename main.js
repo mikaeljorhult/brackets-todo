@@ -423,6 +423,11 @@ define( function( require, exports, module ) {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
 				
+				// Bail if no files are open.
+				if ( !currentDocument ) {
+					return;
+				}
+				
 				// No need to do anything if scope is project.
 				if ( settings.search.scope !== 'project' ) {
 					// Empty stored todos and parse current document.
