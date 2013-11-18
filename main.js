@@ -169,8 +169,16 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
+		var files = getFiles();
+		
 		// Assume no todos.
 		todos = [];
+		
+		// Bail if no files.
+		if ( files.length == 0 ) {
+			callback();
+			return;
+		}
 		
 		// Go through each file asynchronously.
 		Async.doInParallel( getFiles(), function( fileInfo ) {
@@ -206,7 +214,7 @@ define( function( require, exports, module ) {
 			} );
 		} else if ( DocumentManager.getCurrentDocument() ) {
 			// Get current file if one is open.
-			files.push( DocumentManager.getCurrentDocument() );
+			files.push( DocumentManager.getCurrentDocument().file );
 		}
 		
 		return files;
