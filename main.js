@@ -8,7 +8,7 @@
 define( function( require, exports, module ) {
 	'use strict';
 	
-	// Get module dependencies.
+	// Get dependencies.
 	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
@@ -24,39 +24,29 @@ define( function( require, exports, module ) {
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
+		
+		// Extension basics.
+		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
+		MENU_NAME = 'Todo',
+		
+		// Todo modules.
+		Defaults = require( 'modules/Defaults' ),
+		
+		// Mustashe templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' );
 	
 	// Setup extension.
-	var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
-		MENU_NAME = 'Todo',
-		preferences = null,
-		defaultPreferences = {
-			enabled: false,
-			visible: []
-		},
+	var preferences,
+		settings,
 		todos = [],
 		visible = [],
 		todoFile,
 		expression,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' ),
-		doneRegExp = /^\[x\]/i,
-		defaultSettings = {
-			regex: {
-				prefix: '(?:\\/\\*|\\/\\/|#) *@?(',
-				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
-			},
-			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
-			case: false,
-			search: {
-				scope: 'current',
-				excludeFolders: [],
-				excludeFiles: []
-			}
-		},
-		settings;
+		doneRegExp = /^\[x\]/i;
 	
 	/** 
 	 * Set state of extension.
@@ -127,11 +117,11 @@ define( function( require, exports, module ) {
 			}
 			
 			// Merge default settings with JSON.
-			settings = jQuery.extend( true, {}, defaultSettings, userSettings );
+			settings = jQuery.extend( true, {}, Defaults.defaultSettings, userSettings );
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
-			settings = defaultSettings;
+			settings = Defaults.defaultSettings;
 		} ).always( function() {
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
@@ -513,7 +503,7 @@ define( function( require, exports, module ) {
 	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	
 	// Initialize PreferenceStorage.
-	preferences = PreferencesManager.getPreferenceStorage( module, defaultPreferences );
+	preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences );
 	
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
