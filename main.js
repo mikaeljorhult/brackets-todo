@@ -256,62 +256,64 @@ define( function( require, exports, module ) {
 	 * Pass file to parsing function.
 	 */
 	function parseFile( currentDocument ) {
-		var documentTodos = parseText( currentDocument ),
+		var documentTodos = [],
 			index = -1,
-			fileToMatch = ( currentDocument === null || typeof( currentDocument ) === 'string' ? currentDocument : currentDocument.file.fullPath );
+			fileToMatch,
+			text;
 		
-		// Check if file has already been added to array.
-		for ( var i = 0, length = todos.length; i < length; i++ ) {
-			if ( todos[ i ].path == fileToMatch ) {
-				// File found in array, store index.
-				index = i;
-				break;
-			}
-		}
-		
-		// Add file to array if any comments is found.
-		if ( documentTodos.length > 0 ) {
-			// Create object for new entry in array if none found.
-			if ( index == -1 ) {
-				todos.push( {} );
-				index = length;
+		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
+			// Get information about current file.
+			fileToMatch = currentDocument.file.fullPath;
+			text = currentDocument.getText();
+			
+			// Parse document.
+			documentTodos = parseText( text, StringUtils.getLines( text ) )
+			
+			// Check if file has already been added to array.
+			for ( var i = 0, length = todos.length; i < length; i++ ) {
+				if ( todos[ i ].path == fileToMatch ) {
+					// File found in array, store index.
+					index = i;
+					break;
+				}
 			}
 			
-			// Get any matches and merge with previously found comments.
-			todos[ i ].path = currentDocument.file.fullPath;
-			todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
-			todos[ i ].todos = documentTodos;
-			todos[ i ].visible = fileVisible( todos[ i ].path );
-		} else if ( index > -1 ) {
-			todos.splice( i, 1 );
+			// Add file to array if any comments is found.
+			if ( documentTodos.length > 0 ) {
+				// Create object for new entry in array if none found.
+				if ( index == -1 ) {
+					todos.push( {} );
+					index = length;
+				}
+				
+				// Get any matches and merge with previously found comments.
+				todos[ i ].path = currentDocument.file.fullPath;
+				todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
+				todos[ i ].todos = documentTodos;
+				todos[ i ].visible = fileVisible( todos[ i ].path );
+			} else if ( index > -1 ) {
+				todos.splice( i, 1 );
+			}
 		}
 	}
 	
 	/**
-	 * Go through passed in document and search for matches.
+	 * Go through text and search for matches.
 	 */
-	function parseText( currentDocument ) {
-		var documentText,
-			documentLines,
-			matchArray,
+	function parseText( text, lines ) {
+		var matchArray,
 			documentTodos = [];
 		
-		// Check for open documents.
-		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
-			documentText = currentDocument.getText();
-			documentLines = StringUtils.getLines( documentText );
-			
-			// Go through each match in current document.
-			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
-				// Add match to array.
-				documentTodos.push( {
-					todo: matchArray[ 2 ].replace( doneRegExp, '' ),
-					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
-					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1,
-					done: doneRegExp.test( matchArray[ 2 ] )
-				} );
-			}
+		// Go through each match in current document.
+		while ( ( matchArray = expression.exec( text ) ) != null ) {
+			// Add match to array.
+			documentTodos.push( {
+				todo: matchArray[ 2 ].replace( doneRegExp, '' ),
+				tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
+				line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
+				char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
+				done: doneRegExp.test( matchArray[ 2 ] )
+			} );
 		}
 		
 		// Return found comments.
