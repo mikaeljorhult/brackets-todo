@@ -169,24 +169,11 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
-		var files = [];
-		
 		// Assume no todos.
 		todos = [];
 		
-		// Get files for parsing.
-		if ( settings.search.scope === 'project' ) {
-			// Get all files in project.
-			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
-				files = fileListResult;
-			} );
-		} else if ( DocumentManager.getCurrentDocument() ) {
-			// Get current file if one is open.
-			files.push( DocumentManager.getCurrentDocument() );
-		}
-		
 		// Go through each file asynchronously.
-		Async.doInParallel( files, function( fileInfo ) {
+		Async.doInParallel( getFiles(), function( fileInfo ) {
 			var result = new $.Deferred();
 			
 			// Parse each file.
@@ -203,6 +190,26 @@ define( function( require, exports, module ) {
 			// Run callback when completed.
 			callback();
 		} );
+	}
+	
+	/**
+	 * Return all files to be parsed.
+	 */
+	function getFiles() {
+		var files = [];
+		
+		// Get files for parsing.
+		if ( settings.search.scope === 'project' ) {
+			// Get all files in project.
+			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
+				files = fileListResult;
+			} );
+		} else if ( DocumentManager.getCurrentDocument() ) {
+			// Get current file if one is open.
+			files.push( DocumentManager.getCurrentDocument() );
+		}
+		
+		return files;
 	}
 	
 	/**
