@@ -41,7 +41,7 @@ define( function( require, exports, module ) {
 		todoFile,
 		expression,
 		$todoPanel,
-		$todoIcon,
+		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' ),
 		doneRegExp = /^\[x\]/i,
 		defaultSettings = {
 			regex: {
@@ -586,14 +586,10 @@ define( function( require, exports, module ) {
 				
 			} );
 		
-		// Add icon to toolbar.
-		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
-		
-		$todoIcon
-			.click( function( e ) {
-				CommandManager.execute( COMMAND_ID );
-			} )
-			.appendTo( '#main-toolbar .buttons' );
+		// Add toolbar icon.
+		$todoIcon.click( function( e ) {
+			CommandManager.execute( COMMAND_ID );
+		} ).appendTo( '#main-toolbar .buttons' );
 		
 		// Get saved visibility state.
 		visible = preferences.getValue( 'visible' );
