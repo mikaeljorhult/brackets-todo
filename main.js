@@ -561,29 +561,6 @@ define( function( require, exports, module ) {
 					// Set focus on editor.
 					EditorManager.focusEditor();
 				} );
-			} )
-			.on( 'click', '.actions-resolve', function( e ) {
-				var $this = $( this ),
-					$parent = $this.parents( 'tr' ),
-					message = $parent.find( '.message' ).html();
-				
-				// Open and focus the file.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $parent.data( 'file' ) } ).done( function( currentDocument ) {
-					var editorDocument = EditorManager.getCurrentFullEditor();
-					
-					// Find task in file.
-					
-					
-					// Set focus on editor.
-					EditorManager.focusEditor();
-					
-					// Add done styling.
-					$parent.toggleClass( 'done' );
-				} );
-			} )
-			.on( 'click', '.actions-remove', function( e ) {
-				var $this = $( this );
-				
 			} );
 		
 		// Add toolbar icon.
