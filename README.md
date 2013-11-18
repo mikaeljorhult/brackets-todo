@@ -64,9 +64,7 @@ Please note that multiline comments will not work. Todo will only return the fir
 To keep track of your, or your teams, progress you may mark tasks as done. This is achieved by adding `[x]` 
 before the text of the task.
 
-`
-// TODO: [x]This task is done.
-`
+`// TODO: [x]This task is done.`
 
 
 ## Custom Settings
@@ -101,6 +99,20 @@ These are the default settings as they would be set in the `.todo` file.
 			"excludeFiles": []
 		}
 	}
+
+
+### Search scope
+By default Todo looks at the currently opened document for comments. This is nice for small projects but 
+for larger ones you might want to keep an eye on the progress of all parts of the project. This is done 
+by changing scope of the search to project instead of current.
+
+```
+{
+    "search": {
+        "scope": "project"
+    }
+}
+```
 
 
 ### Comment Syntax
