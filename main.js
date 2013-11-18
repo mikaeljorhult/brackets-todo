@@ -32,21 +32,34 @@ define( function( require, exports, module ) {
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
 		
-		// Mustashe templates.
+		// Preferences.
+		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
+		visible = preferences.getValue( 'visible' ),
+		
+		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' );
 	
 	// Setup extension.
-	var preferences,
-		settings,
+	var settings,
 		todos = [],
-		visible = [],
 		todoFile,
 		expression,
+		doneRegExp = /^\[x\]/i,
 		$todoPanel,
-		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' ),
-		doneRegExp = /^\[x\]/i;
+		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
+	
+	// Register extension.
+	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
+	
+	// Add command to menu.
+	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
+	menu.addMenuDivider();
+	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
+	
+	// Load stylesheet.
+	ExtensionUtils.loadStyleSheet( module, 'todo.css' );
 	
 	/** 
 	 * Set state of extension.
@@ -494,24 +507,10 @@ define( function( require, exports, module ) {
 		} );
 	}
 	
-	// Register extension.
-	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
-	
-	// Add command to menu.
-	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
-	menu.addMenuDivider();
-	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
-	
-	// Initialize PreferenceStorage.
-	preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences );
-	
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, { todo: todoFile } ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
-		
-		// Load stylesheet.
-		ExtensionUtils.loadStyleSheet( module, 'todo.css' );
 		
 		// Cache todo panel.
 		$todoPanel = $( '#brackets-todo' );
@@ -559,9 +558,6 @@ define( function( require, exports, module ) {
 		$todoIcon.click( function( e ) {
 			CommandManager.execute( COMMAND_ID );
 		} ).appendTo( '#main-toolbar .buttons' );
-		
-		// Get saved visibility state.
-		visible = preferences.getValue( 'visible' );
 		
 		// Enable extension if loaded last time.
 		if ( preferences.getValue( 'enabled' ) ) {
