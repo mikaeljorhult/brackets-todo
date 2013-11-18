@@ -169,46 +169,40 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
+		var files = [];
+		
 		// Assume no todos.
 		todos = [];
 		
+		// Get files for parsing.
 		if ( settings.search.scope === 'project' ) {
-			// Search entire project.
+			// Get all files in project.
 			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
-				// Go through each file asynchronously.
-				Async.doInParallel( fileListResult, function( fileInfo ) {
-					var result = new $.Deferred();
-					
-					// Search one file
-					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
-						// Pass file to parsing.
-						parseFile( currentDocument );
-						
-						// Move on to next file.
-						result.resolve();
-					} )
-					.fail( function( error ) {
-						// File could not be read. Move on to next file.
-						result.resolve();
-					} );
-					
-					return result.promise();
-				} ).done( function() {
-					// Done! Trigger callback.
-					callback();
-				} )
-				.fail( function() {
-					// Something failed. Trigger callback.
-					callback();
-				} );
+				files = fileListResult;
 			} );
-		} else {
-			// Pass current document for parsing.
-			parseFile( DocumentManager.getCurrentDocument() );
-			
-			// Done! Trigger callback.
-			callback();
+		} else if ( DocumentManager.getCurrentDocument() ) {
+			// Get current file if one is open.
+			files.push( DocumentManager.getCurrentDocument() );
 		}
+		
+		// Go through each file asynchronously.
+		Async.doInParallel( files, function( fileInfo ) {
+			var result = new $.Deferred();
+			
+			// Parse each file.
+			DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
+				// Pass file to parsing.
+				parseFile( currentDocument );
+			} ).always( function() {
+				// Move on to next file.
+				result.resolve();
+			} );
+			
+			return result.promise();
+		} ).always( function() {
+			// Run callback when completed.
+			callback();
+		} );
 	}
 	
 	/**
