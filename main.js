@@ -128,21 +128,11 @@ define( function( require, exports, module ) {
 			
 			// Merge default settings with JSON.
 			settings = jQuery.extend( true, {}, defaultSettings, userSettings );
-			
-			// Show or hide .todo indicator.
-			if ( todoFile ) {
-				$todoPanel.addClass( 'todo-file' );
-			} else {
-				$todoPanel.removeClass( 'todo-file' );
-			}
-			
-			// Trigger callback when done.
-			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
 			settings = defaultSettings;
-			
+		} ).always( function() {
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
 				$todoPanel.addClass( 'todo-file' );
