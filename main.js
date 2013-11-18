@@ -41,7 +41,7 @@ define( function( require, exports, module ) {
 		todoFile,
 		expression,
 		$todoPanel,
-		$todoIcon,
+		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' ),
 		doneRegExp = /^\[x\]/i,
 		defaultSettings = {
 			regex: {
@@ -128,21 +128,11 @@ define( function( require, exports, module ) {
 			
 			// Merge default settings with JSON.
 			settings = jQuery.extend( true, {}, defaultSettings, userSettings );
-			
-			// Show or hide .todo indicator.
-			if ( todoFile ) {
-				$todoPanel.addClass( 'todo-file' );
-			} else {
-				$todoPanel.removeClass( 'todo-file' );
-			}
-			
-			// Trigger callback when done.
-			callback();
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
 			settings = defaultSettings;
-			
+		} ).always( function() {
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
 				$todoPanel.addClass( 'todo-file' );
@@ -169,46 +159,55 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
+		var files = getFiles();
+		
 		// Assume no todos.
 		todos = [];
 		
-		if ( settings.search.scope === 'project' ) {
-			// Search entire project.
-			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
-				// Go through each file asynchronously.
-				Async.doInParallel( fileListResult, function( fileInfo ) {
-					var result = new $.Deferred();
-					
-					// Search one file
-					DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
-						// Pass file to parsing.
-						parseFile( currentDocument );
-						
-						// Move on to next file.
-						result.resolve();
-					} )
-					.fail( function( error ) {
-						// File could not be read. Move on to next file.
-						result.resolve();
-					} );
-					
-					return result.promise();
-				} ).done( function() {
-					// Done! Trigger callback.
-					callback();
-				} )
-				.fail( function() {
-					// Something failed. Trigger callback.
-					callback();
-				} );
-			} );
-		} else {
-			// Pass current document for parsing.
-			parseFile( DocumentManager.getCurrentDocument() );
-			
-			// Done! Trigger callback.
+		// Bail if no files.
+		if ( files.length == 0 ) {
 			callback();
+			return;
 		}
+		
+		// Go through each file asynchronously.
+		Async.doInParallel( getFiles(), function( fileInfo ) {
+			var result = new $.Deferred();
+			
+			// Parse each file.
+			DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
+				// Pass file to parsing.
+				parseFile( currentDocument );
+			} ).always( function() {
+				// Move on to next file.
+				result.resolve();
+			} );
+			
+			return result.promise();
+		} ).always( function() {
+			// Run callback when completed.
+			callback();
+		} );
+	}
+	
+	/**
+	 * Return all files to be parsed.
+	 */
+	function getFiles() {
+		var files = [];
+		
+		// Get files for parsing.
+		if ( settings.search.scope === 'project' ) {
+			// Get all files in project.
+			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
+				files = fileListResult;
+			} );
+		} else if ( DocumentManager.getCurrentDocument() ) {
+			// Get current file if one is open.
+			files.push( DocumentManager.getCurrentDocument().file );
+		}
+		
+		return files;
 	}
 	
 	/**
@@ -255,62 +254,64 @@ define( function( require, exports, module ) {
 	 * Pass file to parsing function.
 	 */
 	function parseFile( currentDocument ) {
-		var documentTodos = parseText( currentDocument ),
+		var documentTodos = [],
 			index = -1,
-			fileToMatch = ( currentDocument === null || typeof( currentDocument ) === 'string' ? currentDocument : currentDocument.file.fullPath );
+			fileToMatch,
+			text;
 		
-		// Check if file has already been added to array.
-		for ( var i = 0, length = todos.length; i < length; i++ ) {
-			if ( todos[ i ].path == fileToMatch ) {
-				// File found in array, store index.
-				index = i;
-				break;
-			}
-		}
-		
-		// Add file to array if any comments is found.
-		if ( documentTodos.length > 0 ) {
-			// Create object for new entry in array if none found.
-			if ( index == -1 ) {
-				todos.push( {} );
-				index = length;
+		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
+			// Get information about current file.
+			fileToMatch = currentDocument.file.fullPath;
+			text = currentDocument.getText();
+			
+			// Parse document.
+			documentTodos = parseText( text, StringUtils.getLines( text ) )
+			
+			// Check if file has already been added to array.
+			for ( var i = 0, length = todos.length; i < length; i++ ) {
+				if ( todos[ i ].path == fileToMatch ) {
+					// File found in array, store index.
+					index = i;
+					break;
+				}
 			}
 			
-			// Get any matches and merge with previously found comments.
-			todos[ i ].path = currentDocument.file.fullPath;
-			todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
-			todos[ i ].todos = documentTodos;
-			todos[ i ].visible = fileVisible( todos[ i ].path );
-		} else if ( index > -1 ) {
-			todos.splice( i, 1 );
+			// Add file to array if any comments is found.
+			if ( documentTodos.length > 0 ) {
+				// Create object for new entry in array if none found.
+				if ( index == -1 ) {
+					todos.push( {} );
+					index = length;
+				}
+				
+				// Get any matches and merge with previously found comments.
+				todos[ i ].path = currentDocument.file.fullPath;
+				todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
+				todos[ i ].todos = documentTodos;
+				todos[ i ].visible = fileVisible( todos[ i ].path );
+			} else if ( index > -1 ) {
+				todos.splice( i, 1 );
+			}
 		}
 	}
 	
 	/**
-	 * Go through passed in document and search for matches.
+	 * Go through text and search for matches.
 	 */
-	function parseText( currentDocument ) {
-		var documentText,
-			documentLines,
-			matchArray,
+	function parseText( text, lines ) {
+		var matchArray,
 			documentTodos = [];
 		
-		// Check for open documents.
-		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
-			documentText = currentDocument.getText();
-			documentLines = StringUtils.getLines( documentText );
-			
-			// Go through each match in current document.
-			while ( ( matchArray = expression.exec( documentText ) ) != null ) {
-				// Add match to array.
-				documentTodos.push( {
-					todo: matchArray[ 2 ].replace( doneRegExp, '' ),
-					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-					line: StringUtils.offsetToLineNum( documentLines, matchArray.index ) + 1,
-					char: matchArray.index - documentText.lastIndexOf( '\n' , matchArray.index ) - 1,
-					done: doneRegExp.test( matchArray[ 2 ] )
-				} );
-			}
+		// Go through each match in current document.
+		while ( ( matchArray = expression.exec( text ) ) != null ) {
+			// Add match to array.
+			documentTodos.push( {
+				todo: matchArray[ 2 ].replace( doneRegExp, '' ),
+				tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
+				line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
+				char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
+				done: doneRegExp.test( matchArray[ 2 ] )
+			} );
 		}
 		
 		// Return found comments.
@@ -560,39 +561,12 @@ define( function( require, exports, module ) {
 					// Set focus on editor.
 					EditorManager.focusEditor();
 				} );
-			} )
-			.on( 'click', '.actions-resolve', function( e ) {
-				var $this = $( this ),
-					$parent = $this.parents( 'tr' ),
-					message = $parent.find( '.message' ).html();
-				
-				// Open and focus the file.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $parent.data( 'file' ) } ).done( function( currentDocument ) {
-					var editorDocument = EditorManager.getCurrentFullEditor();
-					
-					// Find task in file.
-					
-					
-					// Set focus on editor.
-					EditorManager.focusEditor();
-					
-					// Add done styling.
-					$parent.toggleClass( 'done' );
-				} );
-			} )
-			.on( 'click', '.actions-remove', function( e ) {
-				var $this = $( this );
-				
 			} );
 		
-		// Add icon to toolbar.
-		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
-		
-		$todoIcon
-			.click( function( e ) {
-				CommandManager.execute( COMMAND_ID );
-			} )
-			.appendTo( '#main-toolbar .buttons' );
+		// Add toolbar icon.
+		$todoIcon.click( function( e ) {
+			CommandManager.execute( COMMAND_ID );
+		} ).appendTo( '#main-toolbar .buttons' );
 		
 		// Get saved visibility state.
 		visible = preferences.getValue( 'visible' );
