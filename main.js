@@ -165,7 +165,7 @@ define( function( require, exports, module ) {
 		todos = [];
 		
 		// Bail if no files.
-		if ( files.length == 0 ) {
+		if ( files.length === 0 ) {
 			callback();
 			return;
 		}
@@ -218,10 +218,12 @@ define( function( require, exports, module ) {
 			var projectRoot = ProjectManager.getProjectRoot().fullPath,
 				relativePath = '^' + file.parentPath.replace( projectRoot, '' ),
 				fileName = file.name,
-				searchString;
+				searchString,
+				i,
+				length;
 			
 			// Go through all exclude filters for folders and compare to current file path.
-			for ( var i = 0, length = settings.search.excludeFolders.length; i < length; i++ ) {
+			for ( i = 0, length = settings.search.excludeFolders.length; i < length; i++ ) {
 				searchString = settings.search.excludeFolders[ i ];
 				
 				// If root level is indicated (by first character being a slash) replace it with ^
@@ -237,7 +239,7 @@ define( function( require, exports, module ) {
 			}
 			
 			// Go through all exclude filters for files and compare to current file name.
-			for ( var i = 0, length = settings.search.excludeFiles.length; i < length; i++ ) {
+			for ( i = 0, length = settings.search.excludeFiles.length; i < length; i++ ) {
 				searchString = settings.search.excludeFiles[ i ];
 				
 				// Check for matches in filename.
@@ -247,7 +249,7 @@ define( function( require, exports, module ) {
 			}
 			
 			return true;
-		}
+		};
 	}
 	
 	/**
@@ -265,7 +267,7 @@ define( function( require, exports, module ) {
 			text = currentDocument.getText();
 			
 			// Parse document.
-			documentTodos = parseText( text, StringUtils.getLines( text ) )
+			documentTodos = parseText( text, StringUtils.getLines( text ) );
 			
 			// Check if file has already been added to array.
 			for ( var i = 0, length = todos.length; i < length; i++ ) {
@@ -303,7 +305,7 @@ define( function( require, exports, module ) {
 			documentTodos = [];
 		
 		// Go through each match in current document.
-		while ( ( matchArray = expression.exec( text ) ) != null ) {
+		while ( ( matchArray = expression.exec( text ) ) !== null ) {
 			// Add match to array.
 			documentTodos.push( {
 				todo: matchArray[ 2 ].replace( doneRegExp, '' ),
@@ -342,7 +344,7 @@ define( function( require, exports, module ) {
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
-		var resultsHTML = resultsHTML = Mustache.render( todoRowTemplate, {
+		var resultsHTML = Mustache.render( todoRowTemplate, {
 			files: todos
 		} );
 		
