@@ -50,21 +50,13 @@ Todo will by default recognize C-style comments using the [tags](http://en.wikip
 
 Please note that multiline comments will not work. Todo will only return the first line of the comment.
 
-`
-// TODO: This is a comment.
-`
+`// TODO: This is a comment.`
 
-`
-/* NOTE The colon after the tag is optional. */
-`
+`/* NOTE The colon after the tag is optional. */`
 
-`
-/* @NOTE Preceding at sign is also optional. */
-`
+`/* @NOTE Preceding at sign is also optional. */`
 
-`
-/* # NOTE: This is a comment as well. */
-`
+`# NOTE: This is a comment as well.`
 
 
 ## Mark tasks as done
