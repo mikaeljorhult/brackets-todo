@@ -62,6 +62,10 @@ Please note that multiline comments will not work. Todo will only return the fir
 /* @NOTE Preceding at sign is also optional. */
 `
 
+`
+/* # NOTE: This is a comment as well. */
+`
+
 
 ## Mark tasks as done
 
