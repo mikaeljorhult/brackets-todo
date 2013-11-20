@@ -22,7 +22,6 @@ define( function( require, exports, module ) {
 		AppInit = brackets.getModule( 'utils/AppInit' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
-		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
 		
 		// Extension basics.
@@ -31,6 +30,7 @@ define( function( require, exports, module ) {
 		
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
+		ParseUtils = require( 'modules/ParseUtils' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
@@ -45,8 +45,6 @@ define( function( require, exports, module ) {
 	var settings,
 		todos = [],
 		todoFile,
-		expression,
-		doneRegExp = /^\[x\]/i,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
 	
@@ -182,7 +180,7 @@ define( function( require, exports, module ) {
 			// Parse each file.
 			DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
 				// Pass file to parsing.
-				parseFile( currentDocument );
+				todos = ParseUtils.parseFile( currentDocument, todos );
 			} ).always( function() {
 				// Move on to next file.
 				result.resolve();
@@ -257,74 +255,6 @@ define( function( require, exports, module ) {
 		};
 	}
 	
-	/**
-	 * Pass file to parsing function.
-	 */
-	function parseFile( currentDocument ) {
-		var documentTodos = [],
-			index = -1,
-			fileToMatch,
-			text;
-		
-		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
-			// Get information about current file.
-			fileToMatch = currentDocument.file.fullPath;
-			text = currentDocument.getText();
-			
-			// Parse document.
-			documentTodos = parseText( text, StringUtils.getLines( text ) );
-			
-			// Check if file has already been added to array.
-			for ( var i = 0, length = todos.length; i < length; i++ ) {
-				if ( todos[ i ].path == fileToMatch ) {
-					// File found in array, store index.
-					index = i;
-					break;
-				}
-			}
-			
-			// Add file to array if any comments is found.
-			if ( documentTodos.length > 0 ) {
-				// Create object for new entry in array if none found.
-				if ( index == -1 ) {
-					todos.push( {} );
-					index = length;
-				}
-				
-				// Get any matches and merge with previously found comments.
-				todos[ i ].path = currentDocument.file.fullPath;
-				todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
-				todos[ i ].todos = documentTodos;
-				todos[ i ].visible = fileVisible( todos[ i ].path );
-			} else if ( index > -1 ) {
-				todos.splice( i, 1 );
-			}
-		}
-	}
-	
-	/**
-	 * Go through text and search for matches.
-	 */
-	function parseText( text, lines ) {
-		var matchArray,
-			documentTodos = [];
-		
-		// Go through each match in current document.
-		while ( ( matchArray = expression.exec( text ) ) !== null ) {
-			// Add match to array.
-			documentTodos.push( {
-				todo: matchArray[ 2 ].replace( doneRegExp, '' ),
-				tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-				line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
-				char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
-				done: doneRegExp.test( matchArray[ 2 ] )
-			} );
-		}
-		
-		// Return found comments.
-		return documentTodos;
-	}
-	
 	/** 
 	 * Take found todos and add them to panel. 
 	 */
@@ -361,10 +291,10 @@ define( function( require, exports, module ) {
 	 */
 	function setupRegExp() {
 		// Setup regular expression.
-		expression = new RegExp(
+		ParseUtils.setExpression( new RegExp(
 			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
 			'g' + ( settings.case !== false ? '' : 'i' )
-		);
+		) );
 	}
 	
 	/**
@@ -423,7 +353,7 @@ define( function( require, exports, module ) {
 				
 				// Reparse current file.
 				if ( document === DocumentManager.getCurrentDocument() ) {
-					parseFile( document );
+					todos = ParseUtils.parseFile( document, todos );
 					printTodo();
 				}
 			} )
@@ -439,8 +369,7 @@ define( function( require, exports, module ) {
 				// No need to do anything if scope is project.
 				if ( settings.search.scope !== 'project' ) {
 					// Empty stored todos and parse current document.
-					todos = [];
-					parseFile( currentDocument );
+					todos = ParseUtils.parseFile( currentDocument, [] );
 					printTodo();
 				} else {
 					// Look for current file in list.
@@ -490,7 +419,7 @@ define( function( require, exports, module ) {
 				toggleFileVisible( document, false );
 				
 				// Parse path that was deleted to remove from list.
-				parseFile( document );
+				todos = ParseUtils.parseFile( document, todos );
 				printTodo();
 			} );
 		
