@@ -3,7 +3,7 @@
 define( function( require, exports, module ) {
 	'use strict';
 	
-	// Default preferences are different for platforms
+	// Define default preferences and settings.
 	var defaultPreferences = {
 			enabled: false,
 			visible: []
@@ -22,6 +22,7 @@ define( function( require, exports, module ) {
 			}
 		};
 	
+	// Make variables accessible.
 	exports.defaultPreferences = defaultPreferences;
 	exports.defaultSettings = defaultSettings;
 } );
