@@ -55,7 +55,7 @@ define( function( require, exports, module ) {
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
-	if ( menu != undefined ) {
+	if ( menu !== undefined ) {
 		menu.addMenuDivider();
 		menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
 	}
