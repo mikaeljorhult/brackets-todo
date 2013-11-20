@@ -55,8 +55,10 @@ define( function( require, exports, module ) {
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
-	menu.addMenuDivider();
-	menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
+	if ( menu != undefined ) {
+		menu.addMenuDivider();
+		menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
+	}
 	
 	// Load stylesheet.
 	ExtensionUtils.loadStyleSheet( module, 'todo.css' );
