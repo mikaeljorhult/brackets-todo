@@ -81,13 +81,21 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Set the regular epression to use in parsing..
+	 * Get the regular epression to use in parsing.
+	 */
+	function getExpression() {
+		return expression;
+	}
+	
+	/**
+	 * Set the regular epression to use in parsing.
 	 */
 	function setExpression( newExpression ) {
 		expression = newExpression;
 	}
 	
 	// Make variables accessible.
+	exports.getExpression = getExpression;
 	exports.setExpression = setExpression;
 	exports.parseFile = parseFile;
 	exports.parseText = parseText;
