@@ -30,6 +30,7 @@ define( function( require, exports, module ) {
 		
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
+		Events = require( 'modules/Events' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		
 		// Preferences.
@@ -61,6 +62,15 @@ define( function( require, exports, module ) {
 	// Load stylesheet.
 	ExtensionUtils.loadStyleSheet( module, 'todo.css' );
 	
+	// Setup event listeners.
+	Events.subscribe( 'settings:loaded', function() {
+		// Setup regular expression.
+		setupRegExp();
+		
+		// Call parsing function.
+		run();
+	} );
+	
 	/** 
 	 * Set state of extension.
 	 */
@@ -76,12 +86,6 @@ define( function( require, exports, module ) {
 	function enableTodo( enabled ) {
 		if ( enabled ) {
 			loadSettings( function() {
-				// Setup regular expression.
-				setupRegExp();
-				
-				// Call parsing function.
-				run();
-				
 				// Setup listeners.
 				listeners();
 				
@@ -145,6 +149,9 @@ define( function( require, exports, module ) {
 			
 			// Trigger callback.
 			callback();
+			
+			// Publish event.
+			Events.publish( 'settings:loaded' );
 		} );
 	}
 	
@@ -342,13 +349,7 @@ define( function( require, exports, module ) {
 			.on( 'documentSaved.todo', function( event, document ) {
 				// Reload settings if .todo of current project was updated.
 				if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
-					loadSettings( function() {
-						// Setup regular expression.
-						setupRegExp();
-						
-						// Reparse all files.
-						run();
-					} );
+					loadSettings();
 				}
 				
 				// Reparse current file.
@@ -398,13 +399,7 @@ define( function( require, exports, module ) {
 				
 				// Reload settings if .todo of current project was updated.
 				if ( newName === todoPath || oldName === todoPath ) {
-					loadSettings( function() {
-						// Setup regular expression.
-						setupRegExp();
-						
-						// Reparse all files.
-						run();
-					} );
+					loadSettings();
 				} else {
 					// Move visibility state to new file.
 					toggleFileVisible( newName, fileVisible( oldName ) );
@@ -426,14 +421,8 @@ define( function( require, exports, module ) {
 		// Reload settings when new project is loaded.
 		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
 			loadSettings( function() {
-				// Setup regular expression from settings.
-				setupRegExp();
-				
 				// Reset file visibility.
 				visible = [];
-				
-				// Parse all files in project.
-				run();
 			} );
 		} );
 	}
