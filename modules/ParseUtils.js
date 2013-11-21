@@ -48,7 +48,6 @@ define( function( require, exports, module ) {
 				todos[ i ].path = currentDocument.file.fullPath;
 				todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
 				todos[ i ].todos = documentTodos;
-				todos[ i ].visible = true; //fileVisible( todos[ i ].path );
 			} else if ( index > -1 ) {
 				todos.splice( i, 1 );
 			}

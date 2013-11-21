@@ -188,6 +188,11 @@ define( function( require, exports, module ) {
 			
 			return result.promise();
 		} ).always( function() {
+			// Add file visibility state.
+			$.each( todos, function( index, file ) {
+				file.visible = fileVisible( file.path );
+			} );
+			
 			// Run callback when completed.
 			callback();
 		} );
