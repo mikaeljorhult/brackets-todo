@@ -13,7 +13,7 @@ define( function( require, exports, module ) {
 				prefix: '(?:\\/\\*|\\/\\/|#) *@?(',
 				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
 			},
-			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES' ],
+			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES', 'FUTURE' ],
 			case: false,
 			search: {
 				scope: 'current',
