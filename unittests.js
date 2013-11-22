@@ -11,6 +11,7 @@ define( function( require, exports, module ) {
 			StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		
 		// Get Todo modules.
+		Todo = require( 'main' ),
 		Defaults = require( 'modules/Defaults' ),
 		ParseUtils = require( 'modules/ParseUtils' );
 	
