@@ -46,7 +46,7 @@ Clicking on one of the comments in the list will move the cursor to that point i
 ## Comment Syntax
 
 Todo will by default recognize C-style comments using the [tags](http://en.wikipedia.org/wiki/Comment_%28computer_programming%29#Tags)
-`TODO`, `NOTE`, `FIXME` or `CHANGES` as shown in examples below.
+`TODO`, `NOTE`, `FIXME`, `CHANGES` or `FUTURE` as shown in examples below.
 
 Please note that multiline comments will not work. Todo will only return the first line of the comment.
 
