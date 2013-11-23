@@ -62,15 +62,6 @@ define( function( require, exports, module ) {
 	// Load stylesheet.
 	ExtensionUtils.loadStyleSheet( module, 'todo.css' );
 	
-	// Setup event listeners.
-	Events.subscribe( 'settings:loaded', function() {
-		// Setup regular expression.
-		setupRegExp();
-		
-		// Call parsing function.
-		run();
-	} );
-	
 	/** 
 	 * Set state of extension.
 	 */
@@ -156,23 +147,20 @@ define( function( require, exports, module ) {
 	 * Main functionality: Find and show comments.
 	 */
 	function run() {
-		// Parse and print todos.
-		findTodo( function() {
-			printTodo();
-		} );
+		// Get all todo comments.
+		findTodo();
 	}
 	
 	/**
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
-		var files = getFiles();
-		
-		// Assume no todos.
-		todos = [];
+		var files = getFiles(),
+			todoArray = [];
 		
 		// Bail if no files.
 		if ( files.length === 0 ) {
+			setTodos( todoArray );
 			callback();
 			return;
 		}
@@ -184,7 +172,7 @@ define( function( require, exports, module ) {
 			// Parse each file.
 			DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
 				// Pass file to parsing.
-				todos = ParseUtils.parseFile( currentDocument, todos );
+				todoArray = ParseUtils.parseFile( currentDocument, todos );
 			} ).always( function() {
 				// Move on to next file.
 				result.resolve();
@@ -193,13 +181,26 @@ define( function( require, exports, module ) {
 			return result.promise();
 		} ).always( function() {
 			// Add file visibility state.
-			$.each( todos, function( index, file ) {
+			$.each( todoArray, function( index, file ) {
 				file.visible = fileVisible( file.path );
 			} );
+			
+			// Store array of todos.
+			setTodos( todoArray );
 			
 			// Run callback when completed.
 			callback();
 		} );
+	}
+	
+	/**
+	 * Store array of todos.
+	 */
+	function setTodos( todoArray ) {
+		todos = todoArray;
+		
+		// Publish event.
+		Events.publish( 'todos:updated' );
 	}
 	
 	/**
@@ -346,7 +347,20 @@ define( function( require, exports, module ) {
 		var $documentManager = $( DocumentManager ),
 			$projectManager = $( ProjectManager );
 		
-		// Reparse files if document is saved or refreshed.
+		// Listeners bound to Todo modules.
+		Events.subscribe( 'settings:loaded', function() {
+			// Setup regular expression.
+			setupRegExp();
+			
+			// Call parsing function.
+			run();
+		} );
+		
+		Events.subscribe( 'todos:updated', function() {
+			printTodo();
+		} );
+		
+		// Listeners bound to Brackets modules.
 		$documentManager
 			.on( 'documentSaved.todo', function( event, document ) {
 				// Reload settings if .todo of current project was updated.
@@ -356,8 +370,7 @@ define( function( require, exports, module ) {
 				
 				// Reparse current file.
 				if ( document === DocumentManager.getCurrentDocument() ) {
-					todos = ParseUtils.parseFile( document, todos );
-					printTodo();
+					setTodos( ParseUtils.parseFile( document, todos ) );
 				}
 			} )
 			.on( 'currentDocumentChange.todo', function( event ) {
@@ -372,8 +385,7 @@ define( function( require, exports, module ) {
 				// No need to do anything if scope is project.
 				if ( settings.search.scope !== 'project' ) {
 					// Empty stored todos and parse current document.
-					todos = ParseUtils.parseFile( currentDocument, [] );
-					printTodo();
+					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
 				} else {
 					// Look for current file in list.
 					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
@@ -416,8 +428,7 @@ define( function( require, exports, module ) {
 				toggleFileVisible( document, false );
 				
 				// Parse path that was deleted to remove from list.
-				todos = ParseUtils.parseFile( document, todos );
-				printTodo();
+				setTodos( ParseUtils.parseFile( document, todos ) );
 			} );
 		
 		// Reload settings when new project is loaded.
