@@ -137,7 +137,7 @@ define( function( require, exports, module ) {
 			}
 			
 			// Trigger callback.
-			callback();
+			if ( callback ) { callback(); }
 			
 			// Publish event.
 			Events.publish( 'settings:loaded' );
@@ -162,7 +162,7 @@ define( function( require, exports, module ) {
 		// Bail if no files.
 		if ( files.length === 0 ) {
 			setTodos( todoArray );
-			callback();
+			if ( callback ) { callback(); }
 			return;
 		}
 		
@@ -190,7 +190,7 @@ define( function( require, exports, module ) {
 			setTodos( todoArray );
 			
 			// Run callback when completed.
-			callback();
+			if ( callback ) { callback(); }
 		} );
 	}
 	
