@@ -86,9 +86,6 @@ define( function( require, exports, module ) {
 	function enableTodo( enabled ) {
 		if ( enabled ) {
 			loadSettings( function() {
-				// Setup listeners.
-				listeners();
-				
 				// Show panel.
 				Resizer.show( $todoPanel );
 			} );
@@ -340,7 +337,7 @@ define( function( require, exports, module ) {
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
-	function listeners() {
+	function registerListeners() {
 		var $documentManager = $( DocumentManager ),
 			$projectManager = $( ProjectManager );
 		
@@ -474,7 +471,10 @@ define( function( require, exports, module ) {
 				} );
 			} );
 		
-		// Add toolbar icon.
+		// Setup listeners.
+		registerListeners();
+		
+		// Add listener for toolbar icon..
 		$todoIcon.click( function( e ) {
 			CommandManager.execute( COMMAND_ID );
 		} ).appendTo( '#main-toolbar .buttons' );

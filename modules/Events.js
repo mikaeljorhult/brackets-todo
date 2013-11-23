@@ -6,7 +6,10 @@ define( function() {
 	return {
 		cache: {},
 		
-		publish: function( topic, args, /** {Object=} */ scope ) {
+		/**
+		 * Publish a event.
+		 */
+		publish: function( topic, args, scope ) {
 			if ( this.cache[ topic ] ) {
 				var thisTopic = this.cache[ topic ],
 					i = thisTopic.length - 1;
@@ -17,6 +20,9 @@ define( function() {
 			}
 		},
 		
+		/**
+		 * Subscribe to a event.
+		 */
 		subscribe: function( topic, callback ) {
 			if ( !this.cache[ topic ] ) {
 				this.cache[ topic ] = [];
@@ -27,6 +33,9 @@ define( function() {
 			return [ topic, callback ];
 		},
 		
+		/**
+		 * Unsubscribe from event.
+		 */
 		unsubscribe: function( handle, completly ) {
 			var t = handle[ 0 ],
 				i = this.cache[ t ].length - 1;
