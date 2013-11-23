@@ -31,6 +31,7 @@ define( function( require, exports, module ) {
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
 		Events = require( 'modules/Events' ),
+		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		
 		// Preferences.
@@ -155,7 +156,7 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
-		var files = getFiles(),
+		var files = FileManager.getFiles(),
 			todoArray = [];
 		
 		// Bail if no files.
@@ -166,7 +167,7 @@ define( function( require, exports, module ) {
 		}
 		
 		// Go through each file asynchronously.
-		Async.doInParallel( getFiles(), function( fileInfo ) {
+		Async.doInParallel( files, function( fileInfo ) {
 			var result = new $.Deferred();
 			
 			// Parse each file.
@@ -201,68 +202,6 @@ define( function( require, exports, module ) {
 		
 		// Publish event.
 		Events.publish( 'todos:updated' );
-	}
-	
-	/**
-	 * Return all files to be parsed.
-	 */
-	function getFiles() {
-		var files = [];
-		
-		// Get files for parsing.
-		if ( settings.search.scope === 'project' ) {
-			// Get all files in project.
-			ProjectManager.getAllFiles( filter() ).done( function( fileListResult ) {
-				files = fileListResult;
-			} );
-		} else if ( DocumentManager.getCurrentDocument() ) {
-			// Get current file if one is open.
-			files.push( DocumentManager.getCurrentDocument().file );
-		}
-		
-		return files;
-	}
-	
-	/**
-	 * Return function with logic to getAllFiles() to exclude folders and files.
-	 */
-	function filter() {
-		return function filterFunction( file ) {
-			var projectRoot = ProjectManager.getProjectRoot().fullPath,
-				relativePath = '^' + file.parentPath.replace( projectRoot, '' ),
-				fileName = file.name,
-				searchString,
-				i,
-				length;
-			
-			// Go through all exclude filters for folders and compare to current file path.
-			for ( i = 0, length = settings.search.excludeFolders.length; i < length; i++ ) {
-				searchString = settings.search.excludeFolders[ i ];
-				
-				// If root level is indicated (by first character being a slash) replace it with ^
-				// to prevent matching subdirectories.
-				if ( searchString.charAt( 0 ) === '/' ) {
-					searchString = searchString.replace ( /^\//, '^');
-				}
-				
-				// Check for matches in path.
-				if ( relativePath.indexOf( searchString + '/' ) > -1 ) {
-					return false;
-				}
-			}
-			
-			// Go through all exclude filters for files and compare to current file name.
-			for ( i = 0, length = settings.search.excludeFiles.length; i < length; i++ ) {
-				searchString = settings.search.excludeFiles[ i ];
-				
-				// Check for matches in filename.
-				if ( fileName.indexOf( searchString ) > -1 ) {
-					return false;
-				}
-			}
-			
-			return true;
-		};
 	}
 	
 	/** 
@@ -351,6 +290,9 @@ define( function( require, exports, module ) {
 		Events.subscribe( 'settings:loaded', function() {
 			// Setup regular expression.
 			setupRegExp();
+			
+			// Pass search settings to FileManager.
+			FileManager.setSettings( settings.search );
 			
 			// Call parsing function.
 			run();
