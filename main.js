@@ -210,15 +210,18 @@ define( function( require, exports, module ) {
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var resultsHTML = Mustache.render( todoResultsTemplate, {
-			project: ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
-			todos: renderTodo()
-		} );
+		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
+			resultsHTML = Mustache.render( todoResultsTemplate, {
+				project: project,
+				todos: renderTodo()
+			} );
 		
 		resultsHTML = $( resultsHTML );
 		
-		$( '.file.collapsed', resultsHTML )
-			.nextUntil( '.file' ).hide();
+		if ( project ) {
+			$( '.file.collapsed', resultsHTML )
+				.nextUntil( '.file' ).hide();
+		}
 		
 		// Empty container element and apply results template.
 		$todoPanel.find( '.table-container' )
@@ -293,6 +296,9 @@ define( function( require, exports, module ) {
 			// Setup regular expression.
 			setupRegExp();
 			
+			// Empty array of files.
+			setTodos( [] );
+			
 			// Call parsing function.
 			run();
 		} );
@@ -324,10 +330,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// No need to do anything if scope is project.
-				if ( SettingsManager.getSettings().search.scope !== 'project' ) {
-					// Empty stored todos and parse current document.
-					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
-				} else {
+				if ( SettingsManager.getSettings().search.scope === 'project' ) {
 					// Look for current file in list.
 					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
 					
@@ -347,6 +350,9 @@ define( function( require, exports, module ) {
 						// Scroll to target.
 						$todoPanel.children( '.table-container' ).scrollTop( $scrollTarget.position().top );
 					}
+				} else {
+					// Empty stored todos and parse current document.
+					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
 				}
 			} )
 			.on( 'fileNameChange.todo', function( event, oldName, newName ) {
