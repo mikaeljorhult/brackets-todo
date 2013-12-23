@@ -33,6 +33,7 @@ define( function( require, exports, module ) {
 		Events = require( 'modules/Events' ),
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
+		SettingsManager = require( 'modules/SettingsManager' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
@@ -121,14 +122,13 @@ define( function( require, exports, module ) {
 				// .todo exists but isn't valid JSON.
 				todoFile = false;
 			}
-			
-			// Merge default settings with JSON.
-			settings = jQuery.extend( true, {}, Defaults.defaultSettings, userSettings );
 		} ).fail( function( error ) {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
-			settings = Defaults.defaultSettings;
 		} ).always( function() {
+			// Merge default settings with JSON.
+			settings = SettingsManager.mergeSettings( userSettings );
+			
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
 				$todoPanel.addClass( 'todo-file' );
@@ -156,41 +156,43 @@ define( function( require, exports, module ) {
 	 * Go through current document and find each comment. 
 	 */
 	function findTodo( callback ) {
-		var files = FileManager.getFiles(),
+		var filesPromise = FileManager.getFiles(),
 			todoArray = [];
 		
-		// Bail if no files.
-		if ( files.length === 0 ) {
-			setTodos( todoArray );
-			if ( callback ) { callback(); }
-			return;
-		}
-		
-		// Go through each file asynchronously.
-		Async.doInParallel( files, function( fileInfo ) {
-			var result = new $.Deferred();
+		filesPromise.done( function( files ) {
+			// Bail if no files.
+			if ( files.length === 0 ) {
+				setTodos( todoArray );
+				if ( callback ) { callback(); }
+				return;
+			}
 			
-			// Parse each file.
-			DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
-				// Pass file to parsing.
-				todoArray = ParseUtils.parseFile( currentDocument, todos );
+			// Go through each file asynchronously.
+			Async.doInParallel( files, function( fileInfo ) {
+				var result = new $.Deferred();
+				
+				// Parse each file.
+				DocumentManager.getDocumentForPath( fileInfo.fullPath ).done( function( currentDocument ) {
+					// Pass file to parsing.
+					todoArray = ParseUtils.parseFile( currentDocument, todos );
+				} ).always( function() {
+					// Move on to next file.
+					result.resolve();
+				} );
+				
+				return result.promise();
 			} ).always( function() {
-				// Move on to next file.
-				result.resolve();
+				// Add file visibility state.
+				$.each( todoArray, function( index, file ) {
+					file.visible = fileVisible( file.path );
+				} );
+				
+				// Store array of todos.
+				setTodos( todoArray );
+				
+				// Run callback when completed.
+				if ( callback ) { callback(); }
 			} );
-			
-			return result.promise();
-		} ).always( function() {
-			// Add file visibility state.
-			$.each( todoArray, function( index, file ) {
-				file.visible = fileVisible( file.path );
-			} );
-			
-			// Store array of todos.
-			setTodos( todoArray );
-			
-			// Run callback when completed.
-			if ( callback ) { callback(); }
 		} );
 	}
 	
@@ -209,7 +211,7 @@ define( function( require, exports, module ) {
 	 */
 	function printTodo() {
 		var resultsHTML = Mustache.render( todoResultsTemplate, {
-			project: ( settings.search.scope === 'project' ? true : false ),
+			project: ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
 			todos: renderTodo()
 		} );
 		
@@ -241,7 +243,7 @@ define( function( require, exports, module ) {
 	function setupRegExp() {
 		// Setup regular expression.
 		ParseUtils.setExpression( new RegExp(
-			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
 			'g' + ( settings.case !== false ? '' : 'i' )
 		) );
 	}
@@ -250,7 +252,7 @@ define( function( require, exports, module ) {
 	 * Return if file should be expanded or not.
 	 */
 	function fileVisible( path ) {
-		return ( settings.search.scope === 'project' ? visible.indexOf( path ) > -1 : true );
+		return ( SettingsManager.getSettings().search.scope === 'project' ? visible.indexOf( path ) > -1 : true );
 	}
 	
 	/**
@@ -291,9 +293,6 @@ define( function( require, exports, module ) {
 			// Setup regular expression.
 			setupRegExp();
 			
-			// Pass search settings to FileManager.
-			FileManager.setSettings( settings.search );
-			
 			// Call parsing function.
 			run();
 		} );
@@ -325,7 +324,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// No need to do anything if scope is project.
-				if ( settings.search.scope !== 'project' ) {
+				if ( SettingsManager.getSettings().search.scope !== 'project' ) {
 					// Empty stored todos and parse current document.
 					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
 				} else {
