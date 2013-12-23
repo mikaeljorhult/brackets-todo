@@ -74,6 +74,10 @@
 	background-color: #c95353;
 }
 
+.brackets-todo .future {
+	background-color: #5a99c3;
+}
+
 /*--- ACTIONS ---*/
 .brackets-todo .actions a {
 	display: inline-block;
