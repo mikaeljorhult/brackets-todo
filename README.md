@@ -92,7 +92,7 @@ These are the default settings as they would be set in the `.todo` file.
 			"FIX ?ME",
 			"CHANGES"
 		],
-		"case": "false"
+		"case": "false",
 		"search": {
 			"scope": "current",
 			"excludeFolders": [],
