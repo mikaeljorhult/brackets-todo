@@ -89,10 +89,10 @@ These are the default settings as they would be set in the `.todo` file.
 		"tags": [
 			"TODO",
 			"NOTE",
-			"FIX ?ME",
+			"FIXME",
 			"CHANGES"
 		],
-		"case": "false"
+		"case": "false",
 		"search": {
 			"scope": "current",
 			"excludeFolders": [],
