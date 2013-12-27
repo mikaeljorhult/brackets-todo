@@ -118,6 +118,7 @@ define( function( require, exports, module ) {
 				
 				// Parse .todo file.
 				userSettings = JSON.parse( content );
+				userSettings.case = userSettings.case === 'false' ? false : true;
 			} catch ( e ) {
 				// .todo exists but isn't valid JSON.
 				todoFile = false;
