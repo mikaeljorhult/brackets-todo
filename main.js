@@ -427,7 +427,7 @@ define( function( require, exports, module ) {
 				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
 					// Set cursor position at start of todo.
 					EditorManager.getCurrentFullEditor()
-						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ), true );
 					
 					// Set focus on editor.
 					EditorManager.focusEditor();
