@@ -136,6 +136,14 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
+			// Show or hide collapse all / expand all button
+			var forProject = settings.search.scope === 'project' ? true : false;
+			if ( forProject ) {
+				$todoPanel.addClass( 'show-collapse-expand-all' );
+			} else {
+				$todoPanel.removeClass( 'show-collapse-expand-all' );
+			}
+			
 			// Trigger callback.
 			if ( callback ) { callback(); }
 			
@@ -285,6 +293,16 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
+	 * Toggle all files if file should be expanded or not.
+	 */
+	function toggleAllFileVisible() {
+		$todoPanel.find( '.file' ).each( function() {
+			var $this = $( this );
+			toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
+		} );
+	}
+	
+	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function registerListeners() {
@@ -427,11 +445,31 @@ define( function( require, exports, module ) {
 				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
 					// Set cursor position at start of todo.
 					EditorManager.getCurrentFullEditor()
-						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ) );
+						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ), true );
 					
 					// Set focus on editor.
 					EditorManager.focusEditor();
 				} );
+			} )
+			.on('click', '.collapse-all', function( e ) {
+				$todoPanel.find( '.file.expanded' )
+				    .toggleClass( 'expanded' )
+				    .toggleClass( 'collapsed' )
+				    .nextUntil( '.file' )
+				    .toggle();
+				
+				// Toggle file visibility.
+				toggleAllFileVisible();
+			} )
+			.on('click', '.expand-all', function( e ) {
+				$todoPanel.find( '.file.collapsed' )
+				    .toggleClass( 'expanded' )
+					.toggleClass( 'collapsed' )
+					.nextUntil( '.file' )
+					.toggle();
+				
+				// Toggle file visibility.
+				toggleAllFileVisible();
 			} );
 		
 		// Setup listeners.
