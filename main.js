@@ -451,25 +451,13 @@ define( function( require, exports, module ) {
 					EditorManager.focusEditor();
 				} );
 			} )
-			.on('click', '.collapse-all', function( e ) {
+			.on( 'click', '.collapse-all', function( e ) {
 				$todoPanel.find( '.file.expanded' )
-				    .toggleClass( 'expanded' )
-				    .toggleClass( 'collapsed' )
-				    .nextUntil( '.file' )
-				    .toggle();
-				
-				// Toggle file visibility.
-				toggleAllFileVisible();
+					.trigger( 'click' );
 			} )
-			.on('click', '.expand-all', function( e ) {
+			.on( 'click', '.expand-all', function( e ) {
 				$todoPanel.find( '.file.collapsed' )
-				    .toggleClass( 'expanded' )
-					.toggleClass( 'collapsed' )
-					.nextUntil( '.file' )
-					.toggle();
-				
-				// Toggle file visibility.
-				toggleAllFileVisible();
+					.trigger( 'click' );
 			} );
 		
 		// Setup listeners.
