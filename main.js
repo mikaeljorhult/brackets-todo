@@ -288,16 +288,6 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Toggle all files if file should be expanded or not.
-	 */
-	function toggleAllFileVisible() {
-		$todoPanel.find( '.file' ).each( function() {
-			var $this = $( this );
-			toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
-		} );
-	}
-	
-	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function registerListeners() {
