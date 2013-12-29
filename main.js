@@ -217,6 +217,7 @@ define( function( require, exports, module ) {
 		
 		resultsHTML = $( resultsHTML );
 		
+		// Show file rows if project search scope.
 		if ( project ) {
 			$todoPanel.removeClass( 'current' );
 			
@@ -437,10 +438,12 @@ define( function( require, exports, module ) {
 				} );
 			} )
 			.on( 'click', '.collapse-all', function( e ) {
+				// Click all expanded files to collapse them.
 				$todoPanel.find( '.file.expanded' )
 					.trigger( 'click' );
 			} )
 			.on( 'click', '.expand-all', function( e ) {
+				// Click all collapsed files to expand them.
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} );

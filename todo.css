@@ -122,48 +122,37 @@
 	display: block;
 }
 
-.brackets-todo .expand-all {
-	display: block;
+.brackets-todo .tools {
 	position: absolute;
-	top: 50%;
+	top: 0;
+	bottom: 0;
 	left: 50px;
-	opacity: 0.3;
-	margin-top: -.71em;
-	padding: 1px .25em 2px;
-	border: 1px solid #444;
-	border-radius: 5px;
-	color: inherit;
-	height: 15px;
-	width: 15px;
-	background-image: url( 'images/expand-all.png' );
-	background-position: center;
-	background-repeat: no-repeat;
+	margin-left: -.5em;
+	line-height: 25px;
 }
 
-.brackets-todo .expand-all:hover {
+.brackets-todo .tools a {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin-left: .25em;
+	background: transparent url( 'images/folder.svg' ) no-repeat left top;
+	line-height: 1;
+	border-radius: 3px;
+}
+
+.brackets-todo .tools a:hover {
+	opacity: .5;
 	background-color: #fff;
+	text-decoration: none;
 }
 
-.brackets-todo .collapse-all {
-	display: block;
-	position: absolute;
-	top: 50%;
-	left: 80px;
-	opacity: 0.3;
-	margin-top: -.71em;
-	padding: 1px .25em 2px;
-	border: 1px solid #444;
-	border-radius: 5px;
-	color: inherit;
-	height: 15px;
-	width: 15px;
-	background-image: url( 'images/collapse-all.png' );
-	background-position: center;
-	background-repeat: no-repeat;
+.brackets-todo .tools .collapse-all {
+	background-position: left top;
 }
 
-.brackets-todo .collapse-all:hover {
-	background-color: #fff;
+.brackets-todo .tools .expand-all {
+	background-position: left -18px;
 }
 
 .brackets-todo.current .expand-all,
