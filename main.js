@@ -136,14 +136,6 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// Show or hide collapse all / expand all button
-			var forProject = settings.search.scope === 'project' ? true : false;
-			if ( forProject ) {
-				$todoPanel.addClass( 'show-collapse-expand-all' );
-			} else {
-				$todoPanel.removeClass( 'show-collapse-expand-all' );
-			}
-			
 			// Trigger callback.
 			if ( callback ) { callback(); }
 			
@@ -220,15 +212,18 @@ define( function( require, exports, module ) {
 	function printTodo() {
 		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
 			resultsHTML = Mustache.render( todoResultsTemplate, {
-				project: project,
 				todos: renderTodo()
 			} );
 		
 		resultsHTML = $( resultsHTML );
 		
 		if ( project ) {
+			$todoPanel.removeClass( 'current' );
+			
 			$( '.file.collapsed', resultsHTML )
 				.nextUntil( '.file' ).hide();
+		} else {
+			$todoPanel.addClass( 'current' );
 		}
 		
 		// Empty container element and apply results template.

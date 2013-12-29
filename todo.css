@@ -7,10 +7,6 @@
 	vertical-align: middle;
 }
 
-.brackets-todo .current tr.file {
-	display: none;
-}
-
 .brackets-todo .done {
 	opacity: .5;
 }
@@ -127,7 +123,7 @@
 }
 
 .brackets-todo .expand-all {
-	display: none;
+	display: block;
 	position: absolute;
 	top: 50%;
 	left: 50px;
@@ -145,11 +141,11 @@
 }
 
 .brackets-todo .expand-all:hover {
-	background-color: #FFF;
+	background-color: #fff;
 }
 
 .brackets-todo .collapse-all {
-	display: none;
+	display: block;
 	position: absolute;
 	top: 50%;
 	left: 80px;
@@ -167,13 +163,11 @@
 }
 
 .brackets-todo .collapse-all:hover {
-	background-color: #FFF;
+	background-color: #fff;
 }
 
-.brackets-todo.show-collapse-expand-all .collapse-all {
-	display: block;
-}
-
-.brackets-todo.show-collapse-expand-all .expand-all {
-	display: block;
+.brackets-todo.current .expand-all,
+.brackets-todo.current .collapse-all,
+.brackets-todo.current tr.file {
+	display: none;
 }
