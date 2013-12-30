@@ -1,5 +1,14 @@
 # Brackets Todo Changelog
 
+## 0.4.x
+* Comments with #-syntax is now recognized.
+* FUTURE tag is now recognized by default.
+* Functionality is broken down into smaller modules.
+* Main functionality is now unit tested.
+* Editor now centers on task when clicked in pane. Thanks to Wei Lin (@anzhihun).
+* Toolbar icons to expand and collapse all files at once. Thanks to Wei Lin (@anzhihun).
+* Several updates to read me and examples. Thanks to Wei Lin (@anzhihun).
+
 ## 0.4.0
 * Use new filesystem API.
 * Pane enabled state is now remembered.

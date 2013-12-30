@@ -136,14 +136,6 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// Show or hide collapse all / expand all button
-			var forProject = settings.search.scope === 'project' ? true : false;
-			if ( forProject ) {
-				$todoPanel.addClass( 'show-collapse-expand-all' );
-			} else {
-				$todoPanel.removeClass( 'show-collapse-expand-all' );
-			}
-			
 			// Trigger callback.
 			if ( callback ) { callback(); }
 			
@@ -220,15 +212,19 @@ define( function( require, exports, module ) {
 	function printTodo() {
 		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
 			resultsHTML = Mustache.render( todoResultsTemplate, {
-				project: project,
 				todos: renderTodo()
 			} );
 		
 		resultsHTML = $( resultsHTML );
 		
+		// Show file rows if project search scope.
 		if ( project ) {
+			$todoPanel.removeClass( 'current' );
+			
 			$( '.file.collapsed', resultsHTML )
 				.nextUntil( '.file' ).hide();
+		} else {
+			$todoPanel.addClass( 'current' );
 		}
 		
 		// Empty container element and apply results template.
@@ -290,16 +286,6 @@ define( function( require, exports, module ) {
 		
 		// Save visibility state.
 		preferences.setValue( 'visible', visible );
-	}
-	
-	/**
-	 * Toggle all files if file should be expanded or not.
-	 */
-	function toggleAllFileVisible() {
-		$todoPanel.find( '.file' ).each( function() {
-			var $this = $( this );
-			toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
-		} );
 	}
 	
 	/**
@@ -451,25 +437,15 @@ define( function( require, exports, module ) {
 					EditorManager.focusEditor();
 				} );
 			} )
-			.on('click', '.collapse-all', function( e ) {
+			.on( 'click', '.collapse-all', function( e ) {
+				// Click all expanded files to collapse them.
 				$todoPanel.find( '.file.expanded' )
-				    .toggleClass( 'expanded' )
-				    .toggleClass( 'collapsed' )
-				    .nextUntil( '.file' )
-				    .toggle();
-				
-				// Toggle file visibility.
-				toggleAllFileVisible();
+					.trigger( 'click' );
 			} )
-			.on('click', '.expand-all', function( e ) {
+			.on( 'click', '.expand-all', function( e ) {
+				// Click all collapsed files to expand them.
 				$todoPanel.find( '.file.collapsed' )
-				    .toggleClass( 'expanded' )
-					.toggleClass( 'collapsed' )
-					.nextUntil( '.file' )
-					.toggle();
-				
-				// Toggle file visibility.
-				toggleAllFileVisible();
+					.trigger( 'click' );
 			} );
 		
 		// Setup listeners.
