@@ -155,8 +155,35 @@
 	background-position: left -18px;
 }
 
+.brackets-todo .tools-tag {
+	position: relative;
+	left: 55px;
+	margin-left: .25em;
+}
+
+.brackets-todo .tools-tag a {
+	display: inline-block;
+	margin-left: .25em;
+	line-height: 1;
+	border-radius: 3px;
+	color: #666;
+}
+
+.brackets-todo .tools-tag a:hover {
+	opacity: .8;
+	background-color: #fff;
+	text-decoration: none;
+}
+
+.brackets-todo .tools-tag .active {
+	opacity: .6;
+	background-color: #fff;
+	text-decoration: none;
+}
+
 .brackets-todo.current .expand-all,
 .brackets-todo.current .collapse-all,
+.brackets-todo.current .tools-tag,
 .brackets-todo.current tr.file {
 	display: none;
 }

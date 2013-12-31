@@ -43,7 +43,8 @@ define( function( require, exports, module ) {
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
-		todoRowTemplate = require( 'text!html/row.html' );
+		todoRowTemplate = require( 'text!html/row.html' ),
+		toolbarTemplate = require( 'text!html/toolbar.html' );
 	
 	// Setup extension.
 	var settings,
@@ -245,6 +246,23 @@ define( function( require, exports, module ) {
 		return resultsHTML;
 	}
 	
+	function renderToolbar(){
+		var tagButtons = [],
+			index = 0,
+			tagName,
+			len = SettingsManager.getSettings().tags.length;
+		for ( index = 0; index < len; index += 1 ) {
+			tagName = SettingsManager.getSettings().tags[index].replace( ' ?', '' );
+			tagButtons.push( {tagName: tagName.toUpperCase()} );
+		}
+		var resultsHTML = Mustache.render( toolbarTemplate, {
+			strings: Strings,
+			tagButtons:	tagButtons
+		} );
+		
+		return resultsHTML;
+	}
+	
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
@@ -396,7 +414,7 @@ define( function( require, exports, module ) {
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {
 				todo: todoFile,
-				strings: Strings
+				toolbar: renderToolbar()
 			} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
@@ -450,6 +468,10 @@ define( function( require, exports, module ) {
 				// Click all collapsed files to expand them.
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
+			} )
+		    .on( 'click', '.tools-tag', function( e ) {
+				var $tagButton = $( e.originalEvent.target );
+				$tagButton.toggleClass( 'active' );
 			} );
 		
 		// Setup listeners.
