@@ -34,6 +34,7 @@ define( function( require, exports, module ) {
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
+		Strings = require( 'modules/strings' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
@@ -393,7 +394,10 @@ define( function( require, exports, module ) {
 	
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
-		var todoHTML = Mustache.render( todoPanelTemplate, { todo: todoFile } ),
+		var todoHTML = Mustache.render( todoPanelTemplate, {
+				todo: todoFile,
+				strings: Strings
+			} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
 		// Cache todo panel.
