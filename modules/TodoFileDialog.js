@@ -18,7 +18,7 @@ define( function ( require, exports, module ) {
 	function showDialog() {
 		var dialog = Dialogs.showModalDialogUsingTemplate( 
 			Mustache.render( todoFileDialogTemplate, {
-				
+				strings: Strings
 			} )
 		);
 		
