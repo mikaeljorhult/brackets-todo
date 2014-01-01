@@ -74,23 +74,7 @@
 	background-color: #5a99c3;
 }
 
-/*--- ACTIONS ---*/
-.brackets-todo .actions a {
-	display: inline-block;
-	width: 1.5em;
-	height: 1.5em;
-	margin-left: .2em;
-	border: 1px solid #999;
-	color: #999;
-	text-align: center;
-	border-radius: 2em;
-}
-
-.brackets-todo .actions a:hover {
-	text-decoration: none;
-}
-
-/*--- TOOLBAR ---*/
+/*--- ICON ---*/
 #brackets-todo-icon {
 	background-image: url( 'images/todo-icon.svg' );
 }
@@ -99,6 +83,7 @@
 	background-position: 0 -24px;
 }
 
+/*--- TOOLBAR ---*/
 .brackets-todo .tools {
 	position: absolute;
 	top: 0;
@@ -113,7 +98,7 @@
 	width: 18px;
 	height: 18px;
 	margin-left: .25em;
-	background: transparent url( 'images/folder.svg' ) no-repeat left top;
+	background: transparent url( 'images/sprite.svg' ) no-repeat left top;
 	line-height: 1;
 	border-radius: 3px;
 }
