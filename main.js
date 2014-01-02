@@ -247,21 +247,57 @@ define( function( require, exports, module ) {
 		return resultsHTML;
 	}
 	
-	function renderToolbar(){
+	/**
+	 * calculate the count of every tag's comments.
+	 */
+	function countByTag() {
+		var counter = {},
+			fileIndex,
+			fileCount = todos.length,
+			todoIndex,
+			todoCount,
+			perFileTodos;
+		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
+			perFileTodos = todos[fileIndex].todos;
+			for ( todoIndex = 0, todoCount = perFileTodos.length; todoIndex < todoCount; todoIndex++ ) {
+				if (!counter[perFileTodos[todoIndex].tag]) {
+					counter[perFileTodos[todoIndex].tag] = 1;
+				} else {
+					counter[perFileTodos[todoIndex].tag] = counter[perFileTodos[todoIndex].tag] + 1;
+				}
+			}
+		}
+		
+		return counter;
+	}
+	
+	function updateTagButtons(){
+		var toolBarHtml = $( renderToolbar() );
+		
+		// Empty container element and apply results template.
+		$todoPanel.find( '.toolbar-buttons' )
+			.empty()
+			.append( toolBarHtml );
+	}
+	
+	function renderToolbar() {
 		var tagButtons = [],
 			index = 0,
 			tagName,
-			len = SettingsManager.getSettings().tags.length;
+			len = SettingsManager.getSettings().tags.length,
+			counterOfTag = countByTag(),
+			count = 0;
 		for ( index = 0; index < len; index += 1 ) {
 			tagName = SettingsManager.getSettings().tags[index].replace( ' ?', '' );
-			tagButtons.push( {tagName: tagName.toUpperCase()} );
+			count = counterOfTag[tagName.toLowerCase()] ? counterOfTag[tagName.toLowerCase()] : 0;
+			tagButtons.push( { tagName: tagName.toUpperCase(),
+							  count: count } );
 		}
-		var resultsHTML = Mustache.render( toolbarTemplate, {
+		
+		return Mustache.render( toolbarTemplate, {
 			strings: Strings,
 			tagButtons:	tagButtons
 		} );
-		
-		return resultsHTML;
 	}
 	
 	/**
@@ -328,6 +364,7 @@ define( function( require, exports, module ) {
 		} );
 		
 		Events.subscribe( 'todos:updated', function() {
+			updateTagButtons();
 			printTodo();
 		} );
 		
@@ -477,6 +514,7 @@ define( function( require, exports, module ) {
 					.trigger( 'click' );
 			} )
 		    .on( 'click', '.tag', function( e ) {
+				// Click on tag button
 				var $tagButton = $( e.originalEvent.target );
 				$tagButton.toggleClass( 'active' );
 			} );

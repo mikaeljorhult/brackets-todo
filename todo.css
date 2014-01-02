@@ -157,8 +157,12 @@
 	text-decoration: none;
 }
 
-.brackets-todo.current .expand-all,
-.brackets-todo.current .collapse-all,
+.brackets-todo.current .tag {
+	right: 20px;
+}
+
+.brackets-todo.current .icon .expand-all,
+.brackets-todo.current .icon .collapse-all,
 .brackets-todo.current tr.file {
 	display: none;
 }
