@@ -35,6 +35,7 @@ define( function( require, exports, module ) {
 		ParseUtils = require( 'modules/ParseUtils' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/strings' ),
+		TodoFileDialog = require( 'modules/TodoFileDialog' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
@@ -427,11 +428,17 @@ define( function( require, exports, module ) {
 				enableTodo( false );
 			} )
 			.on( 'click', '.indicator', function() {
-				// Open file that todo originate from.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: ProjectManager.getProjectRoot().fullPath + '.todo' } ).done( function( currentDocument ) {
-					// Set focus on editor.
-					EditorManager.focusEditor();
-				} );
+				// Check if todo file is used.
+				if ( todoFile ) {
+					// Open file that todo originate from.
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: ProjectManager.getProjectRoot().fullPath + '.todo' } ).done( function( currentDocument ) {
+						// Set focus on editor.
+						EditorManager.focusEditor();
+					} );
+				} else {
+					// Show dialog for creating .todo file.
+					TodoFileDialog.showDialog();
+				}
 			} )
 			.on( 'click', '.file', function( e ) {
 				var $this = $( this );
@@ -469,7 +476,7 @@ define( function( require, exports, module ) {
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-		    .on( 'click', '.tools-tag', function( e ) {
+		    .on( 'click', '.tag', function( e ) {
 				var $tagButton = $( e.originalEvent.target );
 				$tagButton.toggleClass( 'active' );
 			} );

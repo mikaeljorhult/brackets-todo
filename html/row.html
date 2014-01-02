@@ -1,16 +1,16 @@
 {{#files}}
-	<tr class="file{{#visible}} expanded{{/visible}}{{^visible}} collapsed{{/visible}}" data-file="{{path}}">
+	<tr class="file{{#visible}} expanded{{/visible}}{{^visible}} collapsed{{/visible}}" data-file="{{ path }}">
 		<td colspan="3">
-			<span class="jstree-sprite disclosure-triangle"></span>{{{file}}}
+			<span class="jstree-sprite disclosure-triangle"></span>{{{ file }}}
 		</td>
 	</tr>
 	{{#todos}}
-		<tr class="comment{{#done}} done{{/done}}" data-file="{{path}}" data-line="{{line}}" data-char="{{char}}">
-			<td class="line">{{line}}</td>
+		<tr class="comment{{#done}} done{{/done}}" data-file="{{ path }}" data-line="{{ line }}" data-char="{{ char }}">
+			<td class="line">{{ line }}</td>
 			<td class="tag">
-				<span class="{{tag}}">{{tag}}</span>
+				<span class="{{ tag }}">{{ tag }}</span>
 			</td>
-			<td class="message">{{todo}}</td>
+			<td class="message">{{ todo }}</td>
 		</tr>
 	{{/todos}}
 {{/files}}
