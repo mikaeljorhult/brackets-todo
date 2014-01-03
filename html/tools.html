@@ -1,0 +1,10 @@
+<div class="icon">
+	<a href="#" class="indicator" title=".todo">&nbsp;</a>
+	<a href="#" class="expand-all" title="{{strings.EXPAND_ALL}}">&nbsp;</a>
+	<a href="#" class="collapse-all" title="{{strings.COLLAPSE_ALL}}">&nbsp;</a>
+</div>
+<div class="tag">
+	{{#tagButtons}}
+		<a href="#" class="active" data-name="{{tagName}}" title="Show/Hide {{tagName}} comments">&nbsp;{{tagName}} {{count}} &nbsp;</a>
+	{{/tagButtons}}
+</div>

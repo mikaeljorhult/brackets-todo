@@ -45,7 +45,7 @@ define( function( require, exports, module ) {
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
-		toolbarTemplate = require( 'text!html/toolbar.html' );
+		toolbarTemplate = require( 'text!html/tools.html' );
 	
 	// Setup extension.
 	var settings,
@@ -237,11 +237,19 @@ define( function( require, exports, module ) {
 	}
 	
 	/** 
+	 * Filter todos by tag name. 
+	 */
+	function filterTodosByTagName(allTodos) {
+		// TODO filter todos by tag name 
+		return allTodos;
+	}
+	
+	/** 
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
 		var resultsHTML = Mustache.render( todoRowTemplate, {
-			files: todos
+			files: filterTodosByTagName( todos )
 		} );
 		
 		return resultsHTML;
@@ -275,23 +283,17 @@ define( function( require, exports, module ) {
 		var toolBarHtml = $( renderToolbar() );
 		
 		// Empty container element and apply results template.
-		$todoPanel.find( '.toolbar-buttons' )
+		$todoPanel.find( '.tools' )
 			.empty()
 			.append( toolBarHtml );
 	}
 	
 	function renderToolbar() {
 		var tagButtons = [],
-			index = 0,
 			tagName,
-			len = SettingsManager.getSettings().tags.length,
-			counterOfTag = countByTag(),
-			count = 0;
-		for ( index = 0; index < len; index += 1 ) {
-			tagName = SettingsManager.getSettings().tags[index].replace( ' ?', '' );
-			count = counterOfTag[tagName.toLowerCase()] ? counterOfTag[tagName.toLowerCase()] : 0;
-			tagButtons.push( { tagName: tagName.toUpperCase(),
-							  count: count } );
+			counterOfTag = countByTag();
+		for( tagName in counterOfTag ) {
+			tagButtons.push( { tagName: tagName.toUpperCase(), count: counterOfTag[tagName] } );
 		}
 		
 		return Mustache.render( toolbarTemplate, {
@@ -513,10 +515,11 @@ define( function( require, exports, module ) {
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-		    .on( 'click', '.tag', function( e ) {
-				// Click on tag button
+			.on( 'click', '.tag', function( e ) {
+				// show / hide todos by tag name
 				var $tagButton = $( e.originalEvent.target );
 				$tagButton.toggleClass( 'active' );
+				Events.publish( 'todos:updated' );
 			} );
 		
 		// Setup listeners.
