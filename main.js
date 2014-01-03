@@ -346,7 +346,8 @@ define( function( require, exports, module ) {
 			tagButtons.push( { 
 				tagName: tagName.toUpperCase(), 
 				count: counterOfTag[tagName],
-				visible: isTagVisible(tagName)
+				visible: isTagVisible(tagName),
+				strings: Strings
 			} );
 		}
 		

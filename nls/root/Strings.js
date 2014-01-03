@@ -6,6 +6,7 @@ define( {
 	// TOOLBAR.
 	EXPAND_ALL:    "Expand all",
 	COLLAPSE_ALL:  "Collapse all",
+	SHOW_OR_HIDE:  "Show/Hide",
 	
 	// FILE DIALOG.
 	FILE_DIALOG_TITLE:   "Create .todo file?",
