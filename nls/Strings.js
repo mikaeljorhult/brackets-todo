@@ -3,6 +3,7 @@ define( function ( require, exports, module ) {
 	
 	module.exports = {
 		root: true,
-		sv: true
+		sv: true,
+		zh: true
 	};
 } );
