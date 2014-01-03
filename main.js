@@ -329,7 +329,7 @@ define( function( require, exports, module ) {
 		return counter;
 	}
 	
-	function updateTagButtons(){
+	function updateTools(){
 		var $toolsHtml = $( renderTools() );
 		
 		// Empty tools element and apply results template.
@@ -444,7 +444,7 @@ define( function( require, exports, module ) {
 		} );
 		
 		Events.subscribe( 'todos:updated', function() {
-			updateTagButtons();
+			updateTools();
 			printTodo();
 		} );
 		
