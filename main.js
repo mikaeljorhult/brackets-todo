@@ -46,7 +46,7 @@ define( function( require, exports, module ) {
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
-		toolbarTemplate = require( 'text!html/tools.html' );
+		toolsTemplate = require( 'text!html/tools.html' );
 	
 	// Initialize default visibility state. By default, all files are not visible.
 	if ( visibleFiles === undefined ) {
@@ -149,7 +149,7 @@ define( function( require, exports, module ) {
 			if ( visibleTags === undefined ) {
 				visibleTags = [];
 				for ( var index = 0, len = settings.tags.length; index < len; index++ ) {
-					// TODO there may be more better way to get tag name ?
+					// TODO There may be better way to get tag name ?
 					visibleTags.push( settings.tags[index].replace( ' ?', '' ).toLocaleLowerCase() ); 
 				}
 			}
@@ -255,7 +255,7 @@ define( function( require, exports, module ) {
 	 * return true if todos of tag is visible, otherwise false. 
 	 */
 	function isTagVisible(tagName) {
-		return -1 !== visibleTags.indexOf( tagName );
+		return visibleTags.indexOf( tagName ) > -1;
 	}
 	
 	/** 
@@ -317,11 +317,12 @@ define( function( require, exports, module ) {
 		
 		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
 			perFileTodos = todos[fileIndex].todos;
+			
 			for ( todoIndex = 0, todoCount = perFileTodos.length; todoIndex < todoCount; todoIndex++ ) {
-				if (!counter[perFileTodos[todoIndex].tag]) {
+				if ( !counter[perFileTodos[todoIndex].tag] ) {
 					counter[perFileTodos[todoIndex].tag] = 1;
 				} else {
-					counter[perFileTodos[todoIndex].tag] = counter[perFileTodos[todoIndex].tag] + 1;
+					counter[perFileTodos[todoIndex].tag]++;
 				}
 			}
 		}
@@ -351,7 +352,7 @@ define( function( require, exports, module ) {
 			} );
 		}
 		
-		return Mustache.render( toolbarTemplate, {
+		return Mustache.render( toolsTemplate, {
 			strings: Strings,
 			tagButtons:	tagButtons
 		} );
