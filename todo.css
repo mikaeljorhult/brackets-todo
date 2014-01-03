@@ -89,37 +89,43 @@
 	top: 0;
 	bottom: 0;
 	right: 40px;
-	width: 100%;
 	margin-left: -.5em;
 	line-height: 24px;
-	direction: rtl;
+	text-align: right;
 }
 
-.brackets-todo .tools .icons a {
+.brackets-todo .tools > div {
+	display: inline;
+}
+
+.brackets-todo .tools a {
 	display: inline-block;
+	margin-left: .25em;
+	text-decoration: none;
+}
+
+.brackets-todo .icons a {
 	width: 18px;
 	height: 18px;
-	margin-left: .25em;
 	background: transparent url( 'images/sprite.svg' ) no-repeat left top;
 	line-height: 1;
 	border-radius: 3px;
 }
 
-.brackets-todo .tools .icons a:hover {
+.brackets-todo .icons a:hover {
 	opacity: .5;
 	background-color: #fff;
-	text-decoration: none;
 }
 
-.brackets-todo .tools .icons .collapse-all {
+.brackets-todo .icons .collapse-all {
 	background-position: left top;
 }
 
-.brackets-todo .tools .icons .expand-all {
+.brackets-todo .icons .expand-all {
 	background-position: left -18px;
 }
 
-.brackets-todo .tools .icons .indicator {
+.brackets-todo .icons .indicator {
 	opacity: .5;
 	background-position: left -36px;
 }
@@ -128,40 +134,25 @@
 	opacity: 1;
 }
 
-.brackets-todo .tools .tags {
-	width: 100%;
-	position: absolute;
-	top: 3px;
-	bottom: 0px;
-	right: 70px;
+.brackets-todo .tags {
 	font-size: 0.8em;
 	text-transform: uppercase;
 }
 
-.brackets-todo .tools .tags a {
-	display: inline-block;
-	height: 18px;
+.brackets-todo .tags a {
 	line-height: 18px;
 	border-radius: 3px;
-	margin-left: .25em;
 	color: #666;
-	direction: ltr;
 }
 
-.brackets-todo .tools .tags a:hover {
+.brackets-todo .tags .active,
+.brackets-todo .tags a:hover {
 	opacity: .8;
 	background-color: #fff;
-	text-decoration: none;
 }
 
-.brackets-todo .tools .tags .active {
+.brackets-todo .tags .active {
 	opacity: .6;
-	background-color: #fff;
-	text-decoration: none;
-}
-
-.brackets-todo.current .tags {
-	right: 20px;
 }
 
 .brackets-todo.current .icons .expand-all,
