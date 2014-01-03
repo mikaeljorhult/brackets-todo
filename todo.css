@@ -135,6 +135,7 @@
 	bottom: 0px;
 	right: 70px;
 	font-size: 0.8em;
+	text-transform: uppercase;
 }
 
 .brackets-todo .tools .tags a {

@@ -340,21 +340,21 @@ define( function( require, exports, module ) {
 	}
 	
 	function renderTools() {
-		var tagButtons = [],
-			tagName,
+		var tags = [],
 			counterOfTag = countByTag();
-		for( tagName in counterOfTag ) {
-			tagButtons.push( { 
-				tagName: tagName.toUpperCase(), 
-				count: counterOfTag[tagName],
-				visible: isTagVisible(tagName),
+		
+		for( var tag in counterOfTag ) {
+			tags.push( { 
+				name: tag, 
+				count: counterOfTag[ tag ],
+				visible: isTagVisible( tag ),
 				strings: Strings
 			} );
 		}
 		
 		return Mustache.render( toolsTemplate, {
-			strings: Strings,
-			tagButtons:	tagButtons
+			tags: tags,
+			strings: Strings
 		} );
 	}
 	
@@ -594,13 +594,13 @@ define( function( require, exports, module ) {
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-			.on( 'click', '.tag', function( e ) {
+			.on( 'click', '.tags a', function( e ) {
 				// show / hide todos by tag name
-				var $tagButton = $( e.originalEvent.target );
-				$tagButton.toggleClass( 'active' );
+				var $this = $( this )
+					.toggleClass( 'active' );
 				
 				// toggle button state
-				toggleTagVisible( $tagButton.data( 'name' ).toLowerCase(), $tagButton.hasClass( 'active' ) );
+				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'active' ) );
 				
 				// update todos result
 				Events.publish( 'todos:updated' );

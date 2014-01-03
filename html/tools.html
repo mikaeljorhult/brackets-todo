@@ -4,7 +4,7 @@
 	<a href="#" class="collapse-all" title="{{ strings.COLLAPSE_ALL }}">&nbsp;</a>
 </div>
 <div class="tags">
-	{{#tagButtons}}
-		<a href="#" class="{{#visible}} active {{/visible}}" data-name="{{tagName}}" title="{{strings.SHOW_OR_HIDE}} &nbsp;{{tagName}} ">&nbsp;{{tagName}} (&nbsp;{{count}}&nbsp;)&nbsp;</a>
-	{{/tagButtons}}
+	{{#tags}}
+		<a href="#" class="{{#visible}} active {{/visible}}" data-name="{{ name }}" title="{{ strings.SHOW_OR_HIDE }} &nbsp;{{ name }} ">&nbsp;{{ name }} (&nbsp;{{ count }}&nbsp;)&nbsp;</a>
+	{{/tags}}
 </div>
