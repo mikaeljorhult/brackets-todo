@@ -140,9 +140,10 @@
 	display: inline-block;
 	height: 18px;
 	line-height: 18px;
-	margin-left: .25em;	
 	border-radius: 3px;
+	margin-left: .25em;
 	color: #666;
+	direction: ltr;
 }
 
 .brackets-todo .tools .tag a:hover {

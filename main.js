@@ -39,13 +39,19 @@ define( function( require, exports, module ) {
 		
 		// Preferences.
 		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
-		visible = preferences.getValue( 'visible' ),
+		visibleFiles = preferences.getValue( 'visibleFiles' ),
+		visibleTags = preferences.getValue( 'visibleTags' ),
 		
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
 		toolbarTemplate = require( 'text!html/tools.html' );
+	
+	// Initialize default visibility state. By default, all files are not visible.
+	if ( visibleFiles === undefined ) {
+		visibleFiles = [];
+	}
 	
 	// Setup extension.
 	var settings,
@@ -137,6 +143,15 @@ define( function( require, exports, module ) {
 				$todoPanel.addClass( 'todo-file' );
 			} else {
 				$todoPanel.removeClass( 'todo-file' );
+			}
+			
+			// Initialize default tag button's state. By default, all tag is visible.
+			if ( visibleTags === undefined ) {
+				visibleTags = [];
+				for ( var index = 0, len = settings.tags.length; index < len; index++ ) {
+					// TODO there may be more better way to get tag name ?
+					visibleTags.push( settings.tags[index].replace( ' ?', '' ).toLocaleLowerCase() ); 
+				}
 			}
 			
 			// Trigger callback.
@@ -237,11 +252,45 @@ define( function( require, exports, module ) {
 	}
 	
 	/** 
-	 * Filter todos by tag name. 
+	 * return true if todos of tag is visible, otherwise false. 
 	 */
-	function filterTodosByTagName(allTodos) {
-		// TODO filter todos by tag name 
-		return allTodos;
+	function isTagVisible(tagName) {
+		return -1 !== visibleTags.indexOf( tagName );
+	}
+	
+	/** 
+	 * Filter todos by tag. 
+	 */
+	function filterTodosByTag(allTodos) {
+		var todosAfterFilter = [],
+			fileIndex,
+			fileCount = todos.length,
+			todoIndex,
+			todoCount,
+			oldTodos,
+			newTodos = [];
+		
+		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
+			
+			newTodos = [];
+			oldTodos = todos[fileIndex].todos;
+			for ( todoIndex = 0, todoCount = oldTodos.length; todoIndex < todoCount; todoIndex++ ) {
+				if ( isTagVisible( oldTodos[todoIndex].tag.toLocaleLowerCase() ) ) {
+					newTodos.push( oldTodos[todoIndex] );
+				}
+			}
+			
+			// save new todos to result.
+			if ( newTodos.length > 0 ) {
+				todosAfterFilter.push( {} );
+				todosAfterFilter[todosAfterFilter.length-1].file = todos[fileIndex].file;
+				todosAfterFilter[todosAfterFilter.length-1].path = todos[fileIndex].path;
+				todosAfterFilter[todosAfterFilter.length-1].visible = todos[fileIndex].visible;
+				todosAfterFilter[todosAfterFilter.length-1].todos = newTodos;
+			}
+		}
+
+		return todosAfterFilter;
 	}
 	
 	/** 
@@ -249,12 +298,12 @@ define( function( require, exports, module ) {
 	 */
 	function renderTodo() {
 		var resultsHTML = Mustache.render( todoRowTemplate, {
-			files: filterTodosByTagName( todos )
+			files: filterTodosByTag( todos )
 		} );
 		
 		return resultsHTML;
 	}
-	
+
 	/**
 	 * calculate the count of every tag's comments.
 	 */
@@ -265,6 +314,7 @@ define( function( require, exports, module ) {
 			todoIndex,
 			todoCount,
 			perFileTodos;
+		
 		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
 			perFileTodos = todos[fileIndex].todos;
 			for ( todoIndex = 0, todoCount = perFileTodos.length; todoIndex < todoCount; todoIndex++ ) {
@@ -280,20 +330,24 @@ define( function( require, exports, module ) {
 	}
 	
 	function updateTagButtons(){
-		var toolBarHtml = $( renderToolbar() );
+		var $toolsHtml = $( renderTools() );
 		
-		// Empty container element and apply results template.
+		// Empty tools element and apply results template.
 		$todoPanel.find( '.tools' )
 			.empty()
-			.append( toolBarHtml );
+			.append( $toolsHtml );
 	}
 	
-	function renderToolbar() {
+	function renderTools() {
 		var tagButtons = [],
 			tagName,
 			counterOfTag = countByTag();
 		for( tagName in counterOfTag ) {
-			tagButtons.push( { tagName: tagName.toUpperCase(), count: counterOfTag[tagName] } );
+			tagButtons.push( { 
+				tagName: tagName.toUpperCase(), 
+				count: counterOfTag[tagName],
+				visible: isTagVisible(tagName)
+			} );
 		}
 		
 		return Mustache.render( toolbarTemplate, {
@@ -317,7 +371,7 @@ define( function( require, exports, module ) {
 	 * Return if file should be expanded or not.
 	 */
 	function fileVisible( path ) {
-		return ( SettingsManager.getSettings().search.scope === 'project' ? visible.indexOf( path ) > -1 : true );
+		return ( SettingsManager.getSettings().search.scope === 'project' ? visibleFiles.indexOf( path ) > -1 : true );
 	}
 	
 	/**
@@ -333,17 +387,40 @@ define( function( require, exports, module ) {
 		if ( state ) {
 			// Show if already visible.
 			if ( !alreadyVisible ) {
-				visible.push( path );
+				visibleFiles.push( path );
 			}
 		} else {
 			// Hide if already visible.
 			if ( alreadyVisible ) {
-				visible.splice( visible.indexOf( path ), 1 );
+				visibleFiles.splice( visibleFiles.indexOf( path ), 1 );
 			}
 		}
 		
 		// Save visibility state.
-		preferences.setValue( 'visible', visible );
+		preferences.setValue( 'visibleFiles', visibleFiles );
+	}
+	
+	/**
+	 * Toggle if tag button should be checked or not.
+	 */
+	function toggleTagVisible( tagName, state ) {
+		var isAlreadyVisible = isTagVisible(tagName);
+		
+		// Toggle visibility state.
+		if ( state ) {
+			// Show if already visible.
+			if ( !isAlreadyVisible ) {
+				visibleTags.push( tagName );
+			}
+		} else {
+			// Hide if already visible.
+			if ( isAlreadyVisible ) {
+				visibleTags.splice( visibleTags.indexOf(tagName), 1 );
+			}
+		}
+		
+		// Save visibility state.
+		preferences.setValue( 'visibleTags', visibleTags );
 	}
 	
 	/**
@@ -445,7 +522,7 @@ define( function( require, exports, module ) {
 		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
 			loadSettings( function() {
 				// Reset file visibility.
-				visible = [];
+				visibleFiles = [];
 			} );
 		} );
 	}
@@ -454,7 +531,7 @@ define( function( require, exports, module ) {
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {
 				todo: todoFile,
-				toolbar: renderToolbar()
+				tools: renderTools()
 			} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
@@ -519,6 +596,11 @@ define( function( require, exports, module ) {
 				// show / hide todos by tag name
 				var $tagButton = $( e.originalEvent.target );
 				$tagButton.toggleClass( 'active' );
+				
+				// toggle button state
+				toggleTagVisible( $tagButton.data( 'name' ).toLowerCase(), $tagButton.hasClass( 'active' ) );
+				
+				// update todos result
 				Events.publish( 'todos:updated' );
 			} );
 		

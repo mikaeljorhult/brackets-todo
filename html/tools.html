@@ -5,6 +5,6 @@
 </div>
 <div class="tag">
 	{{#tagButtons}}
-		<a href="#" class="active" data-name="{{tagName}}" title="Show/Hide {{tagName}} comments">&nbsp;{{tagName}} {{count}} &nbsp;</a>
+		<a href="#" class="{{#visible}} active {{/visible}}" data-name="{{tagName}}" title="Show/Hide {{tagName}} comments">&nbsp;{{tagName}} ({{count}})&nbsp;</a>
 	{{/tagButtons}}
 </div>
