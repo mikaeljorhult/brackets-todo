@@ -365,7 +365,7 @@ define( function( require, exports, module ) {
 		// Setup regular expression.
 		ParseUtils.setExpression( new RegExp(
 			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
-			'g' + ( settings.case !== false ? '' : 'i' )
+			'g' + ( SettingsManager.getSettings().case !== false ? '' : 'i' )
 		) );
 	}
 	
