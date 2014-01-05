@@ -336,15 +336,18 @@ define( function( require, exports, module ) {
 		return counter;
 	}
 	
-	function updateTools(){
-		var $toolsHtml = $( renderTools() );
-		
-		// Empty tools element and apply results template.
+	/**
+	 * Update toolbar.
+	 */
+	function updateTools() {
+		// Render toolbar and replace old element.
 		$todoPanel.find( '.tools' )
-			.empty()
-			.append( $toolsHtml );
+			.html( renderTools() );
 	}
 	
+	/**
+	 * Render toolbar.
+	 */
 	function renderTools() {
 		var tags = new Array;
 		
