@@ -46,7 +46,7 @@ define( function( require, exports, module ) {
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
-		toolsTemplate = require( 'text!html/tools.html' );
+		todoToolbarTemplate = require( 'text!html/tools.html' );
 	
 	// Initialize default visibility state. By default, all files are not visible.
 	if ( visibleFiles === undefined ) {
@@ -145,13 +145,20 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// Initialize default tag button's state. By default, all tag is visible.
-			if ( visibleTags === undefined ) {
+			// Initialize default tag button's state.
+			if ( true == true || visibleTags === undefined ) {
+				// All tags are visible by default.
 				visibleTags = [];
-				for ( var index = 0, len = settings.tags.length; index < len; index++ ) {
-					// TODO There may be better way to get tag name ?
-					visibleTags.push( settings.tags[index].replace( ' ?', '' ).toLocaleLowerCase() ); 
-				}
+				
+				// Build an array of possible tags.
+				$.each( SettingsManager.getSettings().tags, function( index, tag ) {
+					visibleTags[ tag.toLowerCase() ] = {
+						tag: tag.toLowerCase(),
+						name: tag.replace( /[^a-zA-Z]/g, '' ).toUpperCase(),
+						count: 0,
+						visible: true
+					} ;
+				} );
 			}
 			
 			// Trigger callback.
@@ -271,7 +278,6 @@ define( function( require, exports, module ) {
 			newTodos = [];
 		
 		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
-			
 			newTodos = [];
 			oldTodos = todos[fileIndex].todos;
 			for ( todoIndex = 0, todoCount = oldTodos.length; todoIndex < todoCount; todoIndex++ ) {
@@ -340,19 +346,15 @@ define( function( require, exports, module ) {
 	}
 	
 	function renderTools() {
-		var tags = [],
-			counterOfTag = countByTag();
+		var tags = new Array;
 		
-		for( var tag in counterOfTag ) {
-			tags.push( { 
-				name: tag, 
-				count: counterOfTag[ tag ],
-				visible: isTagVisible( tag ),
-				strings: Strings
-			} );
+		// Create array of tags from visible tags object.
+		for( var tag in visibleTags ) {
+			tags.push( visibleTags[ tag ] );
 		}
 		
-		return Mustache.render( toolsTemplate, {
+		// Render and return toolbar.
+		return Mustache.render( todoToolbarTemplate, {
 			tags: tags,
 			strings: Strings
 		} );

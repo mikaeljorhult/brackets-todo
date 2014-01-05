@@ -1,7 +1,7 @@
 <div class="tags">
 	{{#tags}}
-		<a href="#" class="{{#visible}} active {{/visible}}" data-name="{{ name }}" title="{{ strings.SHOW_OR_HIDE }} &nbsp;{{ name }} ">
-			&nbsp;{{ name }} (&nbsp;{{ count }}&nbsp;)&nbsp;
+		<a href="#" class="{{#visible}}active{{/visible}}" data-name="{{ tag }}" title="{{ strings.SHOW_OR_HIDE }} {{ name }} ">
+			{{ name }} (<span class="count">{{ count }}</span>)
 		</a>
 	{{/tags}}
 </div>
