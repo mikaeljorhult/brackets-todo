@@ -259,16 +259,24 @@ define( function( require, exports, module ) {
 	}
 	
 	/** 
-	 * return true if todos of tag is visible, otherwise false. 
+	 * Check if tag is visible. 
+	 * @return boolean True if tag is visible, otherwise false. 
 	 */
-	function isTagVisible(tagName) {
-		return visibleTags.indexOf( tagName ) > -1;
+	function isTagVisible( tag ) {
+		var visible = false;
+		
+		// Check if tag exists and use that value.
+		if ( visibleTags.hasOwnProperty( tag ) ) {
+			visible = visibleTags[ tag ].visible;
+		}
+		
+		return visible;
 	}
 	
 	/** 
 	 * Filter todos by tag. 
 	 */
-	function filterTodosByTag(allTodos) {
+	function filterTodosByTag( allTodos ) {
 		var todosAfterFilter = [],
 			fileIndex,
 			fileCount = todos.length,
@@ -408,22 +416,14 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Toggle if tag button should be checked or not.
+	 * Toggle tag visibility.
 	 */
-	function toggleTagVisible( tagName, state ) {
-		var isAlreadyVisible = isTagVisible(tagName);
+	function toggleTagVisible( tag, state ) {
+		var visible = ( state !== undefined ? state : isTagVisible( tag ) );
 		
 		// Toggle visibility state.
-		if ( state ) {
-			// Show if already visible.
-			if ( !isAlreadyVisible ) {
-				visibleTags.push( tagName );
-			}
-		} else {
-			// Hide if already visible.
-			if ( isAlreadyVisible ) {
-				visibleTags.splice( visibleTags.indexOf(tagName), 1 );
-			}
+		if ( visibleTags.hasOwnProperty( tag ) ) {
+			visibleTags[ tag ].visible = visible;
 		}
 		
 		// Save visibility state.
