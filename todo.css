@@ -53,19 +53,19 @@
 }
 
 /*--- TAGS STYLING ---*/
-.brackets-todo .todo {
+.brackets-todo .tag .todo {
 	background-color: #d95;
 }
 
-.brackets-todo .note {
+.brackets-todo .tag .note {
 	background-color: #696;
 }
 
-.brackets-todo .fixme {
+.brackets-todo .tag .fixme {
 	background-color: #c95353;
 }
 
-.brackets-todo .future {
+.brackets-todo .tag .future {
 	background-color: #5a99c3;
 }
 
