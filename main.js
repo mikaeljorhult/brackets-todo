@@ -146,12 +146,12 @@ define( function( require, exports, module ) {
 			}
 			
 			// Initialize default tag button's state. By default, all tag is visible.
-			if ( visibleTags === undefined ) {
+			if ( typeof visibleTags === 'undefined' ) {
 				visibleTags = [];
-				for ( var index = 0, len = settings.tags.length; index < len; index++ ) {
-					// TODO There may be better way to get tag name ?
-					visibleTags.push( settings.tags[index].replace( ' ?', '' ).toLocaleLowerCase() ); 
-				}
+				
+				$.each( settings.tags, function( index, tag) {
+					visibleTags.push(tag.replace( ' ?', '' ).toLowerCase());
+				} );
 			}
 			
 			// Trigger callback.
@@ -263,32 +263,28 @@ define( function( require, exports, module ) {
 	 */
 	function filterTodosByTag(allTodos) {
 		var todosAfterFilter = [],
-			fileIndex,
-			fileCount = todos.length,
-			todoIndex,
-			todoCount,
-			oldTodos,
-			newTodos = [];
+			newTodos = [],
+			newFile;
 		
-		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
-			
+		$.each( todos, function( index, file) {
 			newTodos = [];
-			oldTodos = todos[fileIndex].todos;
-			for ( todoIndex = 0, todoCount = oldTodos.length; todoIndex < todoCount; todoIndex++ ) {
-				if ( isTagVisible( oldTodos[todoIndex].tag.toLocaleLowerCase() ) ) {
-					newTodos.push( oldTodos[todoIndex] );
+			
+			$.each( file.todos, function( index, todo ) {
+				if ( isTagVisible( todo.tag.toLowerCase() ) ) {
+					newTodos.push(todo);
 				}
-			}
+			} );
 			
 			// save new todos to result.
 			if ( newTodos.length > 0 ) {
-				todosAfterFilter.push( {} );
-				todosAfterFilter[todosAfterFilter.length-1].file = todos[fileIndex].file;
-				todosAfterFilter[todosAfterFilter.length-1].path = todos[fileIndex].path;
-				todosAfterFilter[todosAfterFilter.length-1].visible = todos[fileIndex].visible;
-				todosAfterFilter[todosAfterFilter.length-1].todos = newTodos;
+				newFile = {};
+				newFile.file = file.file;
+				newFile.path = file.path;
+				newFile.visible = file.visible;
+				newFile.todos = newTodos;
+				todosAfterFilter.push( newFile );
 			}
-		}
+		} );
 
 		return todosAfterFilter;
 	}
@@ -308,25 +304,18 @@ define( function( require, exports, module ) {
 	 * calculate the count of every tag's comments.
 	 */
 	function countByTag() {
-		var counter = {},
-			fileIndex,
-			fileCount = todos.length,
-			todoIndex,
-			todoCount,
-			perFileTodos;
-		
-		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
-			perFileTodos = todos[fileIndex].todos;
-			
-			for ( todoIndex = 0, todoCount = perFileTodos.length; todoIndex < todoCount; todoIndex++ ) {
-				if ( !counter[perFileTodos[todoIndex].tag] ) {
-					counter[perFileTodos[todoIndex].tag] = 1;
+		var counter = {};
+
+		$.each(todos, function( index, file) {
+			$.each(file.todos, function( index, todo) {
+				if ( todo.tag in counter ) {
+					counter[todo.tag]++;
 				} else {
-					counter[perFileTodos[todoIndex].tag]++;
+					counter[todo.tag] = 1;
 				}
-			}
-		}
-		
+			} );
+		} );
+
 		return counter;
 	}
 	
