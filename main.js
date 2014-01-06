@@ -146,9 +146,9 @@ define( function( require, exports, module ) {
 			}
 			
 			// Initialize default tag button's state.
-			if ( true == true || visibleTags === undefined ) {
+			if ( visibleTags === undefined ) {
 				// All tags are visible by default.
-				visibleTags = [];
+				visibleTags = {};
 				
 				// Build an array of possible tags.
 				$.each( SettingsManager.getSettings().tags, function( index, tag ) {
@@ -159,6 +159,8 @@ define( function( require, exports, module ) {
 						visible: true
 					} ;
 				} );
+				
+				preferences.setValue( 'visibleTags', visibleTags );
 			}
 			
 			// Trigger callback.
