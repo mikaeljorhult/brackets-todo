@@ -89,11 +89,13 @@
 	top: 0;
 	bottom: 0;
 	right: 40px;
+	width: 100%;
 	margin-left: -.5em;
 	line-height: 24px;
+	direction: rtl;
 }
 
-.brackets-todo .tools a {
+.brackets-todo .tools .icon a {
 	display: inline-block;
 	width: 18px;
 	height: 18px;
@@ -103,31 +105,65 @@
 	border-radius: 3px;
 }
 
-.brackets-todo .tools a:hover {
+.brackets-todo .tools .icon a:hover {
 	opacity: .5;
 	background-color: #fff;
 	text-decoration: none;
 }
 
-.brackets-todo .tools .collapse-all {
+.brackets-todo .tools .icon .collapse-all {
 	background-position: left top;
 }
 
-.brackets-todo .tools .expand-all {
+.brackets-todo .tools .icon .expand-all {
 	background-position: left -18px;
 }
 
-.brackets-todo .tools .indicator {
+.brackets-todo .tools .icon .indicator {
 	opacity: .5;
 	background-position: left -36px;
 }
 
-.brackets-todo.todo-file .indicator {
+.brackets-todo.todo-file .icon .indicator {
 	opacity: 1;
 }
 
-.brackets-todo.current .expand-all,
-.brackets-todo.current .collapse-all,
+.brackets-todo .tools .tag {
+	position: absolute;
+	top: 3px;
+	bottom: 0px;
+	width: 100%;
+	right: 70px;
+}
+
+.brackets-todo .tools .tag a {
+	display: inline-block;
+	height: 18px;
+	line-height: 18px;
+	border-radius: 3px;
+	margin-left: .25em;
+	color: #666;
+	direction: ltr;
+}
+
+.brackets-todo .tools .tag a:hover {
+	opacity: .8;
+	background-color: #fff;
+	text-decoration: none;
+}
+
+.brackets-todo .tools .tag .active {
+	opacity: .6;
+	background-color: #fff;
+	text-decoration: none;
+}
+
+.brackets-todo.current .tag {
+	right: 20px;
+}
+
+.brackets-todo.current .icon .expand-all,
+.brackets-todo.current .icon .collapse-all,
 .brackets-todo.current tr.file {
 	display: none;
 }
