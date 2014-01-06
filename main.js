@@ -278,35 +278,20 @@ define( function( require, exports, module ) {
 	/** 
 	 * Filter todos by tag. 
 	 */
-	function filterTodosByTag( allTodos ) {
-		var todosAfterFilter = [],
-			fileIndex,
-			fileCount = todos.length,
-			todoIndex,
-			todoCount,
-			oldTodos,
-			newTodos = [];
-		
-		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
-			newTodos = [];
-			oldTodos = todos[fileIndex].todos;
-			for ( todoIndex = 0, todoCount = oldTodos.length; todoIndex < todoCount; todoIndex++ ) {
-				if ( isTagVisible( oldTodos[todoIndex].tag.toLocaleLowerCase() ) ) {
-					newTodos.push( oldTodos[todoIndex] );
-				}
+	function filterTodosByTag( beforeFilter ) {
+		beforeFilter = beforeFilter.filter( function( file ) {
+			if ( file.todos === undefined || file.todos.length < 0 ) {
+				return false;
 			}
 			
-			// save new todos to result.
-			if ( newTodos.length > 0 ) {
-				todosAfterFilter.push( {} );
-				todosAfterFilter[todosAfterFilter.length-1].file = todos[fileIndex].file;
-				todosAfterFilter[todosAfterFilter.length-1].path = todos[fileIndex].path;
-				todosAfterFilter[todosAfterFilter.length-1].visible = todos[fileIndex].visible;
-				todosAfterFilter[todosAfterFilter.length-1].todos = newTodos;
-			}
-		}
+			file.todos = file.todos.filter( function( comment ) {
+				return isTagVisible( comment.tag );
+			} );
+			
+			return ( file.todos.length > 0 ? true : false );
+		} );
 
-		return todosAfterFilter;
+		return beforeFilter;
 	}
 	
 	/** 
