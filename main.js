@@ -146,7 +146,6 @@ define( function( require, exports, module ) {
 			
 			// Initialize default tag button's state.
 			if ( visibleTags === undefined ) {
-				// All tags are visible by default.
 				visibleTags = {};
 				
 				// Build an array of possible tags.
@@ -278,8 +277,12 @@ define( function( require, exports, module ) {
 	 * Filter todos by tag. 
 	 */
 	function filterTodosByTag( beforeFilter ) {
-		beforeFilter = beforeFilter.filter( function( file ) {
-			if ( file.todos === undefined || file.todos.length < 0 ) {
+		if ( beforeFilter.length === 0 ) { return beforeFilter; }
+		
+		var afterFilter = beforeFilter.slice( 0 );
+		
+		afterFilter = afterFilter.filter( function( file ) {
+			if ( file.todos === undefined || file.todos.length < 1 ) {
 				return false;
 			}
 			
@@ -290,7 +293,7 @@ define( function( require, exports, module ) {
 			return ( file.todos.length > 0 ? true : false );
 		} );
 
-		return beforeFilter;
+		return afterFilter;
 	}
 	
 	/** 
@@ -586,12 +589,12 @@ define( function( require, exports, module ) {
 					.trigger( 'click' );
 			} )
 			.on( 'click', '.tags a', function( e ) {
-				// show / hide todos by tag name
+				// Show or hide clicked tag.
 				var $this = $( this )
-					.toggleClass( 'active' );
+					.toggleClass( 'visible' );
 				
-				// toggle button state
-				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'active' ) );
+				// Toggle tag visibility.
+				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
 				
 				// Update list of comments.
 				run();

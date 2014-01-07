@@ -141,13 +141,13 @@
 	color: #666;
 }
 
-.brackets-todo .tags .active,
+.brackets-todo .tags .visible,
 .brackets-todo .tags a:hover {
 	opacity: .8;
 	background-color: #fff;
 }
 
-.brackets-todo .tags .active {
+.brackets-todo .tags .visible {
 	opacity: .6;
 }
 
