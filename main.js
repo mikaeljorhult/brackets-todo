@@ -593,8 +593,8 @@ define( function( require, exports, module ) {
 				// toggle button state
 				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'active' ) );
 				
-				// update todos result
-				Events.publish( 'todos:updated' );
+				// Update list of comments.
+				run();
 			} );
 		
 		// Setup listeners.
