@@ -8,6 +8,7 @@
 * .todo file can be created automatically if not available.
 * New icon for indicating use of .todo file.
 * Support for localization.
+* Filtering by tag name. Thanks to Wei Lin (@anzhihun).
 * Editor now centers on task when clicked in pane. Thanks to Wei Lin (@anzhihun).
 * Toolbar icons to expand and collapse all files at once. Thanks to Wei Lin (@anzhihun).
 * Several updates to read me and examples. Thanks to Wei Lin (@anzhihun).

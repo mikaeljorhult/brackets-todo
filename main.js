@@ -279,17 +279,22 @@ define( function( require, exports, module ) {
 	function filterTodosByTag( beforeFilter ) {
 		if ( beforeFilter.length === 0 ) { return beforeFilter; }
 		
+		// Create clone of array to work with.
 		var afterFilter = beforeFilter.slice( 0 );
 		
+		// Go through each file and only return those with visible comments.
 		afterFilter = afterFilter.filter( function( file ) {
+			// Do not return if no valid todos.
 			if ( file.todos === undefined || file.todos.length < 1 ) {
 				return false;
 			}
 			
+			// Go through each comment and only return those of visible tags.
 			file.todos = file.todos.filter( function( comment ) {
 				return isTagVisible( comment.tag );
 			} );
 			
+			// Check if file has any visible todos after filtering.
 			return ( file.todos.length > 0 ? true : false );
 		} );
 
@@ -308,29 +313,23 @@ define( function( require, exports, module ) {
 	}
 
 	/**
-	 * calculate the count of every tag's comments.
+	 * Count number of occurences of each tag.
 	 */
-	function countByTag() {
-		var counter = {},
-			fileIndex,
-			fileCount = todos.length,
-			todoIndex,
-			todoCount,
-			perFileTodos;
+	function countByTag( tag ) {
+		var count = 0;
 		
-		for ( fileIndex = 0; fileIndex < fileCount; fileIndex++ ) {
-			perFileTodos = todos[fileIndex].todos;
-			
-			for ( todoIndex = 0, todoCount = perFileTodos.length; todoIndex < todoCount; todoIndex++ ) {
-				if ( !counter[perFileTodos[todoIndex].tag] ) {
-					counter[perFileTodos[todoIndex].tag] = 1;
-				} else {
-					counter[perFileTodos[todoIndex].tag]++;
+		// Go through each file.
+		$.each( todos, function( index, file ) {
+			// Go through each comment.
+			$.each( file.todos, function( index, comment ) {
+				// If comment is of requested type, add one to count.
+				if ( comment.tag == tag ) {
+					count++;
 				}
-			}
-		}
+			} );
+		} );
 		
-		return counter;
+		return count;
 	}
 	
 	/**
@@ -350,6 +349,8 @@ define( function( require, exports, module ) {
 		
 		// Create array of tags from visible tags object.
 		for( var tag in visibleTags ) {
+			visibleTags[ tag ].count = countByTag( tag );
+			
 			tags.push( visibleTags[ tag ] );
 		}
 		
