@@ -54,8 +54,7 @@ define( function( require, exports, module ) {
 	}
 	
 	// Setup extension.
-	var settings,
-		todos = [],
+	var todos = [],
 		todoFile,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
@@ -136,7 +135,7 @@ define( function( require, exports, module ) {
 			todoFile = false;
 		} ).always( function() {
 			// Merge default settings with JSON.
-			settings = SettingsManager.mergeSettings( userSettings );
+			SettingsManager.mergeSettings( userSettings );
 			
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
