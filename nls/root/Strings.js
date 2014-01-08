@@ -1,4 +1,7 @@
 define( {
+	// EXTENSION.
+	EXTENSION_NAME: "Todo",
+	
 	// GENERAL.
 	YES: "Yes",
 	NO:  "No",

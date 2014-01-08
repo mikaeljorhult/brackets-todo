@@ -26,7 +26,6 @@ define( function( require, exports, module ) {
 		
 		// Extension basics.
 		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
-		MENU_NAME = 'Todo',
 		
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
@@ -60,7 +59,7 @@ define( function( require, exports, module ) {
 		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
 	
 	// Register extension.
-	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
+	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
@@ -528,7 +527,8 @@ define( function( require, exports, module ) {
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {
 				todo: todoFile,
-				tools: renderTools()
+				tools: renderTools(),
+				strings: Strings
 			} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		

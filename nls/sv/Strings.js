@@ -1,4 +1,7 @@
 define( {
+	// EXTENSION.
+	EXTENSION_NAME: "Att göra",
+	
 	// GENERAL.
 	YES: "Ja",
 	NO:  "Nej",
