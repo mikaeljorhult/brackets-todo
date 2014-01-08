@@ -10,6 +10,11 @@ define( function( require, exports, module ) {
 	function mergeSettings( userSettings ) {
 		settings = jQuery.extend( true, {}, Defaults.defaultSettings, userSettings );
 		
+		// Replace, don't merge, array of tags if present in user settings.
+		if ( userSettings.tags !== undefined && Object.prototype.toString.call( userSettings.tags ) === '[object Array]' ) {
+			settings.tags = userSettings.tags;
+		}
+		
 		return settings;
 	}
 	
