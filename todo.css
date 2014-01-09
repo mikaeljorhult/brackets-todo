@@ -20,7 +20,6 @@
 	display: inline-block;
 	width: 18px;
 	height: 16px;
-	background-color: transparent;
 	background-position: 8px 4px;
 }
 
@@ -41,11 +40,7 @@
 	padding: 0 .5em;
 }
 
-.brackets-todo .actions {
-	text-align: right;
-}
-
-.brackets-todo span {
+.brackets-todo .tag span {
 	display: inline-block;
 	width: 	5.2em;
 	margin: 0 .1em;
@@ -58,19 +53,19 @@
 }
 
 /*--- TAGS STYLING ---*/
-.brackets-todo .todo {
+.brackets-todo .tag .todo {
 	background-color: #d95;
 }
 
-.brackets-todo .note {
+.brackets-todo .tag .note {
 	background-color: #696;
 }
 
-.brackets-todo .fixme {
+.brackets-todo .tag .fixme {
 	background-color: #c95353;
 }
 
-.brackets-todo .future {
+.brackets-todo .tag .future {
 	background-color: #5a99c3;
 }
 
@@ -89,81 +84,80 @@
 	top: 0;
 	bottom: 0;
 	right: 40px;
-	width: 100%;
 	margin-left: -.5em;
 	line-height: 24px;
-	direction: rtl;
+	text-align: right;
 }
 
-.brackets-todo .tools .icon a {
+.brackets-todo .tools > div {
+	display: inline;
+}
+
+.brackets-todo .tools a {
 	display: inline-block;
+	margin-left: .25em;
+	text-decoration: none;
+}
+
+.brackets-todo .icons a {
 	width: 18px;
 	height: 18px;
-	margin-left: .25em;
 	background: transparent url( 'images/sprite.svg' ) no-repeat left top;
 	line-height: 1;
 	border-radius: 3px;
 }
 
-.brackets-todo .tools .icon a:hover {
+.brackets-todo .icons a:hover {
 	opacity: .5;
 	background-color: #fff;
-	text-decoration: none;
 }
 
-.brackets-todo .tools .icon .collapse-all {
+.brackets-todo .icons .collapse-all {
 	background-position: left top;
 }
 
-.brackets-todo .tools .icon .expand-all {
+.brackets-todo .icons .expand-all {
 	background-position: left -18px;
 }
 
-.brackets-todo .tools .icon .indicator {
+.brackets-todo .icons .indicator {
 	opacity: .5;
 	background-position: left -36px;
 }
 
-.brackets-todo.todo-file .icon .indicator {
+.brackets-todo.todo-file .icons .indicator {
 	opacity: 1;
 }
 
-.brackets-todo .tools .tag {
-	position: absolute;
-	top: 3px;
-	bottom: 0px;
-	width: 100%;
-	right: 70px;
+.brackets-todo .tags {
+	font-size: 0.8em;
+	text-transform: uppercase;
 }
 
-.brackets-todo .tools .tag a {
-	display: inline-block;
-	height: 18px;
+.brackets-todo .tags a {
+	padding: 0 .25em;
 	line-height: 18px;
 	border-radius: 3px;
-	margin-left: .25em;
 	color: #666;
-	direction: ltr;
 }
 
-.brackets-todo .tools .tag a:hover {
+.brackets-todo .tags .visible,
+.brackets-todo .tags a:hover {
 	opacity: .8;
 	background-color: #fff;
-	text-decoration: none;
 }
 
-.brackets-todo .tools .tag .active {
+.brackets-todo .tags .visible {
 	opacity: .6;
-	background-color: #fff;
-	text-decoration: none;
 }
 
-.brackets-todo.current .tag {
-	right: 20px;
+.brackets-todo .tags .count {
+	padding: 0 .15em;
 }
 
-.brackets-todo.current .icon .expand-all,
-.brackets-todo.current .icon .collapse-all,
+/*--- PROJECT WIDE SEARCH ---*/
+.brackets-todo.current .icons .expand-all,
+.brackets-todo.current .icons .collapse-all,
 .brackets-todo.current tr.file {
 	display: none;
 }

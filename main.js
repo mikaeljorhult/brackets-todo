@@ -26,7 +26,6 @@ define( function( require, exports, module ) {
 		
 		// Extension basics.
 		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
-		MENU_NAME = 'Todo',
 		
 		// Todo modules.
 		Defaults = require( 'modules/Defaults' ),
@@ -46,7 +45,7 @@ define( function( require, exports, module ) {
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
-		toolsTemplate = require( 'text!html/tools.html' );
+		todoToolbarTemplate = require( 'text!html/tools.html' );
 	
 	// Initialize default visibility state. By default, all files are not visible.
 	if ( visibleFiles === undefined ) {
@@ -54,14 +53,13 @@ define( function( require, exports, module ) {
 	}
 	
 	// Setup extension.
-	var settings,
-		todos = [],
+	var todos = [],
 		todoFile,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
 	
 	// Register extension.
-	CommandManager.register( MENU_NAME, COMMAND_ID, toggleTodo );
+	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
 	
 	// Add command to menu.
 	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
@@ -136,7 +134,7 @@ define( function( require, exports, module ) {
 			todoFile = false;
 		} ).always( function() {
 			// Merge default settings with JSON.
-			settings = SettingsManager.mergeSettings( userSettings );
+			SettingsManager.mergeSettings( userSettings );
 			
 			// Show or hide .todo indicator.
 			if ( todoFile ) {
@@ -145,13 +143,21 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// Initialize default tag button's state. By default, all tag is visible.
-			if ( typeof visibleTags === 'undefined' ) {
-				visibleTags = [];
+			// Initialize default tag button's state.
+			if ( visibleTags === undefined ) {
+				visibleTags = {};
 				
-				$.each( settings.tags, function( index, tag) {
-					visibleTags.push(tag.replace( ' ?', '' ).toLowerCase());
+				// Build an array of possible tags.
+				$.each( SettingsManager.getSettings().tags, function( index, tag ) {
+					visibleTags[ tag.toLowerCase() ] = {
+						tag: tag.toLowerCase(),
+						name: tag.replace( /[^a-zA-Z]/g, '' ).toUpperCase(),
+						count: 0,
+						visible: true
+					} ;
 				} );
+				
+				preferences.setValue( 'visibleTags', visibleTags );
 			}
 			
 			// Trigger callback.
@@ -252,41 +258,46 @@ define( function( require, exports, module ) {
 	}
 	
 	/** 
-	 * return true if todos of tag is visible, otherwise false. 
+	 * Check if tag is visible. 
+	 * @return boolean True if tag is visible, otherwise false. 
 	 */
-	function isTagVisible(tagName) {
-		return visibleTags.indexOf( tagName ) > -1;
+	function isTagVisible( tag ) {
+		var visible = false;
+		
+		// Check if tag exists and use that value.
+		if ( visibleTags.hasOwnProperty( tag ) ) {
+			visible = visibleTags[ tag ].visible;
+		}
+		
+		return visible;
 	}
 	
 	/** 
 	 * Filter todos by tag. 
 	 */
-	function filterTodosByTag(allTodos) {
-		var todosAfterFilter = [],
-			newTodos = [],
-			newFile;
+	function filterTodosByTag( beforeFilter ) {
+		if ( beforeFilter.length === 0 ) { return beforeFilter; }
 		
-		$.each( todos, function( index, file) {
-			newTodos = [];
+		// Create clone of array to work with.
+		var afterFilter = beforeFilter.slice( 0 );
+		
+		// Go through each file and only return those with visible comments.
+		afterFilter = afterFilter.filter( function( file ) {
+			// Do not return if no valid todos.
+			if ( file.todos === undefined || file.todos.length < 1 ) {
+				return false;
+			}
 			
-			$.each( file.todos, function( index, todo ) {
-				if ( isTagVisible( todo.tag.toLowerCase() ) ) {
-					newTodos.push(todo);
-				}
+			// Go through each comment and only return those of visible tags.
+			file.todos = file.todos.filter( function( comment ) {
+				return isTagVisible( comment.tag );
 			} );
 			
-			// save new todos to result.
-			if ( newTodos.length > 0 ) {
-				newFile = {};
-				newFile.file = file.file;
-				newFile.path = file.path;
-				newFile.visible = file.visible;
-				newFile.todos = newTodos;
-				todosAfterFilter.push( newFile );
-			}
+			// Check if file has any visible todos after filtering.
+			return ( file.todos.length > 0 ? true : false );
 		} );
 
-		return todosAfterFilter;
+		return afterFilter;
 	}
 	
 	/** 
@@ -301,49 +312,51 @@ define( function( require, exports, module ) {
 	}
 
 	/**
-	 * calculate the count of every tag's comments.
+	 * Count number of occurences of each tag.
 	 */
-	function countByTag() {
-		var counter = {};
-
-		$.each(todos, function( index, file) {
-			$.each(file.todos, function( index, todo) {
-				if ( todo.tag in counter ) {
-					counter[todo.tag]++;
-				} else {
-					counter[todo.tag] = 1;
+	function countByTag( tag ) {
+		var count = 0;
+		
+		// Go through each file.
+		$.each( todos, function( index, file ) {
+			// Go through each comment.
+			$.each( file.todos, function( index, comment ) {
+				// If comment is of requested type, add one to count.
+				if ( comment.tag == tag ) {
+					count++;
 				}
 			} );
 		} );
-
-		return counter;
-	}
-	
-	function updateTools(){
-		var $toolsHtml = $( renderTools() );
 		
-		// Empty tools element and apply results template.
-		$todoPanel.find( '.tools' )
-			.empty()
-			.append( $toolsHtml );
+		return count;
 	}
 	
+	/**
+	 * Update toolbar.
+	 */
+	function updateTools() {
+		// Render toolbar and replace old element.
+		$todoPanel.find( '.tools' )
+			.html( renderTools() );
+	}
+	
+	/**
+	 * Render toolbar.
+	 */
 	function renderTools() {
-		var tagButtons = [],
-			tagName,
-			counterOfTag = countByTag();
-		for( tagName in counterOfTag ) {
-			tagButtons.push( { 
-				tagName: tagName.toUpperCase(), 
-				count: counterOfTag[tagName],
-				visible: isTagVisible(tagName),
-				strings: Strings
-			} );
+		var tags = new Array;
+		
+		// Create array of tags from visible tags object.
+		for( var tag in visibleTags ) {
+			visibleTags[ tag ].count = countByTag( tag );
+			
+			tags.push( visibleTags[ tag ] );
 		}
 		
-		return Mustache.render( toolsTemplate, {
-			strings: Strings,
-			tagButtons:	tagButtons
+		// Render and return toolbar.
+		return Mustache.render( todoToolbarTemplate, {
+			tags: tags,
+			strings: Strings
 		} );
 	}
 	
@@ -354,7 +367,7 @@ define( function( require, exports, module ) {
 		// Setup regular expression.
 		ParseUtils.setExpression( new RegExp(
 			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
-			'g' + ( settings.case !== false ? '' : 'i' )
+			'g' + ( SettingsManager.getSettings().case !== false ? '' : 'i' )
 		) );
 	}
 	
@@ -392,22 +405,14 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Toggle if tag button should be checked or not.
+	 * Toggle tag visibility.
 	 */
-	function toggleTagVisible( tagName, state ) {
-		var isAlreadyVisible = isTagVisible(tagName);
+	function toggleTagVisible( tag, state ) {
+		var visible = ( state !== undefined ? state : isTagVisible( tag ) );
 		
 		// Toggle visibility state.
-		if ( state ) {
-			// Show if already visible.
-			if ( !isAlreadyVisible ) {
-				visibleTags.push( tagName );
-			}
-		} else {
-			// Hide if already visible.
-			if ( isAlreadyVisible ) {
-				visibleTags.splice( visibleTags.indexOf(tagName), 1 );
-			}
+		if ( visibleTags.hasOwnProperty( tag ) ) {
+			visibleTags[ tag ].visible = visible;
 		}
 		
 		// Save visibility state.
@@ -522,7 +527,8 @@ define( function( require, exports, module ) {
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {
 				todo: todoFile,
-				tools: renderTools()
+				tools: renderTools(),
+				strings: Strings
 			} ),
 			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		
@@ -583,16 +589,16 @@ define( function( require, exports, module ) {
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-			.on( 'click', '.tag', function( e ) {
-				// show / hide todos by tag name
-				var $tagButton = $( e.originalEvent.target );
-				$tagButton.toggleClass( 'active' );
+			.on( 'click', '.tags a', function( e ) {
+				// Show or hide clicked tag.
+				var $this = $( this )
+					.toggleClass( 'visible' );
 				
-				// toggle button state
-				toggleTagVisible( $tagButton.data( 'name' ).toLowerCase(), $tagButton.hasClass( 'active' ) );
+				// Toggle tag visibility.
+				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
 				
-				// update todos result
-				Events.publish( 'todos:updated' );
+				// Update list of comments.
+				run();
 			} );
 		
 		// Setup listeners.

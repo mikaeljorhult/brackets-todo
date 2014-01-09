@@ -1,9 +1,13 @@
 define( {
+	// EXTENSION.
+	EXTENSION_NAME: "Todo",
+	
 	// GENERAL.
 	YES: "Yes",
 	NO:  "No",
 	
 	// TOOLBAR.
+	CONFIGURE:     "Configure",
 	EXPAND_ALL:    "Expand all",
 	COLLAPSE_ALL:  "Collapse all",
 	SHOW_OR_HIDE:  "Show/Hide",
