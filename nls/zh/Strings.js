@@ -1,4 +1,7 @@
 define( {
+    // EXTENSION.
+	EXTENSION_NAME: "任务列表",
+    
 	// GENERAL.
 	YES: "是",
 	NO:  "否",
