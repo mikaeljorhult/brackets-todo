@@ -56,7 +56,7 @@ define( function( require, exports, module ) {
 	var todos = [],
 		todoFile,
 		$todoPanel,
-		$todoIcon = $( '<a href="#" title="Todo" id="brackets-todo-icon"></a>' );
+		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' );
 	
 	// Register extension.
 	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
