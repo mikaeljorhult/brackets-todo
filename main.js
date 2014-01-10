@@ -106,7 +106,7 @@ define( function( require, exports, module ) {
 		// Mark menu item as enabled/disabled.
 		CommandManager.get( COMMAND_ID ).setChecked( enabled );
 	}
-    
+	
 	/**
 	 * Initialize tags according to settings's tags.
 	 * If user have not set the tag's visibility, all tags are visible by default.
@@ -124,6 +124,7 @@ define( function( require, exports, module ) {
 					visible: true
 				};
 			} );
+			
 			preferences.setValue( 'visibleTags', visibleTags );
 		}
 	}
