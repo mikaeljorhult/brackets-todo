@@ -47,7 +47,7 @@ define( function( require, exports, module ) {
 		todoRowTemplate = require( 'text!html/row.html' ),
 		todoToolbarTemplate = require( 'text!html/tools.html' );
 	
-	// Initialize default visibility state. By default, all files are not visible.
+	// All files are not visible by default.
 	if ( visibleFiles === undefined ) {
 		visibleFiles = [];
 	}
@@ -106,6 +106,27 @@ define( function( require, exports, module ) {
 		// Mark menu item as enabled/disabled.
 		CommandManager.get( COMMAND_ID ).setChecked( enabled );
 	}
+    
+	/**
+	 * Initialize tags according to settings's tags.
+	 * If user have not set the tag's visibility, all tags are visible by default.
+	 */
+	function initializeDefaultTags() {
+		if ( visibleTags === undefined ) {
+			visibleTags = {};
+			
+			// Build an array of possible tags.
+			$.each( SettingsManager.getSettings().tags, function( index, tag ) {
+				visibleTags[ tag.toLowerCase() ] = {
+					tag: tag.toLowerCase(),
+					name: tag.replace( /[^a-zA-Z]/g, '' ),
+					count: 0,
+					visible: true
+				};
+			} );
+			preferences.setValue( 'visibleTags', visibleTags );
+		}
+	}
 	
 	/**
 	 * Check for settings file and load if it exists.
@@ -143,22 +164,8 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// Initialize default tag button's state.
-			if ( visibleTags === undefined ) {
-				visibleTags = {};
-				
-				// Build an array of possible tags.
-				$.each( SettingsManager.getSettings().tags, function( index, tag ) {
-					visibleTags[ tag.toLowerCase() ] = {
-						tag: tag.toLowerCase(),
-						name: tag.replace( /[^a-zA-Z]/g, '' ).toUpperCase(),
-						count: 0,
-						visible: true
-					} ;
-				} );
-				
-				preferences.setValue( 'visibleTags', visibleTags );
-			}
+			// All tags are visible by default. 
+			initializeDefaultTags();
 			
 			// Trigger callback.
 			if ( callback ) { callback(); }
@@ -278,8 +285,8 @@ define( function( require, exports, module ) {
 	function filterTodosByTag( beforeFilter ) {
 		if ( beforeFilter.length === 0 ) { return beforeFilter; }
 		
-		// Create clone of array to work with.
-		var afterFilter = beforeFilter.slice( 0 );
+		// Create deep clone of array to work with.   
+		var afterFilter = JSON.parse( JSON.stringify( beforeFilter ) );
 		
 		// Go through each file and only return those with visible comments.
 		afterFilter = afterFilter.filter( function( file ) {
@@ -344,7 +351,7 @@ define( function( require, exports, module ) {
 	 * Render toolbar.
 	 */
 	function renderTools() {
-		var tags = new Array;
+		var tags = [];
 		
 		// Create array of tags from visible tags object.
 		for( var tag in visibleTags ) {
@@ -385,7 +392,7 @@ define( function( require, exports, module ) {
 		var alreadyVisible = fileVisible( path );
 		
 		// Check if already visible if visibility not provided as parameter.
-		state = ( state == 'undefined' ? !alreadyVisible : state );
+		state = ( state === undefined ? !alreadyVisible : state );
 		
 		// Toggle visibility state.
 		if ( state ) {
@@ -598,7 +605,7 @@ define( function( require, exports, module ) {
 				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
 				
 				// Update list of comments.
-				run();
+				Events.publish( 'todos:updated' );
 			} );
 		
 		// Setup listeners.
