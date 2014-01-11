@@ -549,17 +549,22 @@ define( function( require, exports, module ) {
 				enableTodo( false );
 			} )
 			.on( 'click', '.indicator', function() {
-				// Check if todo file is used.
-				if ( todoFile ) {
-					// Open file that todo originate from.
-					CommandManager.execute( Commands.FILE_OPEN, { fullPath: ProjectManager.getProjectRoot().fullPath + '.todo' } ).done( function( currentDocument ) {
-						// Set focus on editor.
-						EditorManager.focusEditor();
-					} );
-				} else {
-					// Show dialog for creating .todo file.
-					TodoFileDialog.showDialog();
-				}
+				var todoFilePath = ProjectManager.getProjectRoot().fullPath + '.todo';
+				
+				// Check if there is a file with the name .todo.
+				FileSystem.resolve( todoFilePath, function( error, entry ) {
+					// Check if the todo file is present.
+					if ( todoFile || entry !== undefined ) {
+						// Open .todo filein editor.
+						CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoFilePath } ).done( function( currentDocument ) {
+							// Set focus on editor.
+							EditorManager.focusEditor();
+						} );
+					} else {
+						// Show dialog for creating .todo file.
+						TodoFileDialog.showDialog();
+					}
+				} );
 			} )
 			.on( 'click', '.file', function( e ) {
 				var $this = $( this );
