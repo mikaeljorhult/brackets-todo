@@ -161,3 +161,28 @@
 .brackets-todo.current tr.file {
 	display: none;
 }
+
+/*--- SETTINGS DIALOG STYLE ---*/
+#todo-settings-dialog table {
+	width: 100%;
+}
+
+#todo-settings-dialog td {
+	vertical-align: middle;
+	height: 30px;
+}
+
+#todo-settings-dialog td input[type="text"] {
+	width: 80%;
+}
+
+#todo-settings-dialog td.left {
+	text-align: right;
+	width: 30%;
+}
+
+#todo-settings-dialog td.right {
+	text-align: left;
+	padding-left: 1em;
+	width: 70%;
+}

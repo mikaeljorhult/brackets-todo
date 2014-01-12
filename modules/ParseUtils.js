@@ -6,6 +6,9 @@ define( function( require, exports, module ) {
 	// Get dependencies.
 	var StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		
+		// Todo modules
+		SettingsManager = require( 'modules/SettingsManager' ),
+		
 		// Variables.
 		expression,
 		done = /^\[x\]/i;
@@ -18,6 +21,9 @@ define( function( require, exports, module ) {
 			index = -1,
 			fileToMatch,
 			text;
+		
+		// setup regular expression used by parse
+		setupRegExp();
 		
 		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
 			// Get information about current file.
@@ -87,15 +93,16 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Set the regular epression to use in parsing.
+	 * Listen for save or refresh and look for todos when needed.
 	 */
-	function setExpression( newExpression ) {
-		expression = newExpression;
+	function setupRegExp() {
+		// Setup regular expression.
+		expression = new RegExp(
+			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
+			'g' + ( SettingsManager.getSettings().case !== false ? '' : 'i' )
+		);
 	}
 	
 	// Make variables accessible.
-	exports.getExpression = getExpression;
-	exports.setExpression = setExpression;
 	exports.parseFile = parseFile;
-	exports.parseText = parseText;
 } );
