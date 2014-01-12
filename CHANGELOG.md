@@ -1,6 +1,6 @@
 # Brackets Todo Changelog
 
-## 0.4.x
+## 0.5.0
 * Comments with #-syntax is now recognized.
 * FUTURE tag is now recognized by default.
 * Functionality is broken down into smaller modules.
