@@ -5,6 +5,7 @@
  * @author Mikael Jorhult
  * @license http://mikaeljorhult.mit-license.org MIT
  */
+/* global define, brackets, Mustache, $ */
 define( function( require, exports, module ) {
 	'use strict';
 	
@@ -13,7 +14,6 @@ define( function( require, exports, module ) {
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
-		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
@@ -35,22 +35,13 @@ define( function( require, exports, module ) {
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/strings' ),
 		TodoFileDialog = require( 'modules/TodoFileDialog' ),
-		
-		// Preferences.
-		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
-		visibleFiles = preferences.getValue( 'visibleFiles' ),
-		visibleTags = preferences.getValue( 'visibleTags' ),
+		SettingsDialog = require( 'modules/SettingsDialog' ),
 		
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
 		todoToolbarTemplate = require( 'text!html/tools.html' );
-	
-	// All files are not visible by default.
-	if ( visibleFiles === undefined ) {
-		visibleFiles = [];
-	}
 	
 	// Setup extension.
 	var todos = [],
@@ -74,10 +65,8 @@ define( function( require, exports, module ) {
 	/** 
 	 * Set state of extension.
 	 */
-	function toggleTodo() {
-		var enabled = preferences.getValue( 'enabled' );
-		
-		enableTodo( !enabled );
+	function toggleTodo() {	
+		enableTodo( !SettingsManager.isTodoEnabled() );
 	}
 	
 	/** 
@@ -101,31 +90,10 @@ define( function( require, exports, module ) {
 		}
 		
 		// Save enabled state.
-		preferences.setValue( 'enabled', enabled );
+		SettingsManager.enableTodo(enabled);
 		
 		// Mark menu item as enabled/disabled.
 		CommandManager.get( COMMAND_ID ).setChecked( enabled );
-	}
-    
-	/**
-	 * Initialize tags according to settings's tags.
-	 * If user have not set the tag's visibility, all tags are visible by default.
-	 */
-	function initializeDefaultTags() {
-		if ( visibleTags === undefined ) {
-			visibleTags = {};
-			
-			// Build an array of possible tags.
-			$.each( SettingsManager.getSettings().tags, function( index, tag ) {
-				visibleTags[ tag.toLowerCase() ] = {
-					tag: tag.toLowerCase(),
-					name: tag.replace( /[^a-zA-Z]/g, '' ),
-					count: 0,
-					visible: true
-				};
-			} );
-			preferences.setValue( 'visibleTags', visibleTags );
-		}
 	}
 	
 	/**
@@ -154,18 +122,14 @@ define( function( require, exports, module ) {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
 		} ).always( function() {
-			// Merge default settings with JSON.
-			SettingsManager.mergeSettings( userSettings );
 			
-			// Show or hide .todo indicator.
 			if ( todoFile ) {
+				// Set project settings.
+				SettingsManager.setProjectSettings( userSettings );
 				$todoPanel.addClass( 'todo-file' );
 			} else {
 				$todoPanel.removeClass( 'todo-file' );
 			}
-			
-			// All tags are visible by default. 
-			initializeDefaultTags();
 			
 			// Trigger callback.
 			if ( callback ) { callback(); }
@@ -215,7 +179,7 @@ define( function( require, exports, module ) {
 			} ).always( function() {
 				// Add file visibility state.
 				$.each( todoArray, function( index, file ) {
-					file.visible = fileVisible( file.path );
+					file.visible = SettingsManager.fileVisible( file.path );
 				} );
 				
 				// Store array of todos.
@@ -241,15 +205,14 @@ define( function( require, exports, module ) {
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
-			resultsHTML = Mustache.render( todoResultsTemplate, {
+		var resultsHTML = Mustache.render( todoResultsTemplate, {
 				todos: renderTodo()
 			} );
 		
 		resultsHTML = $( resultsHTML );
 		
 		// Show file rows if project search scope.
-		if ( project ) {
+		if ( SettingsManager.isProjectScope() ) {
 			$todoPanel.removeClass( 'current' );
 			
 			$( '.file.collapsed', resultsHTML )
@@ -262,21 +225,6 @@ define( function( require, exports, module ) {
 		$todoPanel.find( '.table-container' )
 			.empty()
 			.append( resultsHTML );
-	}
-	
-	/** 
-	 * Check if tag is visible. 
-	 * @return boolean True if tag is visible, otherwise false. 
-	 */
-	function isTagVisible( tag ) {
-		var visible = false;
-		
-		// Check if tag exists and use that value.
-		if ( visibleTags.hasOwnProperty( tag ) ) {
-			visible = visibleTags[ tag ].visible;
-		}
-		
-		return visible;
 	}
 	
 	/** 
@@ -297,7 +245,7 @@ define( function( require, exports, module ) {
 			
 			// Go through each comment and only return those of visible tags.
 			file.todos = file.todos.filter( function( comment ) {
-				return isTagVisible( comment.tag );
+				return SettingsManager.isTagVisible( comment.tag );
 			} );
 			
 			// Check if file has any visible todos after filtering.
@@ -351,13 +299,15 @@ define( function( require, exports, module ) {
 	 * Render toolbar.
 	 */
 	function renderTools() {
-		var tags = [];
+		var tags = [],
+			visibleTags = SettingsManager.getVisibleTags();
 		
 		// Create array of tags from visible tags object.
 		for( var tag in visibleTags ) {
-			visibleTags[ tag ].count = countByTag( tag );
-			
-			tags.push( visibleTags[ tag ] );
+			if ( SettingsManager.getSettings().tags.indexOf( tag.toUpperCase() ) > -1 ) {
+				visibleTags[ tag ].count = countByTag( tag );
+				tags.push( visibleTags[ tag ] );
+			}
 		}
 		
 		// Render and return toolbar.
@@ -370,73 +320,12 @@ define( function( require, exports, module ) {
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
-	function setupRegExp() {
-		// Setup regular expression.
-		ParseUtils.setExpression( new RegExp(
-			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
-			'g' + ( SettingsManager.getSettings().case !== false ? '' : 'i' )
-		) );
-	}
-	
-	/**
-	 * Return if file should be expanded or not.
-	 */
-	function fileVisible( path ) {
-		return ( SettingsManager.getSettings().search.scope === 'project' ? visibleFiles.indexOf( path ) > -1 : true );
-	}
-	
-	/**
-	 * Toggle if file should be expanded or not.
-	 */
-	function toggleFileVisible( path, state ) {
-		var alreadyVisible = fileVisible( path );
-		
-		// Check if already visible if visibility not provided as parameter.
-		state = ( state === undefined ? !alreadyVisible : state );
-		
-		// Toggle visibility state.
-		if ( state ) {
-			// Show if already visible.
-			if ( !alreadyVisible ) {
-				visibleFiles.push( path );
-			}
-		} else {
-			// Hide if already visible.
-			if ( alreadyVisible ) {
-				visibleFiles.splice( visibleFiles.indexOf( path ), 1 );
-			}
-		}
-		
-		// Save visibility state.
-		preferences.setValue( 'visibleFiles', visibleFiles );
-	}
-	
-	/**
-	 * Toggle tag visibility.
-	 */
-	function toggleTagVisible( tag, state ) {
-		var visible = ( state !== undefined ? state : isTagVisible( tag ) );
-		
-		// Toggle visibility state.
-		if ( visibleTags.hasOwnProperty( tag ) ) {
-			visibleTags[ tag ].visible = visible;
-		}
-		
-		// Save visibility state.
-		preferences.setValue( 'visibleTags', visibleTags );
-	}
-	
-	/**
-	 * Listen for save or refresh and look for todos when needed.
-	 */
 	function registerListeners() {
 		var $documentManager = $( DocumentManager ),
 			$projectManager = $( ProjectManager );
 		
 		// Listeners bound to Todo modules.
 		Events.subscribe( 'settings:loaded', function() {
-			// Setup regular expression.
-			setupRegExp();
 			
 			// Empty array of files.
 			setTodos( [] );
@@ -473,7 +362,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// No need to do anything if scope is project.
-				if ( SettingsManager.getSettings().search.scope === 'project' ) {
+				if ( SettingsManager.isProjectScope() ) {
 					// Look for current file in list.
 					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
 					
@@ -506,8 +395,8 @@ define( function( require, exports, module ) {
 					loadSettings();
 				} else {
 					// Move visibility state to new file.
-					toggleFileVisible( newName, fileVisible( oldName ) );
-					toggleFileVisible( oldName, false );
+					SettingsManager.toggleFileVisible( newName, SettingsManager.fileVisible( oldName ) );
+					SettingsManager.toggleFileVisible( oldName, false );
 					
 					// If not .todo, parse all files.
 					run();
@@ -515,7 +404,7 @@ define( function( require, exports, module ) {
 			} )
 			.on( 'pathDeleted.todo', function( event, document ) {
 				// Remove file from visibility list.
-				toggleFileVisible( document, false );
+				SettingsManager.toggleFileVisible( document, false );
 				
 				// Parse path that was deleted to remove from list.
 				setTodos( ParseUtils.parseFile( document, todos ) );
@@ -525,7 +414,7 @@ define( function( require, exports, module ) {
 		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
 			loadSettings( function() {
 				// Reset file visibility.
-				visibleFiles = [];
+				SettingsManager.setVisibleFiles([]);
 			} );
 		} );
 	}
@@ -548,6 +437,7 @@ define( function( require, exports, module ) {
 				enableTodo( false );
 			} )
 			.on( 'click', '.indicator', function() {
+				
 				// Check if todo file is used.
 				if ( todoFile ) {
 					// Open file that todo originate from.
@@ -556,8 +446,8 @@ define( function( require, exports, module ) {
 						EditorManager.focusEditor();
 					} );
 				} else {
-					// Show dialog for creating .todo file.
-					TodoFileDialog.showDialog();
+					// Show settings dialog.
+					SettingsDialog.showDialog();
 				}
 			} )
 			.on( 'click', '.file', function( e ) {
@@ -571,7 +461,7 @@ define( function( require, exports, module ) {
 						.toggle();
 				
 				// Toggle file visibility.
-				toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
+				SettingsManager.toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
 			} )
 			.on( 'click', '.comment', function( e ) {
 				var $this = $( this );
@@ -602,7 +492,7 @@ define( function( require, exports, module ) {
 					.toggleClass( 'visible' );
 				
 				// Toggle tag visibility.
-				toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
+				SettingsManager.toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
 				
 				// Update list of comments.
 				Events.publish( 'todos:updated' );
@@ -617,8 +507,6 @@ define( function( require, exports, module ) {
 		} ).appendTo( '#main-toolbar .buttons' );
 		
 		// Enable extension if loaded last time.
-		if ( preferences.getValue( 'enabled' ) ) {
-			enableTodo( true );
-		}
+		enableTodo( SettingsManager.isTodoEnabled() );
 	} );
 } );

@@ -1,0 +1,57 @@
+<div id="todo-settings-dialog" class="modal">
+	<div class="modal-header">
+		<h1 class="dialog-title">{{ strings.SETTINGS_DIALOG_TITLE }}</h1>
+	</div>
+	
+	<div class="modal-body no-padding tab-content">
+		<table>
+			<tr>
+				<td class="left"> {{ strings.PREFIX }} </td>
+				<td class="right"><input id="prefix" type="text" value="{{ settings.prefix }}" /></td>
+			</tr>
+			<tr>
+				<td class="left"> {{ strings.SUFFIX }} </td>
+				<td class="right"> <input id="suffix" type="text" value="{{ settings.suffix }}" /> </td>
+			</tr>
+			
+			<tr>
+				<td class="left"> {{ strings.TAGS }} </td>
+				<td class="right"> 
+					<input id="tags" type="text"  value="{{ settings.tags }}" title="{{ strings.DEFAULT_TAGS }} {{ settings.defaultTags }}" /> 
+				</td>
+			</tr>
+			
+			<tr>
+				<td class="left"> {{ strings.CASE }} </td>
+				<td class="right"> 
+					<input type="radio" name="case" value="true"  {{#settings.case}}checked{{/settings.case}}/> {{ strings.YES }} &nbsp;&nbsp;
+					<input type="radio" name="case" value="false" {{^settings.case}}checked{{/settings.case}}/> {{ strings.NO }}
+				</td>	
+			</tr>
+			
+			<tr>
+				<td class="left"> {{ strings.SEARCH_SCOPE }} </td>
+				<td class="right">
+					<input type="radio" name="scope" value="{{ settings.currentScope }}"  {{#settings.isCurrentScope}}checked{{/settings.isCurrentScope}} /> {{ strings.CURRENT_FILE }} &nbsp;&nbsp;
+					<input type="radio" name="scope" value = "{{ settings.projectScope }}"  {{^settings.isCurrentScope}}checked{{/settings.isCurrentScope}} /> {{ strings.PROJECT }}
+				</td>
+			</tr>
+			
+			<tr>
+				<td class="left"> {{ strings.EXCLUDE_FOLDERS }} </td>
+				<td class="right"> <input id="excludeFolders" type="text" value="{{ settings.excludeFolders }}" /> </td>
+			</tr>
+			
+			<tr>
+				<td class="left"> {{ strings.EXCLUDE_FILES }} </td>
+				<td class="right"> <input id="excludeFiles" type="text" value="{{ settings.excludeFiles }}" /> </td>
+			</tr>
+			
+		</table>
+	</div>
+	
+	<div class="modal-footer">
+		<button data-button-id="yes" class="dialog-button btn primary right">{{ strings.SAVE }}</button>
+		<button data-button-id="no" class="dialog-button btn right">{{ strings.CANCEL }}</button>
+	</div>
+</div>
