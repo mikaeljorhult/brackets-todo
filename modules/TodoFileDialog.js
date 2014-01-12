@@ -7,6 +7,7 @@ define( function ( require, exports, module ) {
 	var CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
 		Dialogs = brackets.getModule( 'widgets/Dialogs' ),
+		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
