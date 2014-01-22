@@ -63,16 +63,18 @@ define( function( require, exports, module ) {
 		var matchArray,
 			documentTodos = [];
 		
-		// Go through each match in current document.
-		while ( ( matchArray = expression.exec( text ) ) !== null ) {
-			// Add match to array.
-			documentTodos.push( {
-				todo: matchArray[ 2 ].replace( done, '' ),
-				tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
-				line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
-				char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
-				done: done.test( matchArray[ 2 ] )
-			} );
+		if ( expression !== undefined ) {
+			// Go through each match in current document.
+			while ( ( matchArray = expression.exec( text ) ) !== null ) {
+				// Add match to array.
+				documentTodos.push( {
+					todo: matchArray[ 2 ].replace( done, '' ),
+					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
+					line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
+					char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
+					done: done.test( matchArray[ 2 ] )
+				} );
+			}
 		}
 		
 		// Return found comments.
