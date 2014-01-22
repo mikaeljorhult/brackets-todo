@@ -108,28 +108,6 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Initialize tags according to settings's tags.
-	 * If user have not set the tag's visibility, all tags are visible by default.
-	 */
-	function initializeDefaultTags() {
-		if ( visibleTags === undefined ) {
-			visibleTags = {};
-			
-			// Build an array of possible tags.
-			$.each( SettingsManager.getSettings().tags, function( index, tag ) {
-				visibleTags[ tag.toLowerCase() ] = {
-					tag: tag.toLowerCase(),
-					name: tag.replace( /[^a-zA-Z]/g, '' ),
-					count: 0,
-					visible: true
-				};
-			} );
-			
-			preferences.setValue( 'visibleTags', visibleTags );
-		}
-	}
-	
-	/**
 	 * Check for settings file and load if it exists.
 	 */
 	function loadSettings( callback ) {
@@ -165,8 +143,9 @@ define( function( require, exports, module ) {
 				$todoPanel.removeClass( 'todo-file' );
 			}
 			
-			// All tags are visible by default. 
-			initializeDefaultTags();
+			// Build array of tags and save to preferences.
+			visibleTags = initTags( visibleTags );
+			preferences.setValue( 'visibleTags', visibleTags );
 			
 			// Trigger callback.
 			if ( callback ) { callback(); }
@@ -174,6 +153,26 @@ define( function( require, exports, module ) {
 			// Publish event.
 			Events.publish( 'settings:loaded' );
 		} );
+	}
+	
+	/**
+	 * Initialize tags according to settings's tags.
+	 * If user have not set the tag's visibility, all tags are visible by default.
+	 */
+	function initTags( tags ) {
+		var tagArray = {};
+		
+		// Build an array of possible tags.
+		$.each( SettingsManager.getSettings().tags, function( index, tag ) {
+			tagArray[ tag.toLowerCase() ] = {
+				tag: tag.toLowerCase(),
+				name: tag.replace( /[^a-zA-Z]/g, '' ),
+				count: 0,
+				visible: true
+			};
+		} );
+		
+		return tagArray;
 	}
 	
 	/**
