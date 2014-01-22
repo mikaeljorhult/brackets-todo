@@ -514,7 +514,14 @@ define( function( require, exports, module ) {
 					run();
 				}
 			} )
-			.on( 'pathDeleted.todo', function( event, document ) {
+			.on( 'pathDeleted.todo', function( event, deletedPath ) {
+				var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
+				
+				// Reload settings if .todo of current project was deleted.
+				if ( deletedPath === todoPath ) {
+					loadSettings();
+				}
+				
 				// Remove file from visibility list.
 				toggleFileVisible( document, false );
 				
