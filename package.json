@@ -5,8 +5,20 @@
 	"homepage": "https://github.com/mikaeljorhult/brackets-todo",
 	"version": "0.4.0",
 	"author": "Mikael Jorhult <mikael@jorhult.se> (http://jorhult.se)",
-	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mikaeljorhult/midi-events"
+	},
+	"license": {
+		"type": "MIT",
+		"url": "http://mikaeljorhult.mit-license.org/"
+	},
 	"engines": {
 		"brackets": ">=0.34.0"
+	},
+	"devDependencies": {
+		"grunt": "0.4.x",
+		"load-grunt-tasks": "0.2.x",
+		"grunt-contrib-jshint": "0.7.x"
 	}
 }
