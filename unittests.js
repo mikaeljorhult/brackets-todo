@@ -4,18 +4,17 @@ define( function( require, exports, module ) {
 	'use strict';
 	
 	// Get dependencies.
-		var SpecRunnerUtils = brackets.getModule( 'spec/SpecRunnerUtils' ),
-			FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
-			FileUtils = brackets.getModule( 'file/FileUtils' ),
-			DocumentManager = brackets.getModule( 'document/DocumentManager' ),
-			StringUtils = brackets.getModule( 'utils/StringUtils' ),
-		
+	var FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
+		FileUtils = brackets.getModule( 'file/FileUtils' ),
+		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
+		StringUtils = brackets.getModule( 'utils/StringUtils' ),
+	
 		// Get Todo modules.
 		Defaults = require( 'modules/Defaults' ),
-		ParseUtils = require( 'modules/ParseUtils' );
+		ParseUtils = require( 'modules/ParseUtils' ),
 	
-	// Setup paths and other variables.
-	var extensionPath = FileUtils.getNativeModuleDirectoryPath( module ),
+		// Setup paths and other variables.
+		extensionPath = FileUtils.getNativeModuleDirectoryPath( module ),
 		testPath = extensionPath + '/unittest-files/',
 		expression = new RegExp( Defaults.defaultSettings.regex.prefix + Defaults.defaultSettings.tags.join( '|' ) + Defaults.defaultSettings.regex.suffix, 'gi' );
 	
@@ -84,7 +83,7 @@ define( function( require, exports, module ) {
 				} );
 				
 				// Wait until comments are returned.
-				waitsFor( function() {	
+				waitsFor( function() {
 					return ( todos.length > 0 );
 				}, 'Comments should be returned', 250 );
 				
@@ -97,8 +96,7 @@ define( function( require, exports, module ) {
 			
 			// Test parseFile method.
 			it( 'should return a file and contained comments', function() {
-				var files = [],
-					currentDocument;
+				var files = [];
 				
 				// Run actual fetching and parsing of document.
 				runs( function() {
@@ -108,7 +106,7 @@ define( function( require, exports, module ) {
 				} );
 				
 				// Wait until comments are returned.
-				waitsFor( function() {	
+				waitsFor( function() {
 					return ( files.length > 0 );
 				}, 'A file should be returned', 250 );
 				
