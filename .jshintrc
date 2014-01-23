@@ -83,6 +83,12 @@
 		"jQuery": true,
 		"$": true,
 		"Mustache": true,
+		
+		// Testing
+		"jasmine": true,
+		"describe": true,
+		"it": true,
+		"expect": true,
 		"runs": true,
 		"waitsFor": true
 	}
