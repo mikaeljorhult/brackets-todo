@@ -45,18 +45,18 @@ define( function( require, exports, module ) {
 		todoPanelTemplate = require( 'text!html/panel.html' ),
 		todoResultsTemplate = require( 'text!html/results.html' ),
 		todoRowTemplate = require( 'text!html/row.html' ),
-		todoToolbarTemplate = require( 'text!html/tools.html' );
+		todoToolbarTemplate = require( 'text!html/tools.html' ),
+		
+		// Setup extension.
+		todos = [],
+		todoFile,
+		$todoPanel,
+		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' );
 	
 	// All files are not visible by default.
 	if ( visibleFiles === undefined ) {
 		visibleFiles = [];
 	}
-	
-	// Setup extension.
-	var todos = [],
-		todoFile,
-		$todoPanel,
-		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' );
 	
 	// Register extension.
 	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
