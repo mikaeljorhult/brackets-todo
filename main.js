@@ -164,9 +164,11 @@ define( function( require, exports, module ) {
 		
 		// Build an array of possible tags.
 		$.each( SettingsManager.getSettings().tags, function( index, tag ) {
+			tag = tag.replace( /[^a-zA-Z]/g, '' );
+			
 			tagArray[ tag.toLowerCase() ] = {
 				tag: tag.toLowerCase(),
-				name: tag.replace( /[^a-zA-Z]/g, '' ),
+				name: tag,
 				count: 0,
 				visible: true
 			};
@@ -303,7 +305,9 @@ define( function( require, exports, module ) {
 			// Check if file has any visible todos after filtering.
 			return ( file.todos.length > 0 ? true : false );
 		} );
-
+		
+		console.log( beforeFilter );
+		
 		return afterFilter;
 	}
 	

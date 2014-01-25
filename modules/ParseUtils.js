@@ -67,7 +67,7 @@ define( function( require, exports, module ) {
 				// Add match to array.
 				documentTodos.push( {
 					todo: matchArray[ 2 ].replace( done, '' ),
-					tag: matchArray[ 1 ].replace( ' ', '' ).toLowerCase(),
+					tag: matchArray[ 1 ].replace( /[^a-zA-Z]/g, '' ).toLowerCase(),
 					line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
 					char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
 					done: done.test( matchArray[ 2 ] )
