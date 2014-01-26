@@ -308,8 +308,6 @@ define( function( require, exports, module ) {
 			return ( file.todos.length > 0 ? true : false );
 		} );
 		
-		console.log( beforeFilter );
-		
 		return afterFilter;
 	}
 	
