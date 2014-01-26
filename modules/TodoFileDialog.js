@@ -1,4 +1,4 @@
-define( function ( require, exports, module ) {
+define( function ( require, exports ) {
 	'use strict';
 	
 	// Get dependincies.
@@ -6,8 +6,6 @@ define( function ( require, exports, module ) {
 		Commands = brackets.getModule( 'command/Commands' ),
 		Dialogs = brackets.getModule( 'widgets/Dialogs' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
-		FileUtils = brackets.getModule( 'file/FileUtils' ),
-		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Todo modules.
@@ -17,7 +15,7 @@ define( function ( require, exports, module ) {
 		todoFileDialogTemplate = require( 'text!html/file-dialog.html' );
 	
 	function showDialog() {
-		var dialog = Dialogs.showModalDialogUsingTemplate( 
+		var dialog = Dialogs.showModalDialogUsingTemplate(
 			Mustache.render( todoFileDialogTemplate, {
 				strings: Strings
 			} )
@@ -33,7 +31,7 @@ define( function ( require, exports, module ) {
 				// Create file and callback.
 				createFile.done( function() {
 					// Open newly created file.
-					CommandManager.execute( Commands.FILE_OPEN, { fullPath: projectRoot + '.todo' } ).done( function( currentDocument ) {
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: projectRoot + '.todo' } ).done( function() {
 						// Set focus on editor.
 						EditorManager.focusEditor();
 					} );

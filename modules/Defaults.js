@@ -1,4 +1,4 @@
-define( function( require, exports, module ) {
+define( function( require, exports ) {
 	'use strict';
 	
 	// Define default preferences and settings.

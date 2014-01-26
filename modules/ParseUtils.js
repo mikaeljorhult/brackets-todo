@@ -1,4 +1,4 @@
-define( function( require, exports, module ) {
+define( function( require, exports ) {
 	'use strict';
 	
 	// Get dependencies.
@@ -15,7 +15,9 @@ define( function( require, exports, module ) {
 		var documentTodos = [],
 			index = -1,
 			fileToMatch,
-			text;
+			text,
+			i,
+			length;
 		
 		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
 			// Get information about current file.
@@ -26,8 +28,8 @@ define( function( require, exports, module ) {
 			documentTodos = parseText( text, StringUtils.getLines( text ) );
 			
 			// Check if file has already been added to array.
-			for ( var i = 0, length = todos.length; i < length; i++ ) {
-				if ( todos[ i ].path == fileToMatch ) {
+			for ( i = 0, length = todos.length; i < length; i++ ) {
+				if ( todos[ i ].path === fileToMatch ) {
 					// File found in array, store index.
 					index = i;
 					break;
@@ -37,17 +39,17 @@ define( function( require, exports, module ) {
 			// Add file to array if any comments is found.
 			if ( documentTodos.length > 0 ) {
 				// Create object for new entry in array if none found.
-				if ( index == -1 ) {
+				if ( index === -1 ) {
 					todos.push( {} );
 					index = length;
 				}
 				
 				// Get any matches and merge with previously found comments.
-				todos[ i ].path = currentDocument.file.fullPath;
-				todos[ i ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
-				todos[ i ].todos = documentTodos;
+				todos[ index ].path = currentDocument.file.fullPath;
+				todos[ index ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
+				todos[ index ].todos = documentTodos;
 			} else if ( index > -1 ) {
-				todos.splice( i, 1 );
+				todos.splice( index, 1 );
 			}
 		}
 		

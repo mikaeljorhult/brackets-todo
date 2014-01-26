@@ -51,7 +51,10 @@ define( function( require, exports, module ) {
 		todos = [],
 		todoFile,
 		$todoPanel,
-		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' );
+		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' ),
+		
+		// Get view menu.
+		menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
 	
 	// All files are not visible by default.
 	if ( visibleFiles === undefined ) {
@@ -62,7 +65,6 @@ define( function( require, exports, module ) {
 	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
 	
 	// Add command to menu.
-	var menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
 	if ( menu !== undefined ) {
 		menu.addMenuDivider();
 		menu.addMenuItem( COMMAND_ID, 'Ctrl-Alt-T' );
@@ -129,7 +131,7 @@ define( function( require, exports, module ) {
 				// .todo exists but isn't valid JSON.
 				todoFile = false;
 			}
-		} ).fail( function( error ) {
+		} ).fail( function() {
 			// .todo doesn't exists or couldn't be accessed.
 			todoFile = false;
 		} ).always( function() {
@@ -144,7 +146,7 @@ define( function( require, exports, module ) {
 			}
 			
 			// Build array of tags and save to preferences.
-			visibleTags = initTags( visibleTags );
+			visibleTags = initTags();
 			preferences.setValue( 'visibleTags', visibleTags );
 			
 			// Trigger callback.
@@ -159,7 +161,7 @@ define( function( require, exports, module ) {
 	 * Initialize tags according to settings's tags.
 	 * If user have not set the tag's visibility, all tags are visible by default.
 	 */
-	function initTags( tags ) {
+	function initTags() {
 		var tagArray = {};
 		
 		// Build an array of possible tags.
@@ -333,7 +335,7 @@ define( function( require, exports, module ) {
 			// Go through each comment.
 			$.each( file.todos, function( index, comment ) {
 				// If comment is of requested type, add one to count.
-				if ( comment.tag == tag ) {
+				if ( comment.tag === tag ) {
 					count++;
 				}
 			} );
@@ -355,13 +357,16 @@ define( function( require, exports, module ) {
 	 * Render toolbar.
 	 */
 	function renderTools() {
-		var tags = [];
+		var tags = [],
+			tag;
 		
 		// Create array of tags from visible tags object.
-		for( var tag in visibleTags ) {
-			visibleTags[ tag ].count = countByTag( tag );
-			
-			tags.push( visibleTags[ tag ] );
+		for( tag in visibleTags ) {
+			if ( visibleTags.hasOwnProperty( tag ) ) {
+				visibleTags[ tag ].count = countByTag( tag );
+				
+				tags.push( visibleTags[ tag ] );
+			}
 		}
 		
 		// Render and return toolbar.
@@ -467,7 +472,7 @@ define( function( require, exports, module ) {
 					setTodos( ParseUtils.parseFile( document, todos ) );
 				}
 			} )
-			.on( 'currentDocumentChange.todo', function( event ) {
+			.on( 'currentDocumentChange.todo', function() {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
 				
@@ -533,7 +538,7 @@ define( function( require, exports, module ) {
 			} );
 		
 		// Reload settings when new project is loaded.
-		$projectManager.on( 'projectOpen.todo', function( event, projectRoot ) {
+		$projectManager.on( 'projectOpen.todo', function() {
 			loadSettings( function() {
 				// Reset file visibility.
 				visibleFiles = [];
@@ -547,10 +552,10 @@ define( function( require, exports, module ) {
 				todo: todoFile,
 				tools: renderTools(),
 				strings: Strings
-			} ),
-			todoPanel = PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
+			} );
 		
-		// Cache todo panel.
+		// Create and cache todo panel.
+		PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		$todoPanel = $( '#brackets-todo' );
 		
 		// Close panel when close button is clicked.
@@ -566,7 +571,7 @@ define( function( require, exports, module ) {
 					// Check if the todo file is present.
 					if ( todoFile || entry !== undefined ) {
 						// Open .todo filein editor.
-						CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoFilePath } ).done( function( currentDocument ) {
+						CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoFilePath } ).done( function() {
 							// Set focus on editor.
 							EditorManager.focusEditor();
 						} );
@@ -576,7 +581,7 @@ define( function( require, exports, module ) {
 					}
 				} );
 			} )
-			.on( 'click', '.file', function( e ) {
+			.on( 'click', '.file', function() {
 				var $this = $( this );
 				
 				// Change classes and toggle visibility of todos.
@@ -589,11 +594,11 @@ define( function( require, exports, module ) {
 				// Toggle file visibility.
 				toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
 			} )
-			.on( 'click', '.comment', function( e ) {
+			.on( 'click', '.comment', function() {
 				var $this = $( this );
 				
 				// Open file that todo originate from.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function( currentDocument ) {
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function() {
 					// Set cursor position at start of todo.
 					EditorManager.getCurrentFullEditor()
 						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ), true );
@@ -602,17 +607,17 @@ define( function( require, exports, module ) {
 					EditorManager.focusEditor();
 				} );
 			} )
-			.on( 'click', '.collapse-all', function( e ) {
+			.on( 'click', '.collapse-all', function() {
 				// Click all expanded files to collapse them.
 				$todoPanel.find( '.file.expanded' )
 					.trigger( 'click' );
 			} )
-			.on( 'click', '.expand-all', function( e ) {
+			.on( 'click', '.expand-all', function() {
 				// Click all collapsed files to expand them.
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-			.on( 'click', '.tags a', function( e ) {
+			.on( 'click', '.tags a', function() {
 				// Show or hide clicked tag.
 				var $this = $( this )
 					.toggleClass( 'visible' );
@@ -628,7 +633,7 @@ define( function( require, exports, module ) {
 		registerListeners();
 		
 		// Add listener for toolbar icon..
-		$todoIcon.click( function( e ) {
+		$todoIcon.click( function() {
 			CommandManager.execute( COMMAND_ID );
 		} ).appendTo( '#main-toolbar .buttons' );
 		
