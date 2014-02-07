@@ -1,5 +1,8 @@
 # Brackets Todo Changelog
 
+## 0.5.1
+* German translation. Thanks to Marcel Gerber (@SAPlayer).
+
 ## 0.5.0
 * Comments with #-syntax is now recognized.
 * FUTURE tag is now recognized by default.
@@ -8,6 +11,7 @@
 * .todo file can be created automatically if not available.
 * New icon for indicating use of .todo file.
 * Support for localization.
+* Chinese translation. Thanks to Wei Lin (@anzhihun).
 * Filtering by tag name. Thanks to Wei Lin (@anzhihun).
 * Editor now centers on task when clicked in pane. Thanks to Wei Lin (@anzhihun).
 * Toolbar icons to expand and collapse all files at once. Thanks to Wei Lin (@anzhihun).
