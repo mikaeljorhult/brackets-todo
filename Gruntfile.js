@@ -15,7 +15,8 @@ module.exports = function( grunt ) {
 				'Gruntfile.js',
 				'main.js',
 				'unittests.js',
-				'modules/*.js'
+				'modules/*.js',
+				'nls/**/*.js'
 			]
 		}
 	} );
