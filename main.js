@@ -33,7 +33,7 @@ define( function( require, exports, module ) {
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
-		Strings = require( 'modules/strings' ),
+		Strings = require( 'modules/Strings' ),
 		TodoFileDialog = require( 'modules/TodoFileDialog' ),
 		
 		// Preferences.

@@ -9,7 +9,7 @@ define( function ( require, exports ) {
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Todo modules.
-		Strings = require( 'modules/strings' ),
+		Strings = require( 'modules/Strings' ),
 		
 		// Templates.
 		todoFileDialogTemplate = require( 'text!html/file-dialog.html' );
