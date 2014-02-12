@@ -1,6 +1,7 @@
 # Brackets Todo Changelog
 
 ## 0.5.1
+* Fix file name issue on Linux.
 * German translation. Thanks to Marcel Gerber (@SAPlayer).
 
 ## 0.5.0
