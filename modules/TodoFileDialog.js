@@ -12,7 +12,7 @@ define( function ( require, exports ) {
 		Strings = require( 'modules/Strings' ),
 		
 		// Templates.
-		todoFileDialogTemplate = require( 'text!html/file-dialog.html' );
+		todoFileDialogTemplate = require( 'text!html/dialog-file.html' );
 	
 	function showDialog() {
 		var dialog = Dialogs.showModalDialogUsingTemplate(
