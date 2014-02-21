@@ -34,6 +34,7 @@ define( function( require, exports, module ) {
 		ParseUtils = require( 'modules/ParseUtils' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
+		SettingsDialog = require( 'modules/SettingsDialog' ),
 		TodoFileDialog = require( 'modules/TodoFileDialog' ),
 		
 		// Preferences.
