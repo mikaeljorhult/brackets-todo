@@ -38,9 +38,7 @@ define( function( require, exports, module ) {
 		TodoFileDialog = require( 'modules/TodoFileDialog' ),
 		
 		// Preferences.
-		preferences = PreferencesManager.getPreferenceStorage( module, Defaults.defaultPreferences ),
-		visibleFiles = preferences.getValue( 'visibleFiles' ),
-		visibleTags = preferences.getValue( 'visibleTags' ),
+		preferences = PreferencesManager.getExtensionPrefs( 'mikaeljorhult.bracketsTodo' ),
 		
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
@@ -50,6 +48,8 @@ define( function( require, exports, module ) {
 		
 		// Setup extension.
 		todos = [],
+		visibleFiles,
+		visibleTags,
 		todoFile,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' ),
@@ -57,10 +57,14 @@ define( function( require, exports, module ) {
 		// Get view menu.
 		menu = Menus.getMenu( Menus.AppMenuBar.VIEW_MENU );
 	
+	// Define preferences.
+	preferences.definePreference( 'enabled', 'boolean', false );
+	preferences.definePreference( 'visibleFiles', 'object', [] );
+	preferences.definePreference( 'visibleTags', 'object', [] );
+	
 	// All files are not visible by default.
-	if ( visibleFiles === undefined ) {
-		visibleFiles = [];
-	}
+	visibleFiles = preferences.get( 'visibleFiles' );
+	visibleTags = preferences.get( 'visibleTags' );
 	
 	// Register extension.
 	CommandManager.register( Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo );
@@ -78,7 +82,7 @@ define( function( require, exports, module ) {
 	 * Set state of extension.
 	 */
 	function toggleTodo() {
-		var enabled = preferences.getValue( 'enabled' );
+		var enabled = preferences.get( 'enabled' );
 		
 		enableTodo( !enabled );
 	}
@@ -104,7 +108,8 @@ define( function( require, exports, module ) {
 		}
 		
 		// Save enabled state.
-		preferences.setValue( 'enabled', enabled );
+		preferences.set( 'enabled', enabled );
+		preferences.save();
 		
 		// Mark menu item as enabled/disabled.
 		CommandManager.get( COMMAND_ID ).setChecked( enabled );
@@ -148,7 +153,8 @@ define( function( require, exports, module ) {
 			
 			// Build array of tags and save to preferences.
 			visibleTags = initTags();
-			preferences.setValue( 'visibleTags', visibleTags );
+			preferences.set( 'visibleTags', visibleTags );
+			preferences.save();
 			
 			// Trigger callback.
 			if ( callback ) { callback(); }
@@ -416,7 +422,8 @@ define( function( require, exports, module ) {
 		}
 		
 		// Save visibility state.
-		preferences.setValue( 'visibleFiles', visibleFiles );
+		preferences.set( 'visibleFiles', visibleFiles );
+		preferences.save();
 	}
 	
 	/**
@@ -431,7 +438,8 @@ define( function( require, exports, module ) {
 		}
 		
 		// Save visibility state.
-		preferences.setValue( 'visibleTags', visibleTags );
+		preferences.set( 'visibleTags', visibleTags );
+		preferences.save();
 	}
 	
 	/**
@@ -637,7 +645,7 @@ define( function( require, exports, module ) {
 		} ).appendTo( '#main-toolbar .buttons' );
 		
 		// Enable extension if loaded last time.
-		if ( preferences.getValue( 'enabled' ) ) {
+		if ( preferences.get( 'enabled' ) ) {
 			enableTodo( true );
 		}
 	} );
