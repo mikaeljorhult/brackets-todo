@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.5.1
+ * Brackets Todo 0.5.2
  * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
@@ -28,13 +28,11 @@ define( function( require, exports, module ) {
 		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		
 		// Todo modules.
-		Defaults = require( 'modules/Defaults' ),
 		Events = require( 'modules/Events' ),
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
-		SettingsDialog = require( 'modules/SettingsDialog' ),
 		TodoFileDialog = require( 'modules/TodoFileDialog' ),
 		
 		// Preferences.
