@@ -14,7 +14,7 @@
 		"url": "http://mikaeljorhult.mit-license.org/"
 	},
 	"engines": {
-		"brackets": ">=0.34.0"
+		"brackets": ">=0.37.0"
 	},
 	"devDependencies": {
 		"grunt": "0.4.x",
