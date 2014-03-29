@@ -3,6 +3,7 @@ define( function( require, exports ) {
 	
 	// Get dependencies.
 	var DocumentManager = brackets.getModule( 'document/DocumentManager' ),
+		LanguageManager = brackets.getModule( 'language/LanguageManager' ),
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Todo modules.
@@ -22,10 +23,16 @@ define( function( require, exports ) {
 		return function filterFunction( file ) {
 			var projectRoot = ProjectManager.getProjectRoot().fullPath,
 				relativePath = '^' + file.parentPath.replace( projectRoot, '' ),
+				languageID = LanguageManager.getLanguageForPath( file.fullPath ).getId(),
 				fileName = file.name,
 				searchString,
 				i,
 				length;
+			
+			// Don't parse files not recognized by Brackets.
+			if ( [ 'unknown', 'binary', 'image' ].indexOf( languageID ) > -1 ) {
+				return false;
+			}
 			
 			// Get files for parsing.
 			if ( SettingsManager.getSettings().search.scope === 'project' ) {
