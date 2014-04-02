@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.5.2
+ * Brackets Todo 0.5.3
  * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult

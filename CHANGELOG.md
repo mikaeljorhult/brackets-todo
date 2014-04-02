@@ -1,5 +1,8 @@
 # Brackets Todo Changelog
 
+## 0.5.3
+* Ignore binary files, images and unknown files to speed up performance.
+
 ## 0.5.2
 * Use new preferences system.
 
