@@ -467,7 +467,7 @@ define( function( require, exports, module ) {
 		// Listeners for file changes.
 		FileSystem.on( 'change', function( event, file ) {
 			// Bail if not a file or file is outside current project root.
-			if ( file.constructor.name !== 'File' || file.fullPath.indexOf( ProjectManager.getProjectRoot().fullPath ) === -1 ) {
+			if ( !file.isFile || file.fullPath.indexOf( ProjectManager.getProjectRoot().fullPath ) === -1 ) {
 				return false;
 			}
 			
@@ -544,7 +544,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// Remove file from visibility list.
-				toggleFileVisible( document, false );
+				toggleFileVisible( deletedPath, false );
 				
 				// Parse path that was deleted to remove from list.
 				setTodos( ParseUtils.parseFile( document, todos ) );
