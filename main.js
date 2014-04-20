@@ -466,8 +466,6 @@ define( function( require, exports, module ) {
 		
 		// Listeners for file changes.
 		FileSystem.on( 'change', function( event, file ) {
-			console.log( file );
-			
 			// Bail if not a file or file is outside current project root.
 			if ( file.constructor.name !== 'File' || file.fullPath.indexOf( ProjectManager.getProjectRoot().fullPath ) === -1 ) {
 				return false;
@@ -481,6 +479,22 @@ define( function( require, exports, module ) {
 				DocumentManager.getDocumentForPath( file.fullPath ).done( function( document ) {
 					setTodos( ParseUtils.parseFile( document, todos ) );
 				} );
+			}
+		} );
+		
+		FileSystem.on( 'rename', function( event, oldName, newName ) {
+			var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
+			
+			// Reload settings if .todo of current project was updated.
+			if ( newName === todoPath || oldName === todoPath ) {
+				loadSettings();
+			} else {
+				// Move visibility state to new file.
+				toggleFileVisible( newName, fileVisible( oldName ) );
+				toggleFileVisible( oldName, false );
+				
+				// If not .todo, parse all files.
+				run();
 			}
 		} );
 		
@@ -519,21 +533,6 @@ define( function( require, exports, module ) {
 				} else {
 					// Empty stored todos and parse current document.
 					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
-				}
-			} )
-			.on( 'fileNameChange.todo', function( event, oldName, newName ) {
-				var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
-				
-				// Reload settings if .todo of current project was updated.
-				if ( newName === todoPath || oldName === todoPath ) {
-					loadSettings();
-				} else {
-					// Move visibility state to new file.
-					toggleFileVisible( newName, fileVisible( oldName ) );
-					toggleFileVisible( oldName, false );
-					
-					// If not .todo, parse all files.
-					run();
 				}
 			} )
 			.on( 'pathDeleted.todo', function( event, deletedPath ) {
