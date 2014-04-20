@@ -464,19 +464,28 @@ define( function( require, exports, module ) {
 			printTodo();
 		} );
 		
+		// Listeners for file changes.
+		FileSystem.on( 'change', function( event, file ) {
+			console.log( file );
+			
+			// Bail if not a file or file is outside current project root.
+			if ( file.constructor.name !== 'File' || file.fullPath.indexOf( ProjectManager.getProjectRoot().fullPath ) === -1 ) {
+				return false;
+			}
+			
+			// Reload settings if .todo of current project was updated.
+			if ( file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
+				loadSettings();
+			} else {
+				// Get document from path and parse.
+				DocumentManager.getDocumentForPath( file.fullPath ).done( function( document ) {
+					setTodos( ParseUtils.parseFile( document, todos ) );
+				} );
+			}
+		} );
+		
 		// Listeners bound to Brackets modules.
 		$documentManager
-			.on( 'documentSaved.todo', function( event, document ) {
-				// Reload settings if .todo of current project was updated.
-				if ( document.file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
-					loadSettings();
-				}
-				
-				// Reparse current file.
-				if ( document === DocumentManager.getCurrentDocument() ) {
-					setTodos( ParseUtils.parseFile( document, todos ) );
-				}
-			} )
 			.on( 'currentDocumentChange.todo', function() {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
