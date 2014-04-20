@@ -82,6 +82,31 @@ define( function( require, exports ) {
 	}
 	
 	/**
+	 * Remove file from array.
+	 */
+	function removeFile( path, todos ) {
+		var index = -1,
+			i,
+			length;
+		
+		// Check if file has already been added to array.
+		for ( i = 0, length = todos.length; i < length; i++ ) {
+			if ( todos[ i ].path === path ) {
+				// File found in array, store index.
+				index = i;
+				break;
+			}
+		}
+		
+		// Remove file if found in array.
+		if ( index > -1 ) {
+			todos.splice( index, 1 );
+		}
+		
+		return todos;
+	}
+	
+	/**
 	 * Get the regular epression to use in parsing.
 	 */
 	function getExpression() {
@@ -100,4 +125,5 @@ define( function( require, exports ) {
 	exports.setExpression = setExpression;
 	exports.parseFile = parseFile;
 	exports.parseText = parseText;
+	exports.removeFile = removeFile;
 } );

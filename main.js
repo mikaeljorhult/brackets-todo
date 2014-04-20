@@ -547,7 +547,7 @@ define( function( require, exports, module ) {
 				toggleFileVisible( deletedPath, false );
 				
 				// Parse path that was deleted to remove from list.
-				setTodos( ParseUtils.parseFile( document, todos ) );
+				setTodos( ParseUtils.removeFile( deletedPath, todos ) );
 			} );
 		
 		// Reload settings when new project is loaded.
