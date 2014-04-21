@@ -85,6 +85,20 @@ define( function( require, exports ) {
 	 * Remove file from array.
 	 */
 	function removeFile( path, todos ) {
+		var index = getIndex( path, todos );
+		
+		// Remove file if found in array.
+		if ( index > -1 ) {
+			todos.splice( index, 1 );
+		}
+		
+		return todos;
+	}
+	
+	/**
+	 * Determine and return index of path in todo array.
+	 */
+	function getIndex( path, todos ) {
 		var index = -1,
 			i,
 			length;
@@ -98,12 +112,7 @@ define( function( require, exports ) {
 			}
 		}
 		
-		// Remove file if found in array.
-		if ( index > -1 ) {
-			todos.splice( index, 1 );
-		}
-		
-		return todos;
+		return index;
 	}
 	
 	/**
