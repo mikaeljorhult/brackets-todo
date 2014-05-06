@@ -26,6 +26,10 @@ define( function( require, exports, module ) {
 		
 		// Extension basics.
 		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
+
+        // Thirdparty.
+        // TODO: `markdown` comment **bolded**
+		marked = require( 'thirdparty/marked' ),
 		
 		// Todo modules.
 		Events = require( 'modules/Events' ),
@@ -308,21 +312,32 @@ define( function( require, exports, module ) {
 			file.todos = file.todos.filter( function( comment ) {
 				return isTagVisible( comment.tag );
 			} );
+
 			
 			// Check if file has any visible todos after filtering.
 			return ( file.todos.length > 0 ? true : false );
 		} );
-		
+
 		return afterFilter;
 	}
 	
+    /**
+     * Render markdown for each message
+     */
+    function renderMarkdown(todos) {
+        $.each(todos[0].todos, function ( index ) {
+            todos[0].todos[index].todo = marked(todos[0].todos[index].todo, {gfm: true, breaks: true});
+        });
+        return todos;
+    }
+
 	/** 
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
 		var resultsHTML = Mustache.render( todoRowTemplate, {
-			files: filterTodosByTag( todos )
-		} );
+			files: filterTodosByTag( renderMarkdown(todos) )
+		});
 		
 		return resultsHTML;
 	}
