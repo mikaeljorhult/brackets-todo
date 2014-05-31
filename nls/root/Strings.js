@@ -20,5 +20,14 @@ define( {
 	
 	// SETTINGS DIALOG.
 	SETTINGS_DIALOG_TITLE:        "Todo Settings",
-	SETTINGS_DIALOG_REGEX_PREFIX: "RegExp prefix"
+	SETTINGS_DIALOG_REGEX_PREFIX: "RegExp prefix",
+    SETTINGS_DIALOG_REGEX_SUFFIX: "RegExp Suffix",
+    SETTINGS_DIALOG_TAGS:           "Tags",
+    SETTINGS_DIALOG_CASE:           "Case",
+    SETTINGS_DIALOG_SEARCH_SCOPE:   "Search Scope",
+    SETTINGS_DIALOG_FILE:           "Current File",
+    SETTINGS_DIALOG_PROJECT:        "Current Project",
+    SETTINGS_DIALOG_EXCLUDE_FOLDERS: "Exclude Folders",
+    SETTINGS_DIALOG_EXCLUDE_FILES:  "Exculude Files"
+    
 } );

@@ -1,13 +1,59 @@
-<div id="autoprefixer-settings-dialog" class="modal">
+<div id="brackets-todo-settings-dialog" class="modal brackets-todo-settings-dialog">
 	<div class="modal-header">
 		<h1 class="dialog-title">{{ Strings.SETTINGS_DIALOG_TITLE }}</h1>
 	</div>
 	
 	<div class="modal-body table-striped tab-content">
-		<label for="todo-settings-regex-prefix">
-			<input type="text" name="todo-settings-regex-prefix" id="todo-settings-regex-prefix" />
-			{{ Strings.SETTINGS_REGEX_PREFIX }}
-		</label>
+
+		<label for="todo-settings-regex-prefix"> <span> {{ Strings.SETTINGS_DIALOG_REGEX_PREFIX }} </span>
+            <input name="todo-settings-regex-prefix" id="todo-settings-regex-prefix" type="text" value="{{ settings.prefix }}" />
+        </label>
+		<br>
+        
+        <label for="todo-settings-regex-suffix"> <span> {{ Strings.SETTINGS_DIALOG_REGEX_SUFFIX }} </span>
+            <input name="todo-settings-regex-suffix" id="todo-settings-regex-suffix" type="text" value="{{ settings.suffix }}" />
+        </label> 
+		<br>
+        
+        <label for="todo-settings-tags"> <span> {{ Strings.SETTINGS_DIALOG_TAGS }} </span>
+            <input name="todo-settings-tags" id="todo-settings-tags" type="text"  value="{{ settings.tags }}" title="{{ strings.DEFAULT_TAGS }} {{ settings.defaultTags }}" />
+        </label>
+		<br>
+        
+        <label> <span> {{ Strings.SETTINGS_DIALOG_CASE }} </span>
+			<label for="todo-settings-case-yes">
+				<input type="radio" name="todo-settings-case" id="todo-settings-case-yes" value="true"  {{#settings.case}}checked{{/settings.case}}/> 
+				{{ Strings.YES }}
+			</label>
+			<label for="todo-settings-case-no">
+				<input type="radio" name="todo-settings-case" id="todo-settings-case-no" value="false" {{^settings.case}}checked{{/settings.case}}/>
+				{{ Strings.NO }}
+			</label>
+        </label>
+		<br>
+
+        <label> <span> {{ Strings.SETTINGS_DIALOG_SEARCH_SCOPE }} </span>
+			<label for="todo-settings-scope-file">
+				<input type="radio" name="todo-settings-scope" id="todo-settings-scope-file" value="{{ settings.currentScope }}"  {{#settings.isCurrentScope}}checked{{/settings.isCurrentScope}} /> 
+				{{ Strings.SETTINGS_DIALOG_FILE }}
+			</label>
+			<label for="todo-settings-scope-project">
+				<input type="radio" name="todo-settings-scope" id="todo-settings-scope-project" value = "{{ settings.projectScope }}"  {{^settings.isCurrentScope}}checked{{/settings.isCurrentScope}} /> 
+				{{ Strings.SETTINGS_DIALOG_PROJECT }}
+			</label>
+        </label>
+		<br>
+        
+        <label for="todo-settings-exclude-folders"> <span> {{ Strings.SETTINGS_DIALOG_EXCLUDE_FOLDERS }} </span>
+            <input type="text" name="todo-settings-exclude-folders" id="todo-settings-exclude-folders" value="{{ settings.excludeFolders }}" />
+        </label>
+		<br>
+			
+        <label for="todo-settings-exclude-files"> <span> {{ Strings.SETTINGS_DIALOG_EXCLUDE_FILES }} </span>
+            <input type="text" name="todo-settings-exclude-files" id="todo-settings-exclude-files" value="{{ settings.excludeFiles }}" />
+        </label>
+		<br>
+        
 	</div>
 	
 	<div class="modal-footer">
