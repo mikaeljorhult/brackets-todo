@@ -20,36 +20,41 @@ define( function( require, exports ) {
 			length;
 		
 		if ( currentDocument !== null && typeof( currentDocument ) !== 'string' ) {
-			// Get information about current file.
-			fileToMatch = currentDocument.file.fullPath;
-			text = currentDocument.getText();
 			
-			// Parse document.
-			documentTodos = parseText( text, StringUtils.getLines( text ) );
-			
-			// Check if file has already been added to array.
-			for ( i = 0, length = todos.length; i < length; i++ ) {
-				if ( todos[ i ].path === fileToMatch ) {
-					// File found in array, store index.
-					index = i;
-					break;
-				}
-			}
-			
-			// Add file to array if any comments is found.
-			if ( documentTodos.length > 0 ) {
-				// Create object for new entry in array if none found.
-				if ( index === -1 ) {
-					todos.push( {} );
-					index = length;
+			// test currentDocument has `file` property.
+			if (currentDocument.hasOwnProperty('file')) {
+				
+				// Get information about current file.
+				fileToMatch = currentDocument.file.fullPath;
+				text = currentDocument.getText();
+				
+				// Parse document.
+				documentTodos = parseText( text, StringUtils.getLines( text ) );
+				
+				// Check if file has already been added to array.
+				for ( i = 0, length = todos.length; i < length; i++ ) {
+					if ( todos[ i ].path === fileToMatch ) {
+						// File found in array, store index.
+						index = i;
+						break;
+					}
 				}
 				
-				// Get any matches and merge with previously found comments.
-				todos[ index ].path = currentDocument.file.fullPath;
-				todos[ index ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
-				todos[ index ].todos = documentTodos;
-			} else if ( index > -1 ) {
-				todos.splice( index, 1 );
+				// Add file to array if any comments is found.
+				if ( documentTodos.length > 0 ) {
+					// Create object for new entry in array if none found.
+					if ( index === -1 ) {
+						todos.push( {} );
+						index = length;
+					}
+					
+					// Get any matches and merge with previously found comments.
+					todos[ index ].path = currentDocument.file.fullPath;
+					todos[ index ].file = currentDocument.file.fullPath.replace( /^.*[\\\/]/ , '' );
+					todos[ index ].todos = documentTodos;
+				} else if ( index > -1 ) {
+					todos.splice( index, 1 );
+				}
 			}
 		}
 		
