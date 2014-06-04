@@ -93,7 +93,7 @@ define(function (require, exports) {
     }
 
     /**
-     * save
+     * save and reload settings 
      */
     function setUserSettings(newSettings) {
         preferences.set('userSettings', newSettings);
@@ -107,10 +107,17 @@ define(function (require, exports) {
         return preferences.get('userSettings');
     }
 
+    /**
+     * use .todo file settings or default settings to show if no user settings before
+     */
     function showSettingsDialog() {
-        SettingsDialog.showDialog(getUserSettings(), function (newSettings) {
+        var userSettings = getUserSettings();
+        if ( userSettings === null || userSettings === undefined || Object.keys( userSettings ).length === 0 ) {
+            userSettings = getSettings();
+        }
+        SettingsDialog.showDialog( userSettings, function (newSettings) {
             setUserSettings(newSettings);
-        });
+        } );
     }
 
     /**
