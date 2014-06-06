@@ -224,12 +224,27 @@ define( function( require, exports, module ) {
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
+
 		var resultsHTML = Mustache.render( todoRowTemplate, {
-			files: filterTodosByTag( todos )
+			files: setTodosVisible( filterTodosByTag( todos ) )
 		} );
 		
 		return resultsHTML;
 	}
+    
+        /**
+         * Keep file visibility as before after file changed
+         */
+        function setTodosVisible( todos ) {
+                var index = 0,
+                    len = 0;
+
+                for ( index = 0, len = todos.length; index < len; index++ ) {
+                        todos[index].visible = SettingsManager.fileVisible( todos[index].path );
+                }
+
+                return todos;
+        }
 
 	/**
 	 * Count number of occurences of each tag.
