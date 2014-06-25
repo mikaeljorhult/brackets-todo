@@ -81,25 +81,27 @@ within JavaScript strings before parsed as regular expressions.
 
 These are the default settings as they would be set in the `.todo` file.
 
-	{
-		"regex": {
-			"prefix": "(?:\\/\\*|\\/\\/|#) *@?(",
-			"suffix": "):? *(.*?) ?(?=\\*/|\\n|$)"
-		},
-		"tags": [
-			"TODO",
-			"NOTE",
-			"FIX ?ME",
-			"CHANGES",
-			"FUTURE"
-		],
-		"case": false,
-		"search": {
-			"scope": "current",
-			"excludeFolders": [],
-			"excludeFiles": []
-		}
+```json
+{
+	"regex": {
+		"prefix": "(?:\\/\\*|\\/\\/|#) *@?(",
+		"suffix": "):? *(.*?) ?(?=\\*/|\\n|$)"
+	},
+	"tags": [
+		"TODO",
+		"NOTE",
+		"FIX ?ME",
+		"CHANGES",
+		"FUTURE"
+	],
+	"case": false,
+	"search": {
+		"scope": "current",
+		"excludeFolders": [],
+		"excludeFiles": []
 	}
+}
+```
 
 
 ### Search scope
@@ -107,7 +109,7 @@ By default Todo looks at the currently opened document for comments. This is nic
 for larger ones you might want to keep an eye on the progress of all parts of the project. This is done 
 by changing scope of the search to project instead of current.
 
-```
+```json
 {
     "search": {
         "scope": "project"
@@ -122,22 +124,25 @@ covers some common formats.
 
 #### jsDoc / phpDoc Syntax
 
-	{
-		"regex": {
-			"prefix": "(?:\* *@)(",
-			"suffix": "):? *(.*?) ?(?=\n)"
-		}
-	}
+```json
+{
+    "regex": {
+        "prefix": "(?:\\* *@*)(",
+        "suffix": "):? *(.*?) ?(?=\\n)"
+    }
+}
+```
 
 #### HTML Comment Syntax
 
-	{
-		"regex": {
-			"prefix": "(?:<!--) *(",
-			"suffix": "):? *(.*?) ?(?=-->)"
-		}
+```json
+{
+	"regex": {
+		"prefix": "(?:<!--) *(",
+		"suffix": "):? *(.*?) ?(?=-->)"
 	}
-
+}
+```
 
 ### Exclude files and folders
 
@@ -149,36 +154,44 @@ Please note that excludes will only work with project wide search scope.
 
 #### Exclude SCSS files
 
-	{
-		"search": {
-			"scope": "project",
-			"excludeFiles": [ ".scss" ]
-		}
+```json
+{
+	"search": {
+		"scope": "project",
+		"excludeFiles": [ ".scss" ]
 	}
+}
+```
 
 #### Exclude files with names containing the word index
 
-	{
-		"search": {
-			"scope": "project",
-			"excludeFiles": [ "index" ]
-		}
+```json
+{
+	"search": {
+		"scope": "project",
+		"excludeFiles": [ "index" ]
 	}
+}
+```
 
 #### Exclude all vendor folders
 
-	{
-		"search": {
-			"scope": "project",
-			"excludeFolders": [ "vendor" ]
-		}
+```json
+{
+	"search": {
+		"scope": "project",
+		"excludeFolders": [ "vendor" ]
 	}
+}
+```
 
 #### Exclude ONLY root vendor folder
 
-	{
-		"search": {
-			"scope": "project",
-			"excludeFolders": [ "/vendor" ]
-		}
+```json
+{
+	"search": {
+		"scope": "project",
+		"excludeFolders": [ "/vendor" ]
 	}
+}
+```
