@@ -162,3 +162,22 @@
 .brackets-todo.current tr.file {
 	display: none;
 }
+
+.brackets-todo-settings-dialog label {
+    display: inline-block;
+    line-height: 1.5em;
+    width: 100%;
+}
+
+.brackets-todo-settings-dialog label > span {
+    display: inline-block;
+    margin-right: 1em;
+    text-align: right;
+    width: 8em;
+}
+
+.brackets-todo-settings-dialog label > label {
+    display: inline;
+    margin-right: 1em;
+    text-align: left;
+}
