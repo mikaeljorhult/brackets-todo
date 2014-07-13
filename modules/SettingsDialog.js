@@ -2,7 +2,13 @@ define( function( require, exports ) {
 	'use strict';
 
 	// Get module dependencies.
-	var Dialogs = brackets.getModule( 'widgets/Dialogs' ),
+	var CommandManager = brackets.getModule( 'command/CommandManager' ),
+		Commands = brackets.getModule( 'command/Commands' ),
+		Dialogs = brackets.getModule( 'widgets/Dialogs' ),
+		EditorManager = brackets.getModule( 'editor/EditorManager' ),
+		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
+		FileUtils = brackets.getModule( 'file/FileUtils' ),
+		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
@@ -13,7 +19,7 @@ define( function( require, exports ) {
 		dialog;
 
 	/**
-	 * get each value of the preferences in dialog.
+	 * Get each value of the preferences in dialog.
 	 */
 	function getValues( $dialog ) {
 		return {
@@ -22,7 +28,7 @@ define( function( require, exports ) {
 				suffix: $dialog.find( '#todo-settings-regex-suffix' ).val(),
 			},
 			tags: splitByComma( $dialog.find( '#todo-settings-tags' ).val() ),
-			case: $dialog.find( '#todo-settings-case-yes' )[ 0 ].checked,
+			case: $dialog.find( '#todo-settings-case' )[ 0 ].checked,
 			search: {
 				scope: $dialog.find( '#todo-settings-scope-file' )[ 0 ].checked ? Defaults.CURRENT_SCOPE : Defaults.PROJECT_SCOPE,
 				excludeFolders: splitByComma( $dialog.find( '#todo-settings-exclude-folders' ).val() ),
@@ -35,7 +41,7 @@ define( function( require, exports ) {
 	 * check or uncheck radio button
 	 */
 	function checkRadio( elementId, isChecked ) {
-		$( '#' + elementId ).attr( 'checked', isChecked );
+		$( '#' + elementId ).prop( 'checked', isChecked );
 	}
 
 	/**
@@ -45,13 +51,8 @@ define( function( require, exports ) {
 		$( '#todo-settings-regex-prefix' ).val( settings.regex.prefix );
 		$( '#todo-settings-regex-suffix' ).val( settings.regex.suffix );
 		$( '#todo-settings-tags' ).val( settings.tags.join( ', ' ) );
-		if ( settings.case === true ) {
-			checkRadio( 'todo-settings-case-yes', true );
-			checkRadio( 'todo-settings-case-no', false );
-		} else {
-			checkRadio( 'todo-settings-case-yes', false );
-			checkRadio( 'todo-settings-case-no', true );
-		}
+		
+		$( '#todo-settings-case' ).prop( 'checked', settings.case );
 
 		if ( settings.search.scope === 'current' ) {
 			checkRadio( 'todo-settings-scope-file', true );
@@ -105,14 +106,25 @@ define( function( require, exports ) {
 		
 		// Open dialog.
 		dialog.done( function( buttonId ) {
+			var $dialog = dialog.getElement(),
+				newSettings = getValues( $dialog ),
+				todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
+				fileEntry = FileSystem.getFileForPath( todoPath );
+			
 			// Save preferences if OK button was clicked.
 			if ( buttonId === 'ok' ) {
-				var $dialog = dialog.getElement(),
-					newSettings = getValues( $dialog );
-					
 				if ( onSaveCallback ) {
 					onSaveCallback( newSettings );
 				}
+			} else if ( buttonId === 'save-file' ) {
+				// Write settings to .todo as JSON.
+				FileUtils.writeText( fileEntry, JSON.stringify( newSettings, null, '\t' ), true ).done( function() {
+					// Open newly created file.
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
+						// Set focus on editor.
+						EditorManager.focusEditor();
+					} );
+				} );
 			}
 		} );
 	};

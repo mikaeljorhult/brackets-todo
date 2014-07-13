@@ -458,8 +458,7 @@ define( function( require, exports, module ) {
 							EditorManager.focusEditor();
 						} );
 					} else {
-						// Show dialog for creating .todo file.
-//						TodoFileDialog.showDialog();
+						// Show settings dialog.
 						SettingsManager.showSettingsDialog();
 					}
 				} );
