@@ -163,21 +163,33 @@
 	display: none;
 }
 
+
+/*--- SETTINGS DIALOG ---*/
 .brackets-todo-settings-dialog label {
-    display: inline-block;
-    line-height: 1.5em;
-    width: 100%;
+	width: 100%;
+	display: inline-block;
 }
 
-.brackets-todo-settings-dialog label > span {
-    display: inline-block;
-    margin-right: 1em;
-    text-align: right;
-    width: 8em;
+.brackets-todo-settings-dialog fieldset {
+	margin-bottom: 1em;
 }
 
-.brackets-todo-settings-dialog label > label {
-    display: inline;
-    margin-right: 1em;
-    text-align: left;
+.brackets-todo-settings-dialog legend {
+	margin: 0 0 .25em;
+}
+
+.brackets-todo-settings-dialog input {
+	vertical-align: middle;
+	margin-bottom: 0;
+}
+
+.brackets-todo-settings-dialog label span {
+	min-width: 8em;
+	display: inline-block;
+}
+
+.brackets-todo-settings-dialog .horizontal label {
+	width: auto;
+	display: inline-block;
+	margin-right: 1em;
 }
