@@ -1,5 +1,3 @@
-/* global define, describe, it, expect, jasmine */
-
 define( function( require, exports, module ) {
 	'use strict';
 	

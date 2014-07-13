@@ -22,5 +22,5 @@ module.exports = function( grunt ) {
 	} );
 	
 	// Register tasks.
-	grunt.registerTask( 'default', [ 'jshint' ]);
+	grunt.registerTask( 'default', [ 'jshint' ] );
 };

@@ -224,28 +224,27 @@ define( function( require, exports, module ) {
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
-
 		var resultsHTML = Mustache.render( todoRowTemplate, {
 			files: setTodosVisible( filterTodosByTag( todos ) )
 		} );
 		
 		return resultsHTML;
 	}
-    
-        /**
-         * Keep file visibility as before after file changed
-         */
-        function setTodosVisible( todos ) {
-                var index = 0,
-                    len = 0;
-
-                for ( index = 0, len = todos.length; index < len; index++ ) {
-                        todos[index].visible = SettingsManager.fileVisible( todos[index].path );
-                }
-
-                return todos;
-        }
-
+	
+	/**
+	 * Keep file visibility as before after file changed
+	 */
+	function setTodosVisible( todos ) {
+		var index = 0,
+			length = todos.length;
+		
+		for ( index = 0; index < length; index++ ) {
+			todos[ index ].visible = SettingsManager.fileVisible( todos[ index ].path );
+		}
+		
+		return todos;
+	}
+	
 	/**
 	 * Count number of occurences of each tag.
 	 */
@@ -280,7 +279,7 @@ define( function( require, exports, module ) {
 	 */
 	function renderTools() {
 		var visibleTags = SettingsManager.getVisibleTags(),
-            tags = [],
+			tags = [],
 			tag;
 		
 		// Create array of tags from visible tags object.
@@ -424,7 +423,7 @@ define( function( require, exports, module ) {
 		$projectManager.on( 'projectOpen.todo', function() {
 			loadSettings( function() {
 				// Reset file visibility.
-                SettingsManager.clearVisibleFiles();
+				SettingsManager.clearVisibleFiles();
 			} );
 		} );
 	}
@@ -461,7 +460,7 @@ define( function( require, exports, module ) {
 					} else {
 						// Show dialog for creating .todo file.
 //						TodoFileDialog.showDialog();
-                        SettingsManager.showSettingsDialog();
+						SettingsManager.showSettingsDialog();
 					}
 				} );
 			} )
