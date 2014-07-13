@@ -1,5 +1,9 @@
 # Brackets Todo Changelog
 
+## 0.6.0 (not released yet)
+* Italian translation. Thanks to Fez Vrasta (@FezVrasta).
+* Allow modifying default settings through new settings dialog. Thanks to Wei Lin (@anzhihun).
+
 ## 0.5.3
 * Ignore binary files, images and unknown files to speed up performance.
 
