@@ -16,6 +16,9 @@
 	"engines": {
 		"brackets": ">=0.37.0"
 	},
+	"i18n": [
+		"de", "en", "fr", "it", "sv", "zh"
+	],
 	"devDependencies": {
 		"grunt": "0.4.x",
 		"load-grunt-tasks": "0.2.x",
