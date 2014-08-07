@@ -16,7 +16,8 @@ define( function( require, exports ) {
 		settingsDialogTemplate = require( 'text!../html/dialog-settings.html' ),
 
 		// Variables.
-		dialog;
+		dialog,
+		$dialog;
 
 	/**
 	 * Get each value of the preferences in dialog.
@@ -24,24 +25,17 @@ define( function( require, exports ) {
 	function getValues( $dialog ) {
 		return {
 			regex: {
-				prefix: $dialog.find( '#todo-settings-regex-prefix' ).val(),
-				suffix: $dialog.find( '#todo-settings-regex-suffix' ).val(),
+				prefix: $( '#todo-settings-regex-prefix', $dialog ).val(),
+				suffix: $( '#todo-settings-regex-suffix', $dialog ).val(),
 			},
 			tags: splitByComma( $dialog.find( '#todo-settings-tags' ).val() ),
-			case: $dialog.find( '#todo-settings-case' )[ 0 ].checked,
+			case: $( '#todo-settings-case', $dialog ).prop( 'checked' ),
 			search: {
-				scope: $dialog.find( '#todo-settings-scope-file' )[ 0 ].checked ? Defaults.CURRENT_SCOPE : Defaults.PROJECT_SCOPE,
-				excludeFolders: splitByComma( $dialog.find( '#todo-settings-exclude-folders' ).val() ),
-				excludeFiles: splitByComma( $dialog.find( '#todo-settings-exclude-files' ).val() )
+				scope: $( 'input[ name="todo-settings-scope" ]:checked', $dialog ).val(),
+				excludeFolders: splitByComma( $( '#todo-settings-exclude-folders', $dialog ).val() ),
+				excludeFiles: splitByComma( $( '#todo-settings-exclude-files', $dialog ).val() )
 			}
 		};
-	}
-
-	/**
-	 * check or uncheck radio button
-	 */
-	function checkRadio( elementId, isChecked ) {
-		$( '#' + elementId ).prop( 'checked', isChecked );
 	}
 
 	/**
@@ -54,38 +48,26 @@ define( function( require, exports ) {
 		
 		$( '#todo-settings-case' ).prop( 'checked', settings.case );
 
-		if ( settings.search.scope === 'current' ) {
-			checkRadio( 'todo-settings-scope-file', true );
-			checkRadio( 'todo-settings-scope-project', false );
-		} else {
-			checkRadio( 'todo-settings-scope-file', false );
-			checkRadio( 'todo-settings-scope-project', true );
-		}
+		$( 'input[ name="todo-settings-scope" ][ value="' + settings.search.scope + '" ]' ).prop( 'checked', true );
 		
 		$( '#todo-settings-exclude-folders' ).val( settings.search.excludeFolders.join( ', ' ) );
 		$( '#todo-settings-exclude-files' ).val( settings.search.excludeFiles.join( ', ' ) );
 	}
 	
 	/**
-	 * Split string by comma into array
-	 * @return {Array}
+	 * Split string by comma and return values as an array.
 	 */
 	function splitByComma( value ) {
 		var result = [];
-
-		if ( value === null || value === undefined ) {
-			return result;
-		}
 		
-		if ( value.trim().length > 0) {
-			// Filtering empty string
-			$.each( value.split( ',' ), function( index, item ) {
-				if ( item.trim().length > 0 ) {
-					result.push( item.trim() );
-				}
+		// Only process string if its entered and not empty.
+		if ( value && value.trim().length > 0 ) {
+			// Split string and remove empty values.
+			result = value.split( /\s?,\s?/ ).filter( function( item ) {
+				return item.length > 0;
 			} );
 		}
-
+		
 		return result;
 	}
 	
@@ -100,6 +82,7 @@ define( function( require, exports ) {
 		
 		// Save dialog to variable.
 		dialog = Dialogs.showModalDialogUsingTemplate( compiledTemplate );
+		$dialog = dialog.getElement();
 		
 		// Initialize dialog values.
 		initValues( settings );

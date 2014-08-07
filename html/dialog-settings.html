@@ -7,13 +7,13 @@
 		<fieldset class="horizontal">
 			<legend>{{ Strings.SETTINGS_DIALOG_SEARCH_SCOPE }}</legend>
 			
-			<label for="todo-settings-scope-file">
-				<input type="radio" name="todo-settings-scope" id="todo-settings-scope-file" /> 
+			<label>
+				<input type="radio" name="todo-settings-scope" value="current" checked="checked" /> 
 				{{ Strings.SETTINGS_DIALOG_FILE }}
 			</label>
 			
-			<label for="todo-settings-scope-project">
-				<input type="radio" name="todo-settings-scope" id="todo-settings-scope-project" /> 
+			<label>
+				<input type="radio" name="todo-settings-scope" value="project" /> 
 				{{ Strings.SETTINGS_DIALOG_PROJECT }}
 			</label>
 		</fieldset>
@@ -46,7 +46,7 @@
 		</fieldset>
 		
 		<fieldset>
-			<legend>{{ Strings.SETTINGS_DIALOG_TAGS }}</legend>
+			<legend>{{ Strings.SETTINGS_DIALOG_EXCLUDE }}</legend>
 			
 			<label for="todo-settings-exclude-folders">
 				<span>{{ Strings.SETTINGS_DIALOG_EXCLUDE_FOLDERS }}</span>
