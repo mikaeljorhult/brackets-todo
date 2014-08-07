@@ -104,6 +104,12 @@ define( function( require, exports ) {
 		// Initialize dialog values.
 		initValues( settings );
 		
+		// Register event listeners.
+		$dialog
+			.on( 'click', '.reset-preferences', function() {
+				initValues( Defaults.defaultSettings );
+			} );
+		
 		// Open dialog.
 		dialog.done( function( buttonId ) {
 			var $dialog = dialog.getElement(),
