@@ -95,14 +95,15 @@ define( function( require, exports ) {
 		
 		// Open dialog.
 		dialog.done( function( buttonId ) {
-			var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
+			var newSettings = getValues(),
+				todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
 				fileEntry = FileSystem.getFileForPath( todoPath );
 			
 			// Save preferences if OK button was clicked.
 			if ( buttonId === 'ok' ) {
 				// Send values to callback if one is supplied.
 				if ( onSaveCallback ) {
-					onSaveCallback( getValues() );
+					onSaveCallback( newSettings );
 				}
 			} else if ( buttonId === 'save-file' ) {
 				// Write settings to .todo as JSON.
