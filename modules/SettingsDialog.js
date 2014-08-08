@@ -22,7 +22,7 @@ define( function( require, exports ) {
 	/**
 	 * Get each value of the preferences in dialog.
 	 */
-	function getValues( $dialog ) {
+	function getValues() {
 		return {
 			regex: {
 				prefix: $( '#todo-settings-regex-prefix', $dialog ).val(),
@@ -95,15 +95,14 @@ define( function( require, exports ) {
 		
 		// Open dialog.
 		dialog.done( function( buttonId ) {
-			var $dialog = dialog.getElement(),
-				newSettings = getValues( $dialog ),
-				todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
+			var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
 				fileEntry = FileSystem.getFileForPath( todoPath );
 			
 			// Save preferences if OK button was clicked.
 			if ( buttonId === 'ok' ) {
+				// Send values to callback if one is supplied.
 				if ( onSaveCallback ) {
-					onSaveCallback( newSettings );
+					onSaveCallback( getValues() );
 				}
 			} else if ( buttonId === 'save-file' ) {
 				// Write settings to .todo as JSON.

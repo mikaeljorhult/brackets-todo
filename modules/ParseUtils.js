@@ -6,7 +6,6 @@ define( function( require, exports ) {
 		StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		
 		// Variables.
-		projectRoot,
 		expression,
 		done = /^\[x\]/i;
 	
