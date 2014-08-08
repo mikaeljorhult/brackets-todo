@@ -469,9 +469,7 @@ define( function( require, exports, module ) {
 				// Change classes and toggle visibility of todos.
 				$this
 					.toggleClass( 'expanded' )
-					.toggleClass( 'collapsed' )
-					.nextUntil( '.file' )
-						.toggle();
+					.toggleClass( 'collapsed' );
 				
 				// Toggle file visibility.
 				SettingsManager.toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
@@ -488,6 +486,8 @@ define( function( require, exports, module ) {
 					// Set focus on editor.
 					EditorManager.focusEditor();
 				} );
+				
+				return false;
 			} )
 			.on( 'click', '.collapse-all', function() {
 				// Click all expanded files to collapse them.

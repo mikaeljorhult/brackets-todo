@@ -3,6 +3,10 @@
 	position: relative;
 }
 
+.brackets-todo tr {
+	cursor: pointer;
+}
+
 .brackets-todo td {
 	vertical-align: middle;
 }
@@ -163,6 +167,19 @@
 	display: none;
 }
 
+.brackets-todo tr.file > td {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.brackets-todo .todos {
+	display: none;
+	margin-top: 4px;
+}
+
+.brackets-todo .expanded .todos {
+	display: table;
+}
 
 /*--- SETTINGS DIALOG ---*/
 .brackets-todo-settings-dialog label {
