@@ -1,9 +1,9 @@
 <div class="tags">
-	{{#tags}}
-		<a href="#" class="{{#visible}}visible{{/visible}}" data-name="{{ tag }}" title="{{ strings.SHOW_OR_HIDE }} {{ name }} ">
+	{{ #tags }}
+		<a href="#" class="{{ #visible }}visible{{ /visible }}" data-name="{{ tag }}" title="{{ strings.SHOW_OR_HIDE }} {{ name }} ">
 			{{ name }} (<span class="count">{{ count }}</span>)
 		</a>
-	{{/tags}}
+	{{ /tags }}
 </div>
 
 <div class="icons">
