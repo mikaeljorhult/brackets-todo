@@ -74,7 +74,7 @@ define( function( require, exports, module ) {
 	 */
 	function enableTodo( enabled ) {
 		if ( enabled ) {
-			loadSettings( function() {
+			SettingsManager.loadSettings( function() {
 				// Show panel.
 				Resizer.show( $todoPanel );
 			} );
@@ -90,18 +90,10 @@ define( function( require, exports, module ) {
 		}
 		
 		// Save enabled state.
-		SettingsManager.setExtensionEnabled(enabled);
+		SettingsManager.setExtensionEnabled( enabled );
 		
 		// Mark menu item as enabled/disabled.
 		CommandManager.get( COMMAND_ID ).setChecked( enabled );
-	}
-	
-	/**
-	 * Check for settings file and load if it exists.
-	 * .todo file > settings by setting dialog > default settings
-	 */
-	function loadSettings( callback ) {
-		SettingsManager.loadSettings( callback );
 	}
 	
 	/**
@@ -343,7 +335,7 @@ define( function( require, exports, module ) {
 			
 			// Reload settings if .todo of current project was updated.
 			if ( file.fullPath === Paths.todoFile() ) {
-				loadSettings();
+				SettingsManager.loadSettings();
 			} else {
 				// Get document from path and parse.
 				DocumentManager.getDocumentForPath( file.fullPath ).done( function( document ) {
@@ -357,7 +349,7 @@ define( function( require, exports, module ) {
 			
 			// Reload settings if .todo of current project was updated.
 			if ( newName === todoPath || oldName === todoPath ) {
-				loadSettings();
+				SettingsManager.loadSettings();
 			} else {
 				// Move visibility state to new file.
 				SettingsManager.toggleFileVisible( newName, SettingsManager.fileVisible( oldName ) );
@@ -410,7 +402,7 @@ define( function( require, exports, module ) {
 				
 				// Reload settings if .todo of current project was deleted.
 				if ( deletedPath === todoPath ) {
-					loadSettings();
+					SettingsManager.loadSettings();
 				}
 				
 				// Remove file from visibility list.
@@ -422,7 +414,7 @@ define( function( require, exports, module ) {
 		
 		// Reload settings when new project is loaded.
 		$projectManager.on( 'projectOpen.todo', function() {
-			loadSettings( function() {
+			SettingsManager.loadSettings( function() {
 				// Reset file visibility.
 				SettingsManager.clearVisibleFiles();
 			} );
