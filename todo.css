@@ -125,12 +125,7 @@
 }
 
 .brackets-todo .icons .indicator {
-	opacity: .5;
 	background-position: left -36px;
-}
-
-.brackets-todo.todo-file .icons .indicator {
-	opacity: 1;
 }
 
 .brackets-todo .tags {

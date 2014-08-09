@@ -41,7 +41,6 @@ define( function( require, exports, module ) {
 		
 		// Setup extension.
 		todos = [],
-		todoFile,
 		$todoPanel,
 		$todoIcon = $( '<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>' ),
 		
@@ -424,7 +423,6 @@ define( function( require, exports, module ) {
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
 		var todoHTML = Mustache.render( todoPanelTemplate, {
-				todo: todoFile,
 				tools: renderTools(),
 				strings: Strings
 			} );
@@ -444,7 +442,7 @@ define( function( require, exports, module ) {
 				// Check if there is a file with the name .todo.
 				FileSystem.resolve( todoFilePath, function( error, entry ) {
 					// Check if the todo file is present.
-					if ( todoFile || entry !== undefined ) {
+					if ( entry !== undefined ) {
 						// Open .todo filein editor.
 						CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoFilePath } ).done( function() {
 							// Set focus on editor.
