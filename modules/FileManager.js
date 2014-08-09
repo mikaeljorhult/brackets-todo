@@ -7,6 +7,7 @@ define( function( require, exports ) {
 		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Todo modules.
+		Paths = require( 'modules/Paths' ),
 		SettingsManager = require( 'modules/SettingsManager' );
 	
 	/**
@@ -21,8 +22,7 @@ define( function( require, exports ) {
 	 */
 	function filter() {
 		return function filterFunction( file ) {
-			var projectRoot = ProjectManager.getProjectRoot().fullPath,
-				relativePath = '^' + file.parentPath.replace( projectRoot, '' ),
+			var relativePath = '^' + Paths.makeRelative( file.parentPath ),
 				languageID = LanguageManager.getLanguageForPath( file.fullPath ).getId(),
 				fileName = file.name,
 				searchString,

@@ -5,14 +5,18 @@ define( function( require, exports ) {
 	var FileUtils = brackets.getModule( 'file/FileUtils' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
+		
+		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
 		Events = require( 'modules/Events' ),
+		Paths = require( 'modules/Paths' ),
 		SettingsDialog = require( 'modules/SettingsDialog' ),
 		settings = Defaults.defaultSettings,
 		
 		// Preferences.
 		preferences = PreferencesManager.getExtensionPrefs( 'mikaeljorhult.bracketsTodo' ),
 		
+		// Variables.
 		visibleFiles,
 		visibleTags;
 	
@@ -32,9 +36,7 @@ define( function( require, exports ) {
 	 * settings in .todo file > settings set by settings dialog > default settings
 	 */
 	function loadSettings( callback ) {
-		var ProjectManager = brackets.getModule( 'project/ProjectManager' ),
-			projectRoot = ProjectManager.getProjectRoot(),
-			fileEntry = FileSystem.getFileForPath(projectRoot.fullPath + '.todo' ),
+		var fileEntry = FileSystem.getFileForPath( Paths.todoFile() ),
 			fileContent = FileUtils.readAsText( fileEntry ),
 			userSettings = {},
 			todoFile = false;

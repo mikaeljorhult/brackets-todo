@@ -29,6 +29,7 @@ define( function( require, exports, module ) {
 		Events = require( 'modules/Events' ),
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
+		Paths = require( 'modules/Paths' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
 		
@@ -336,12 +337,12 @@ define( function( require, exports, module ) {
 		// Listeners for file changes.
 		FileSystem.on( 'change', function( event, file ) {
 			// Bail if not a file or file is outside current project root.
-			if ( !file.isFile || file.fullPath.indexOf( ProjectManager.getProjectRoot().fullPath ) === -1 ) {
+			if ( !file.isFile || file.fullPath.indexOf( Paths.projectRoot() ) === -1 ) {
 				return false;
 			}
 			
 			// Reload settings if .todo of current project was updated.
-			if ( file.fullPath === ProjectManager.getProjectRoot().fullPath + '.todo' ) {
+			if ( file.fullPath === Paths.todoFile() ) {
 				loadSettings();
 			} else {
 				// Get document from path and parse.
@@ -352,7 +353,7 @@ define( function( require, exports, module ) {
 		} );
 		
 		FileSystem.on( 'rename', function( event, oldName, newName ) {
-			var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
+			var todoPath = Paths.todoFile();
 			
 			// Reload settings if .todo of current project was updated.
 			if ( newName === todoPath || oldName === todoPath ) {
@@ -405,7 +406,7 @@ define( function( require, exports, module ) {
 				}
 			} )
 			.on( 'pathDeleted.todo', function( event, deletedPath ) {
-				var todoPath = ProjectManager.getProjectRoot().fullPath + '.todo';
+				var todoPath = Paths.todoFile();
 				
 				// Reload settings if .todo of current project was deleted.
 				if ( deletedPath === todoPath ) {
@@ -446,7 +447,7 @@ define( function( require, exports, module ) {
 				enableTodo( false );
 			} )
 			.on( 'click', '.indicator', function() {
-				var todoFilePath = ProjectManager.getProjectRoot().fullPath + '.todo';
+				var todoFilePath = Paths.todoFile();
 				
 				// Check if there is a file with the name .todo.
 				FileSystem.resolve( todoFilePath, function( error, entry ) {

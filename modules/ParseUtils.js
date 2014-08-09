@@ -2,8 +2,10 @@ define( function( require, exports ) {
 	'use strict';
 	
 	// Get dependencies.
-	var ProjectManager = brackets.getModule( 'project/ProjectManager' ),
-		StringUtils = brackets.getModule( 'utils/StringUtils' ),
+	var StringUtils = brackets.getModule( 'utils/StringUtils' ),
+		
+		// Extension modules.
+		Paths = require( 'modules/Paths' ),
 		
 		// Variables.
 		expression,
@@ -13,8 +15,7 @@ define( function( require, exports ) {
 	 * Pass file to parsing function.
 	 */
 	function parseFile( currentDocument, todos ) {
-		var projectRoot = ProjectManager.getProjectRoot().fullPath,
-			documentTodos = [],
+		var documentTodos = [],
 			index = -1,
 			fileToMatch,
 			text,
@@ -48,7 +49,7 @@ define( function( require, exports ) {
 				
 				// Get any matches and merge with previously found comments.
 				todos[ index ].path = currentDocument.file.fullPath;
-				todos[ index ].file = currentDocument.file.fullPath.replace( projectRoot, '' );
+				todos[ index ].file = Paths.makeRelative( currentDocument.file.fullPath );
 				todos[ index ].todos = documentTodos;
 			} else if ( index > -1 ) {
 				todos.splice( index, 1 );

@@ -8,10 +8,10 @@ define( function( require, exports ) {
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
-		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
+		Paths = require( 'modules/Paths' ),
 		Strings = require( 'modules/Strings' ),
 		settingsDialogTemplate = require( 'text!../html/dialog-settings.html' ),
 
@@ -96,7 +96,7 @@ define( function( require, exports ) {
 		// Open dialog.
 		dialog.done( function( buttonId ) {
 			var newSettings = getValues(),
-				todoPath = ProjectManager.getProjectRoot().fullPath + '.todo',
+				todoPath = Paths.todoFile(),
 				fileEntry = FileSystem.getFileForPath( todoPath );
 			
 			// Save preferences if OK button was clicked.
