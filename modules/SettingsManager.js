@@ -37,46 +37,47 @@ define( function( require, exports ) {
 	 */
 	function loadSettings( callback ) {
 		var fileEntry = FileSystem.getFileForPath( Paths.todoFile() ),
-			fileContent = FileUtils.readAsText( fileEntry ),
-			userSettings = {},
-			todoFile = false;
+			fileContent,
+			userSettings = getUserSettings();
 		
-		// File is loaded asynchronous.
-		fileContent.done( function( content ) {
-			// Catch error if JSON is invalid
-			try {
-				//.todo file exists.
-				todoFile = true;
-
-				// Parse .todo file.
-				userSettings = JSON.parse( content );
-			} catch ( e ) {
-				// .todo exists but isn't valid JSON.
-				todoFile = false;
+		// Check if .todo exists in current project.
+		fileEntry.exists( function( err, exists ) {
+			// Only load settings from .todo if it exists.
+			if ( exists ) {
+				fileContent = FileUtils.readAsText( fileEntry );
+				
+				// File is loaded asynchronous.
+				fileContent.done( function( content ) {
+					// Catch error if JSON is invalid
+					try {
+						// Parse .todo file.
+						userSettings = JSON.parse( content );
+					} catch ( e ) {
+						// .todo exists but isn't valid JSON.
+					}
+				} ).always( function() {
+					finalizeSettings( userSettings, callback );
+				} );
+			} else {
+				finalizeSettings( userSettings, callback );
 			}
-		} ).fail( function() {
-			// .todo doesn't exists or couldn't be accessed.
-			todoFile = false;
-		} ).always( function() {
-			// Load settings from setting dialog if no .todo file
-			if ( ! todoFile ) {
-				userSettings = getUserSettings();
-			}
-			
-			// Merge default settings with JSON.
-			mergeSettings( userSettings );
-			
-			// Build array of tags and save to preferences.
-			setUpTags();
-			
-			// Trigger callback.
-			if ( callback ) {
-				callback();
-			}
-			
-			// Publish event.
-			Events.publish( 'settings:loaded' );
 		} );
+	}
+	
+	function finalizeSettings( userSettings, callback ) {
+		// Merge default settings with JSON.
+		mergeSettings( userSettings );
+		
+		// Build array of tags and save to preferences.
+		setupTags();
+		
+		// Trigger callback.
+		if ( callback ) {
+			callback();
+		}
+		
+		// Publish event.
+		Events.publish( 'settings:loaded' );
 	}
 
 	function mergeSettings( userSettings ) {
@@ -163,9 +164,11 @@ define( function( require, exports ) {
 		visibleFiles = [];
 	}
 
-	function setUpTags() {
+	function setupTags() {
 		// Build array of tags and save to preferences.
 		visibleTags = initTags();
+		
+		// Save visibility state.
 		preferences.set( 'visibleTags', visibleTags );
 		preferences.save();
 	}
