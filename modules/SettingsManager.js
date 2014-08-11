@@ -64,6 +64,9 @@ define( function( require, exports ) {
 		} );
 	}
 	
+	/**
+	 * Merge settings and trigger callback.
+	 */
 	function finalizeSettings( userSettings, callback ) {
 		// Merge default settings with JSON.
 		mergeSettings( userSettings );
