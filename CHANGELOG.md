@@ -4,6 +4,8 @@
 * Allow modifying default settings through new settings dialog. Thanks to Wei Lin (@anzhihun).
 * Italian translation. Thanks to Fez Vrasta (@FezVrasta).
 * French translation. Thanks to Cyrakuse (@cyrakuse).
+* Spanish translation. Thanks to Iván Barcia (@ivarcia).
+* Galician translation. Thanks to Iván Barcia (@ivarcia).
 
 ## 0.5.3
 * Ignore binary files, images and unknown files to speed up performance.
