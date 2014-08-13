@@ -1,11 +1,12 @@
 var gulp = require( 'gulp' ),
 	plugins = require( 'gulp-load-plugins' )(),
-	files = [ 'main.js', 'unittests.js', 'package.json', 'modules/*.js', 'nls/**/*.js' ];
+	files = [ 'main.js', 'unittests.js', 'modules/*.js', 'nls/**/*.js' ];
 
 gulp.task( 'lint', function() {
 	return gulp.src( files )
 		.pipe( plugins.jshint() )
-		.pipe( plugins.jshint.reporter( 'default' ) );
+		.pipe( plugins.jshint.reporter( 'default' ) )
+		.pipe( plugins.jscs() );
 } );
 
 gulp.task( 'default', [ 'lint' ] );
