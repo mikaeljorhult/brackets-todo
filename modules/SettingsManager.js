@@ -21,7 +21,7 @@ define( function( require, exports ) {
 		visibleTags;
 	
 	// Define preferences.
-	preferences.definePreference( 'enabled', 'boolean', false);
+	preferences.definePreference( 'enabled', 'boolean', false );
 	preferences.definePreference( 'visibleFiles', 'object', [] );
 	preferences.definePreference( 'visibleTags', 'object', {} );
 	preferences.definePreference( 'userSettings', 'object', {} );
@@ -147,7 +147,7 @@ define( function( require, exports ) {
 		// Toggle visibility state.
 		if ( state ) {
 			// Show if already visible.
-			if ( ! alreadyVisible ) {
+			if ( !alreadyVisible ) {
 				visibleFiles.push( path );
 			}
 		} else {
@@ -161,12 +161,11 @@ define( function( require, exports ) {
 		preferences.set( 'visibleFiles', visibleFiles );
 		preferences.save();
 	}
-
-
+	
 	function clearVisibleFiles() {
 		visibleFiles = [];
 	}
-
+	
 	function setupTags() {
 		// Build array of tags and save to preferences.
 		visibleTags = initTags();
@@ -206,8 +205,8 @@ define( function( require, exports ) {
 		var visible = false;
 		
 		// Check if tag exists and use that value.
-		if (visibleTags.hasOwnProperty(tag)) {
-			visible = visibleTags[tag].visible;
+		if ( visibleTags.hasOwnProperty( tag ) ) {
+			visible = visibleTags[ tag ].visible;
 		}
 		
 		return visible;
@@ -220,7 +219,7 @@ define( function( require, exports ) {
 	/**
 	 * Toggle tag visibility.
 	 */
-	function toggleTagVisible(tag, state) {
+	function toggleTagVisible( tag, state ) {
 		var visible = ( state !== undefined ? state : isTagVisible( tag ) );
 		
 		// Toggle visibility state.

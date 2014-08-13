@@ -114,7 +114,12 @@ define( function( require, exports, module ) {
 			// Bail if no files.
 			if ( files.length === 0 ) {
 				setTodos( todoArray );
-				if ( callback ) { callback(); }
+				
+				// Run callback when completed.
+				if ( callback ) {
+					callback();
+				}
+				
 				return;
 			}
 			
@@ -142,7 +147,9 @@ define( function( require, exports, module ) {
 				setTodos( todoArray );
 				
 				// Run callback when completed.
-				if ( callback ) { callback(); }
+				if ( callback ) {
+					callback();
+				}
 			} );
 		} );
 	}
@@ -188,7 +195,9 @@ define( function( require, exports, module ) {
 	 * Filter todos by tag. 
 	 */
 	function filterTodosByTag( beforeFilter ) {
-		if ( beforeFilter.length === 0 ) { return beforeFilter; }
+		if ( beforeFilter.length === 0 ) {
+			return beforeFilter;
+		}
 		
 		// Create deep clone of array to work with.   
 		var afterFilter = JSON.parse( JSON.stringify( beforeFilter ) );
@@ -275,7 +284,7 @@ define( function( require, exports, module ) {
 			tag;
 		
 		// Create array of tags from visible tags object.
-		for( tag in visibleTags ) {
+		for ( tag in visibleTags ) {
 			if ( visibleTags.hasOwnProperty( tag ) ) {
 				visibleTags[ tag ].count = countByTag( tag );
 				

@@ -43,7 +43,7 @@ define( function( require, exports ) {
 					// If root level is indicated (by first character being a slash) replace it with ^
 					// to prevent matching subdirectories.
 					if ( searchString.charAt( 0 ) === '/' ) {
-						searchString = searchString.replace ( /^\//, '^');
+						searchString = searchString.replace ( /^\//, '^' );
 					}
 					
 					// Check for matches in path.
