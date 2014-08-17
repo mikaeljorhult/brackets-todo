@@ -1,6 +1,9 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.1 - Unreleased
+* Update to italian translation. Thanks to Denisov21 (@Denisov21).
+
 ## 0.6.0 - 2014-08-17
 * Allow modifying default settings through new settings dialog. Thanks to Wei Lin (@anzhihun).
 * Italian translation. Thanks to Fez Vrasta (@FezVrasta).
