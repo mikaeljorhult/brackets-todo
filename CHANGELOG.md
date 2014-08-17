@@ -1,6 +1,6 @@
 # Brackets Todo Changelog
 
-## 0.6.0 (not released yet)
+## 0.6.0
 * Allow modifying default settings through new settings dialog. Thanks to Wei Lin (@anzhihun).
 * Italian translation. Thanks to Fez Vrasta (@FezVrasta).
 * French translation. Thanks to Cyrakuse (@cyrakuse).

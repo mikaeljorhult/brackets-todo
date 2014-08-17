@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.5.3
+ * Brackets Todo 0.6.0
  * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
@@ -178,9 +178,6 @@ define( function( require, exports, module ) {
 		// Show file rows if project search scope.
 		if ( project ) {
 			$todoPanel.removeClass( 'current' );
-			
-			$( '.file.collapsed', resultsHTML )
-				.nextUntil( '.file' ).hide();
 		} else {
 			$todoPanel.addClass( 'current' );
 		}
