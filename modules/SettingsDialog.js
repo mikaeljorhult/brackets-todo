@@ -115,8 +115,7 @@ define( function( require, exports ) {
 		var todoPath = Paths.todoFile(),
 			fileEntry = FileSystem.getFileForPath( todoPath ),
 			validation = validateValues(),
-			newSettings = getValues(),
-			field;
+			newSettings = getValues();
 		
 		// Close button if cancel was clicked.
 		if ( buttonId === 'cancel' ) {
