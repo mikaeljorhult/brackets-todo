@@ -1,10 +1,11 @@
-define( function( require, exports ) {
+define( function( require ) {
 	'use strict';
 	
 	// Get dependencies.
 	var FileUtils = brackets.getModule( 'file/FileUtils' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		PreferencesManager = brackets.getModule( 'preferences/PreferencesManager' ),
+		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
@@ -241,22 +242,33 @@ define( function( require, exports ) {
 		preferences.save();
 	}
 	
-	// APIs about settings
-	exports.loadSettings = loadSettings;
-	exports.getSettings = getSettings;
-	exports.showSettingsDialog = showSettingsDialog;
-
-	// APIs about visible file
-	exports.fileVisible = fileVisible;
-	exports.toggleFileVisible = toggleFileVisible;
-	exports.clearVisibleFiles = clearVisibleFiles;
-
-	// APIs about visible tag
-	exports.isTagVisible = isTagVisible;
-	exports.getVisibleTags = getVisibleTags;
-	exports.toggleTagVisible = toggleTagVisible;
-
-	// APIs about Extension 
-	exports.isExtensionEnabled = isExtensionEnabled;
-	exports.setExtensionEnabled = setExtensionEnabled;
+	// Reload settings when new project is loaded.
+	$( ProjectManager ).on( 'projectOpen.todo', function() {
+		loadSettings( function() {
+			// Reset file visibility.
+			clearVisibleFiles();
+		} );
+	} );
+	
+	// Return global methods.
+	return {
+		// APIs about settings. 
+		loadSettings: loadSettings,
+		getSettings: getSettings,
+		showSettingsDialog: showSettingsDialog,
+		
+		// APIs about visible file
+		fileVisible: fileVisible,
+		toggleFileVisible: toggleFileVisible,
+		clearVisibleFiles: clearVisibleFiles,
+		
+		// APIs about visible tag
+		isTagVisible: isTagVisible,
+		getVisibleTags: getVisibleTags,
+		toggleTagVisible: toggleTagVisible,
+		
+		// APIs about Extension 
+		isExtensionEnabled: isExtensionEnabled,
+		setExtensionEnabled: setExtensionEnabled
+	};
 } );

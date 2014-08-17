@@ -13,7 +13,6 @@ define( function( require, exports, module ) {
 		Menus = brackets.getModule( 'command/Menus' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
-		ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		PanelManager = brackets.getModule( 'view/PanelManager' ),
@@ -311,8 +310,7 @@ define( function( require, exports, module ) {
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function registerListeners() {
-		var $documentManager = $( DocumentManager ),
-			$projectManager = $( ProjectManager );
+		var $documentManager = $( DocumentManager );
 		
 		// Listeners bound to Todo modules.
 		Events.subscribe( 'settings:loaded', function() {
@@ -416,14 +414,6 @@ define( function( require, exports, module ) {
 				// Parse path that was deleted to remove from list.
 				setTodos( ParseUtils.removeFile( deletedPath, todos ) );
 			} );
-		
-		// Reload settings when new project is loaded.
-		$projectManager.on( 'projectOpen.todo', function() {
-			SettingsManager.loadSettings( function() {
-				// Reset file visibility.
-				SettingsManager.clearVisibleFiles();
-			} );
-		} );
 	}
 	
 	// Register panel and setup event listeners.
