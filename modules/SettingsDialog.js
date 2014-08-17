@@ -59,7 +59,10 @@ define( function( require, exports ) {
 	 */
 	function validateValues() {
 		var values = getValues(),
-			validRegularExpression = true;
+			validationObject = {
+				valid: true,
+				invalidFields: [ 'test' ]
+			};
 		
 		// Test regular expression.
 		try {
@@ -68,10 +71,13 @@ define( function( require, exports ) {
 				values.regex.suffix
 			);
 		} catch ( error ) {
-			validRegularExpression = false;
+			validationObject.valid = false;
+			
+			validationObject.invalidFields.push( 'todo-settings-regex-prefix' );
+			validationObject.invalidFields.push( 'todo-settings-regex-suffix' );
 		}
 		
-		return validRegularExpression;
+		return validationObject;
 	}
 	
 	/**
@@ -91,11 +97,26 @@ define( function( require, exports ) {
 		return result;
 	}
 	
+	function markInvalidFields( fields ) {
+		var field;
+		
+		// Reset invalid fields.
+		$dialog.find( 'input' ).removeClass( 'invalid' );
+		
+		// Add class to each invalid field.
+		for ( field in fields ) {
+			if ( fields.hasOwnProperty( field ) ) {
+				$( 'input[ name="' + fields[ field ] + '"]', $dialog ).addClass( 'invalid' );
+			}
+		}
+	}
+	
 	function handleButton( buttonId, callback ) {
-		var validValues = validateValues(),
+		var todoPath = Paths.todoFile(),
+			fileEntry = FileSystem.getFileForPath( todoPath ),
+			validation = validateValues(),
 			newSettings = getValues(),
-			todoPath = Paths.todoFile(),
-			fileEntry = FileSystem.getFileForPath( todoPath );
+			field;
 		
 		// Close button if cancel was clicked.
 		if ( buttonId === 'cancel' ) {
@@ -104,26 +125,35 @@ define( function( require, exports ) {
 		
 		// Save preferences if OK button was clicked.
 		if ( buttonId === 'ok' ) {
-			// Send values to callback if one is supplied.
-			if ( callback ) {
-				callback( newSettings );
-			}
-			
-			// Close dialog.
-			dialog.close();
+			// Check that values are valid.
+			if ( validation.valid === true ) {
+				// Send values to callback if one is supplied.
+				if ( callback ) {
+					callback( newSettings );
+				}
 				
+				// Close dialog.
+				dialog.close();
+			} else {
+				markInvalidFields( validation.invalidFields );
+			}
 		} else if ( buttonId === 'save-file' ) {
-			// Write settings to .todo as JSON.
-			FileUtils.writeText( fileEntry, JSON.stringify( newSettings, null, '\t' ), true ).done( function() {
-				// Open newly created file.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
-					// Set focus on editor.
-					EditorManager.focusEditor();
+			// Check that values are valid.
+			if ( validation.valid === true ) {
+				// Write settings to .todo as JSON.
+				FileUtils.writeText( fileEntry, JSON.stringify( newSettings, null, '\t' ), true ).done( function() {
+					// Open newly created file.
+					CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
+						// Set focus on editor.
+						EditorManager.focusEditor();
+					} );
 				} );
-			} );
-			
-			// Close dialog.
-			dialog.close();
+				
+				// Close dialog.
+				dialog.close();
+			} else {
+				markInvalidFields( validation.invalidFields );
+			}
 		}
 	}
 	

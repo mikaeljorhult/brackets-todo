@@ -205,3 +205,7 @@
 	display: inline-block;
 	margin-right: 1em;
 }
+
+.brackets-todo-settings-dialog .invalid {
+	border-color: #c95353;
+}
