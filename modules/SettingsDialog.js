@@ -55,6 +55,26 @@ define( function( require, exports ) {
 	}
 	
 	/**
+	 * Test that all values are valid.
+	 */
+	function validateValues() {
+		var values = getValues(),
+			validRegularExpression = true;
+		
+		// Test regular expression.
+		try {
+			new RegExp(
+				values.regex.prefix + 'TEST' +
+				values.regex.suffix
+			);
+		} catch ( error ) {
+			validRegularExpression = false;
+		}
+		
+		return validRegularExpression;
+	}
+	
+	/**
 	 * Split string by comma and return values as an array.
 	 */
 	function splitByComma( value ) {
@@ -71,17 +91,53 @@ define( function( require, exports ) {
 		return result;
 	}
 	
+	function handleButton( buttonId, callback ) {
+		var validValues = validateValues(),
+			newSettings = getValues(),
+			todoPath = Paths.todoFile(),
+			fileEntry = FileSystem.getFileForPath( todoPath );
+		
+		// Close button if cancel was clicked.
+		if ( buttonId === 'cancel' ) {
+			dialog.close();
+		}
+		
+		// Save preferences if OK button was clicked.
+		if ( buttonId === 'ok' ) {
+			// Send values to callback if one is supplied.
+			if ( callback ) {
+				callback( newSettings );
+			}
+			
+			// Close dialog.
+			dialog.close();
+				
+		} else if ( buttonId === 'save-file' ) {
+			// Write settings to .todo as JSON.
+			FileUtils.writeText( fileEntry, JSON.stringify( newSettings, null, '\t' ), true ).done( function() {
+				// Open newly created file.
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
+					// Set focus on editor.
+					EditorManager.focusEditor();
+				} );
+			} );
+			
+			// Close dialog.
+			dialog.close();
+		}
+	}
+	
 	/**
 	 * Exposed method to show dialog.
 	 */
-	exports.showDialog = function( settings, onSaveCallback ) {
+	exports.show = function( settings, callback ) {
 		// Compile dialog template.
 		var compiledTemplate = Mustache.render( settingsDialogTemplate, {
 			Strings: Strings
 		} );
 		
 		// Save dialog to variable.
-		dialog = Dialogs.showModalDialogUsingTemplate( compiledTemplate );
+		dialog = Dialogs.showModalDialogUsingTemplate( compiledTemplate, false );
 		$dialog = dialog.getElement();
 		
 		// Initialize dialog values.
@@ -91,30 +147,12 @@ define( function( require, exports ) {
 		$dialog
 			.on( 'click', '.reset-preferences', function() {
 				initValues( Defaults.defaultSettings );
+			} )
+			.on( 'click', '.dialog-button', function() {
+				var buttonId = $( this ).data( 'button-id' );
+				
+				// Handle closing dialog.
+				handleButton( buttonId, callback );
 			} );
-		
-		// Open dialog.
-		dialog.done( function( buttonId ) {
-			var newSettings = getValues(),
-				todoPath = Paths.todoFile(),
-				fileEntry = FileSystem.getFileForPath( todoPath );
-			
-			// Save preferences if OK button was clicked.
-			if ( buttonId === 'ok' ) {
-				// Send values to callback if one is supplied.
-				if ( onSaveCallback ) {
-					onSaveCallback( newSettings );
-				}
-			} else if ( buttonId === 'save-file' ) {
-				// Write settings to .todo as JSON.
-				FileUtils.writeText( fileEntry, JSON.stringify( newSettings, null, '\t' ), true ).done( function() {
-					// Open newly created file.
-					CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
-						// Set focus on editor.
-						EditorManager.focusEditor();
-					} );
-				} );
-			}
-		} );
 	};
 } );

@@ -123,7 +123,7 @@ define( function( require, exports ) {
 			userSettings = getSettings();
 		}
 		
-		SettingsDialog.showDialog( userSettings, function( newSettings ) {
+		SettingsDialog.show( userSettings, function( newSettings ) {
 			setUserSettings( newSettings );
 		} );
 	}
