@@ -191,30 +191,15 @@ define( function( require, exports, module ) {
 	 * Filter todos by tag. 
 	 */
 	function filterTodosByTag( beforeFilter ) {
+		// Bail if no files are available.
 		if ( beforeFilter.length === 0 ) {
 			return beforeFilter;
 		}
 		
-		// Create deep clone of array to work with.   
-		var afterFilter = JSON.parse( JSON.stringify( beforeFilter ) );
-		
 		// Go through each file and only return those with visible comments.
-		afterFilter = afterFilter.filter( function( file ) {
-			// Do not return if no valid todos.
-			if ( file.todos === undefined || file.todos.length < 1 ) {
-				return false;
-			}
-			
-			// Go through each comment and only return those of visible tags.
-			file.todos = file.todos.filter( function( comment ) {
-				return SettingsManager.isTagVisible( comment.tag );
-			} );
-			
-			// Check if file has any visible todos after filtering.
-			return ( file.todos.length > 0 ? true : false );
+		return beforeFilter.filter( function( file ) {
+			return file.hasVisibleTodos();
 		} );
-		
-		return afterFilter;
 	}
 	
 	/** 
@@ -236,7 +221,7 @@ define( function( require, exports, module ) {
 			length = todos.length;
 		
 		for ( index = 0; index < length; index++ ) {
-			todos[ index ].visible = SettingsManager.fileVisible( todos[ index ].path );
+			todos[ index ].visible = SettingsManager.fileVisible( todos[ index ].path() );
 		}
 		
 		return todos;
@@ -251,7 +236,7 @@ define( function( require, exports, module ) {
 		// Go through each file.
 		$.each( todos, function( index, file ) {
 			// Go through each comment.
-			$.each( file.todos, function( index, comment ) {
+			$.each( file.todos(), function( index, comment ) {
 				// If comment is of requested type, add one to count.
 				if ( comment.tag === tag ) {
 					count++;

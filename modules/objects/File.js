@@ -5,7 +5,8 @@ define( function( require ) {
 	var ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Extension modules.
-		Paths = require( 'modules/Paths' );
+		Paths = require( 'modules/Paths' ),
+		SettingsManager = require( 'modules/SettingsManager' );
 	
 	// Define file object.
 	function File( file ) {
@@ -62,6 +63,25 @@ define( function( require ) {
 	
 	File.prototype.clearTodos = function() {
 		this._todos = [];
+	}
+	
+	File.prototype.hasVisibleTodos = function() {
+		var todo;
+		
+		// Do not return if file has no todos.
+		if ( this._todos.length < 1 ) {
+			return false;
+		}
+		
+		// Go through each comment and only return those of visible tags.
+		for ( todo in this._todos ) {
+			if ( SettingsManager.isTagVisible( this._todos[ todo ].tag ) ) {
+				return true;
+			}
+		}
+		
+		// Check if file has any visible todos after filtering.
+		return false;
 	}
 	
 	// Return object.
