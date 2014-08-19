@@ -1,4 +1,4 @@
-define( function( require, exports ) {
+define( function( require ) {
 	'use strict';
 	
 	// Get dependencies.
@@ -6,7 +6,6 @@ define( function( require, exports ) {
 		
 		// Extension modules.
 		File = require( 'modules/objects/File' ),
-		Paths = require( 'modules/Paths' ),
 		
 		// Variables.
 		expression,
@@ -133,9 +132,11 @@ define( function( require, exports ) {
 	}
 	
 	// Make variables accessible.
-	exports.getExpression = getExpression;
-	exports.setExpression = setExpression;
-	exports.parseFile = parseFile;
-	exports.parseText = parseText;
-	exports.removeFile = removeFile;
+	return {
+		getExpression: getExpression,
+		setExpression: setExpression,
+		parseFile: parseFile,
+		parseText: parseText,
+		removeFile: removeFile
+	}
 } );
