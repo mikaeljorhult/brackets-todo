@@ -257,17 +257,17 @@ define( function( require ) {
 		getSettings: getSettings,
 		showSettingsDialog: showSettingsDialog,
 		
-		// APIs about visible file
+		// APIs about visible file.
 		fileVisible: fileVisible,
 		toggleFileVisible: toggleFileVisible,
 		clearVisibleFiles: clearVisibleFiles,
 		
-		// APIs about visible tag
+		// APIs about visible tag.
 		isTagVisible: isTagVisible,
 		getVisibleTags: getVisibleTags,
 		toggleTagVisible: toggleTagVisible,
 		
-		// APIs about Extension 
+		// APIs about extension.
 		isExtensionEnabled: isExtensionEnabled,
 		setExtensionEnabled: setExtensionEnabled
 	};

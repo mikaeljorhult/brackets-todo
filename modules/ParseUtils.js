@@ -5,6 +5,7 @@ define( function( require, exports ) {
 	var StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		
 		// Extension modules.
+		File = require( 'modules/objects/File' ),
 		Paths = require( 'modules/Paths' ),
 		
 		// Variables.
@@ -43,14 +44,13 @@ define( function( require, exports ) {
 			if ( documentTodos.length > 0 ) {
 				// Create object for new entry in array if none found.
 				if ( index === -1 ) {
-					todos.push( {} );
+					todos.push( new File() );
 					index = length;
 				}
 				
 				// Get any matches and merge with previously found comments.
-				todos[ index ].path = currentDocument.file.fullPath;
-				todos[ index ].file = Paths.makeRelative( currentDocument.file.fullPath );
-				todos[ index ].todos = documentTodos;
+				todos[ index ].path( currentDocument.file.fullPath );
+				todos[ index ].todos( documentTodos );
 			} else if ( index > -1 ) {
 				todos.splice( index, 1 );
 			}
