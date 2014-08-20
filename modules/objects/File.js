@@ -75,7 +75,7 @@ define( function( require ) {
 		
 		// Go through each comment and only return those of visible tags.
 		for ( todo in this._todos ) {
-			if ( SettingsManager.isTagVisible( this._todos[ todo ].tag ) ) {
+			if ( SettingsManager.isTagVisible( this._todos[ todo ].tag() ) ) {
 				return true;
 			}
 		}
