@@ -214,7 +214,7 @@ define( function( require, exports, module ) {
 	}
 	
 	/**
-	 * Keep file visibility as before after file changed
+	 * Keep file visibility as before after file changed.
 	 */
 	function setTodosVisible( todos ) {
 		var index = 0,
@@ -238,7 +238,7 @@ define( function( require, exports, module ) {
 			// Go through each comment.
 			$.each( file.todos(), function( index, comment ) {
 				// If comment is of requested type, add one to count.
-				if ( comment.tag === tag ) {
+				if ( comment.tag() === tag ) {
 					count++;
 				}
 			} );

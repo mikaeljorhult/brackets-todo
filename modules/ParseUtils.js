@@ -6,10 +6,10 @@ define( function( require ) {
 		
 		// Extension modules.
 		File = require( 'modules/objects/File' ),
+		Todo = require( 'modules/objects/Todo' ),
 		
 		// Variables.
-		expression,
-		done = /^\[x\]/i;
+		expression;
 	
 	/**
 	 * Pass file to parsing function.
@@ -69,13 +69,12 @@ define( function( require ) {
 			// Go through each match in current document.
 			while ( ( matchArray = expression.exec( text ) ) !== null ) {
 				// Add match to array.
-				documentTodos.push( {
-					todo: matchArray[ 2 ].replace( done, '' ),
-					tag: matchArray[ 1 ].replace( /[^a-zA-Z]/g, '' ).toLowerCase(),
+				documentTodos.push( new Todo( {
+					comment: matchArray[ 2 ],
+					tag: matchArray[ 1 ],
 					line: StringUtils.offsetToLineNum( lines, matchArray.index ) + 1,
 					char: matchArray.index - text.lastIndexOf( '\n' , matchArray.index ) - 1,
-					done: done.test( matchArray[ 2 ] )
-				} );
+				} ) );
 			}
 		}
 		
@@ -138,5 +137,5 @@ define( function( require ) {
 		parseFile: parseFile,
 		parseText: parseText,
 		removeFile: removeFile
-	}
+	};
 } );
