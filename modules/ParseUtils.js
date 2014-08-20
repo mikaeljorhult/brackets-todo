@@ -32,7 +32,7 @@ define( function( require ) {
 			
 			// Check if file has already been added to array.
 			for ( i = 0, length = todos.length; i < length; i++ ) {
-				if ( todos[ i ].path === fileToMatch ) {
+				if ( todos[ i ].path() === fileToMatch ) {
 					// File found in array, store index.
 					index = i;
 					break;
@@ -107,7 +107,7 @@ define( function( require ) {
 		
 		// Check if file has already been added to array.
 		for ( i = 0, length = todos.length; i < length; i++ ) {
-			if ( todos[ i ].path === path ) {
+			if ( todos[ i ].path() === path ) {
 				// File found in array, store index.
 				index = i;
 				break;

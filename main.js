@@ -139,7 +139,7 @@ define( function( require, exports, module ) {
 			} ).always( function() {
 				// Add file visibility state.
 				$.each( todoArray, function( index, file ) {
-					file.visible = SettingsManager.fileVisible( file.path );
+					file.visible = SettingsManager.fileVisible( file.path() );
 				} );
 				
 				// Store array of todos.
