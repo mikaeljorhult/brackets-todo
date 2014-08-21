@@ -13,23 +13,23 @@ define( function( require ) {
 		Paths = require( 'modules/Paths' ),
 		SettingsDialog = require( 'modules/SettingsDialog' ),
 		settings = Defaults.defaultSettings,
+		Tag = require( 'modules/objects/Tag' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getExtensionPrefs( 'mikaeljorhult.bracketsTodo' ),
 		
 		// Variables.
 		visibleFiles,
-		visibleTags;
+		tags = [];
 	
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
 	preferences.definePreference( 'visibleFiles', 'object', [] );
-	preferences.definePreference( 'visibleTags', 'object', {} );
+	preferences.definePreference( 'visibleTags', 'object', [] );
 	preferences.definePreference( 'userSettings', 'object', {} );
 	
 	// All files are not visible by default.
 	visibleFiles = preferences.get( 'visibleFiles' );
-	visibleTags = preferences.get( 'visibleTags' );
 	
 	/**
 	 * Check for settings file, settings from setting dialog and load if it exists.
@@ -73,7 +73,7 @@ define( function( require ) {
 		mergeSettings( userSettings );
 		
 		// Build array of tags and save to preferences.
-		setupTags();
+		initTags();
 		
 		// Trigger callback.
 		if ( callback ) {
@@ -167,69 +167,72 @@ define( function( require ) {
 		visibleFiles = [];
 	}
 	
-	function setupTags() {
-		// Build array of tags and save to preferences.
-		visibleTags = initTags();
-		
-		// Save visibility state.
-		preferences.set( 'visibleTags', visibleTags );
-		preferences.save();
-	}
-	
 	/**
 	 * Initialize tags according to settings's tags.
 	 * If user have not set the tag's visibility, all tags are visible by default.
 	 */
 	function initTags() {
-		var tagArray = {};
-
+		var visibleTags = preferences.get( 'visibleTags' );
+		
+		// Remove all tags before adding new ones.
+		tags = [];
+		
 		// Build an array of possible tags.
 		$.each( settings.tags, function( index, tag ) {
-			tag = tag.replace( /[^a-zA-Z]/g, '' );
-			
-			tagArray[ tag.toLowerCase() ] = {
-				tag: tag.toLowerCase(),
+			var newTag = new Tag( {
+				tag: tag,
 				name: tag,
 				count: 0,
 				visible: true
-			};
+			} );
+			
+			newTag.isVisible( visibleTags.indexOf( newTag.tag() ) > -1 );
+			
+			tags.push( newTag );
 		} );
-		
-		return tagArray;
 	}
 
-	/** 
-	 * Check if tag is visible.
-	 * @return boolean True if tag is visible, otherwise false.
-	 */
-	function isTagVisible( tag ) {
-		var visible = false;
+	function getVisibleTags( onlyNames ) {
+		var visible = tags.filter( function( tag ) {
+				return tag.isVisible();
+			} ),
+			tagNames;
 		
-		// Check if tag exists and use that value.
-		if ( visibleTags.hasOwnProperty( tag ) ) {
-			visible = visibleTags[ tag ].visible;
+		if ( onlyNames === true ) {
+			return visible.map( function( tag ) {
+				return tag.tag();
+			} );
 		}
 		
 		return visible;
 	}
-
-	function getVisibleTags() {
-		return visibleTags;
+	
+	function getTags() {
+		return tags;
 	}
 	
-	/**
-	 * Toggle tag visibility.
-	 */
-	function toggleTagVisible( tag, state ) {
-		var visible = ( state !== undefined ? state : isTagVisible( tag ) );
+	function isTagVisible( tagName ) {
+		var tag;
 		
-		// Toggle visibility state.
-		if ( visibleTags.hasOwnProperty( tag ) ) {
-			visibleTags[ tag ].visible = visible;
+		for ( tag in tags ) {
+			if ( tags[ tag ].tag() === tagName ) {
+				return tags[ tag ].isVisible();
+			}
 		}
 		
-		// Save visibility state.
-		preferences.set( 'visibleTags', visibleTags );
+		return false;
+	}
+	
+	function toggleTagVisible( tagName, visible ) {
+		var shouldBeVisible = ( visible !== undefined ? visible : !isTagVisible( tagName ) );
+		
+		$.each( tags, function( index, tag ) {
+			if ( tag.tag() === tagName ) {
+				tag.isVisible( shouldBeVisible );
+			}
+		} );
+		
+		preferences.set( 'visibleTags', getVisibleTags( true ) );
 		preferences.save();
 	}
 	
@@ -264,7 +267,7 @@ define( function( require ) {
 		
 		// APIs about visible tag.
 		isTagVisible: isTagVisible,
-		getVisibleTags: getVisibleTags,
+		getTags: getTags,
 		toggleTagVisible: toggleTagVisible,
 		
 		// APIs about extension.

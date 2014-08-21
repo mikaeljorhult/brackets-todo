@@ -260,18 +260,12 @@ define( function( require, exports, module ) {
 	 * Render toolbar.
 	 */
 	function renderTools() {
-		var visibleTags = SettingsManager.getVisibleTags(),
-			tags = [],
-			tag;
+		var tags = SettingsManager.getTags();
 		
-		// Create array of tags from visible tags object.
-		for ( tag in visibleTags ) {
-			if ( visibleTags.hasOwnProperty( tag ) ) {
-				visibleTags[ tag ].count = countByTag( tag );
-				
-				tags.push( visibleTags[ tag ] );
-			}
-		}
+		// Count number of occurences of each tags.
+		$.each( tags, function( index, tag ) {
+			tag.count( countByTag( tag.tag() ) );
+		} );
 		
 		// Render and return toolbar.
 		return Mustache.render( todoToolbarTemplate, {
