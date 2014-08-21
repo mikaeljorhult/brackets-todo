@@ -37,9 +37,31 @@ define( function( require ) {
 	 * settings in .todo file > settings set by settings dialog > default settings
 	 */
 	function loadSettings( callback ) {
+		var userSettings = getUserSettings(),
+			baseSettings = mergeSettings( Defaults.defaultSettings, userSettings );
+		
+		// Load settings from .todo file if one exists in current project.
+		loadTodoFile( function( fileSettings ) {
+			// Merge base settings with settings from file.
+			settings = mergeSettings( baseSettings, fileSettings );
+			
+			// Build array of tags.
+			initTags();
+			
+			// Trigger callback.
+			if ( callback ) {
+				callback();
+			}
+			
+			// Publish event.
+			Events.publish( 'settings:loaded' );
+		} );
+	}
+	
+	function loadTodoFile( callback ) {
 		var fileEntry = FileSystem.getFileForPath( Paths.todoFile() ),
 			fileContent,
-			userSettings = getUserSettings();
+			fileSettings = {};
 		
 		// Check if .todo exists in current project.
 		fileEntry.exists( function( err, exists ) {
@@ -52,47 +74,28 @@ define( function( require ) {
 					// Catch error if JSON is invalid
 					try {
 						// Parse .todo file.
-						userSettings = JSON.parse( content );
+						fileSettings = JSON.parse( content );
 					} catch ( e ) {
 						// .todo exists but isn't valid JSON.
 					}
 				} ).always( function() {
-					finalizeSettings( userSettings, callback );
+					callback( fileSettings );
 				} );
 			} else {
-				finalizeSettings( userSettings, callback );
+				callback( fileSettings );
 			}
 		} );
 	}
 	
-	/**
-	 * Merge settings and trigger callback.
-	 */
-	function finalizeSettings( userSettings, callback ) {
-		// Merge default settings with JSON.
-		mergeSettings( userSettings );
-		
-		// Build array of tags and save to preferences.
-		initTags();
-		
-		// Trigger callback.
-		if ( callback ) {
-			callback();
-		}
-		
-		// Publish event.
-		Events.publish( 'settings:loaded' );
-	}
-
-	function mergeSettings( userSettings ) {
-		settings = jQuery.extend( true, {}, Defaults.defaultSettings, userSettings );
+	function mergeSettings( settings1, settings2 ) {
+		var mergedSettings = jQuery.extend( true, {}, settings1, settings2 );
 		
 		// Replace, don't merge, array of tags if present in user settings.
-		if ( userSettings.tags !== undefined && Object.prototype.toString.call( userSettings.tags ) === '[object Array]' ) {
-			settings.tags = userSettings.tags;
+		if ( settings2.tags !== undefined && Object.prototype.toString.call( settings2.tags ) === '[object Array]' ) {
+			mergedSettings.tags = settings2.tags;
 		}
 		
-		return settings;
+		return mergedSettings;
 	}
 
 	function getSettings() {
@@ -195,8 +198,7 @@ define( function( require ) {
 	function getVisibleTags( onlyNames ) {
 		var visible = tags.filter( function( tag ) {
 				return tag.isVisible();
-			} ),
-			tagNames;
+			} );
 		
 		if ( onlyNames === true ) {
 			return visible.map( function( tag ) {
