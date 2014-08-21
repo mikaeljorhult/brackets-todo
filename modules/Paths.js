@@ -33,6 +33,11 @@ define( function() {
 		return path.replace( getProjectRoot(), '' );
 	}
 	
+	// Reload settings when new project is loaded.
+	$( ProjectManager ).on( 'projectOpen.todo', function() {
+		projectRoot = ProjectManager.getProjectRoot().fullPath;
+	} );
+	
 	// Return module.
 	return {
 		makeRelative: makeRelative,
