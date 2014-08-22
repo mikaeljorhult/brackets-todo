@@ -10,6 +10,7 @@ define( function( require ) {
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
 		Events = require( 'modules/Events' ),
+		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
 		SettingsDialog = require( 'modules/SettingsDialog' ),
 		settings = Defaults.defaultSettings,
@@ -47,6 +48,9 @@ define( function( require ) {
 			
 			// Build array of tags.
 			initTags();
+			
+			// Build regular expression.
+			setupRegExp();
 			
 			// Trigger callback.
 			if ( callback ) {
@@ -115,6 +119,14 @@ define( function( require ) {
 	
 	function getUserSettings() {
 		return preferences.get( 'userSettings' );
+	}
+	
+	function setupRegExp() {
+		// Setup regular expression.
+		ParseUtils.setExpression( new RegExp(
+			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+			'g' + ( settings.case !== false ? '' : 'i' )
+		) );
 	}
 
 	/**

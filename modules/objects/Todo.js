@@ -3,7 +3,6 @@ define( function( require ) {
 	
 	// Extension modules.
 	var Events = require( 'modules/Events' ),
-		SettingsManager = require( 'modules/SettingsManager' ),
 		
 		// Variables.
 		doneRegExp = /^\[x\]/i;

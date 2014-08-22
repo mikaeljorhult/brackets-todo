@@ -5,8 +5,7 @@ define( function( require ) {
 	var ProjectManager = brackets.getModule( 'project/ProjectManager' ),
 		
 		// Extension modules.
-		Paths = require( 'modules/Paths' ),
-		SettingsManager = require( 'modules/SettingsManager' );
+		Paths = require( 'modules/Paths' );
 	
 	// Define file object.
 	function File( file ) {
@@ -75,7 +74,7 @@ define( function( require ) {
 		
 		// Go through each comment and only return those of visible tags.
 		for ( todo in this._todos ) {
-			if ( SettingsManager.isTagVisible( this._todos[ todo ].tag() ) ) {
+			if ( this._todos[ todo ].isVisible() ) {
 				return true;
 			}
 		}

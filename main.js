@@ -277,25 +277,11 @@ define( function( require, exports, module ) {
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
-	function setupRegExp() {
-		// Setup regular expression.
-		ParseUtils.setExpression( new RegExp(
-			SettingsManager.getSettings().regex.prefix + SettingsManager.getSettings().tags.join( '|' ) + SettingsManager.getSettings().regex.suffix,
-			'g' + ( SettingsManager.getSettings().case !== false ? '' : 'i' )
-		) );
-	}
-	
-	/**
-	 * Listen for save or refresh and look for todos when needed.
-	 */
 	function registerListeners() {
 		var $documentManager = $( DocumentManager );
 		
 		// Listeners bound to Todo modules.
 		Events.subscribe( 'settings:loaded', function() {
-			// Setup regular expression.
-			setupRegExp();
-			
 			// Empty array of files.
 			setTodos( [] );
 			
