@@ -226,7 +226,8 @@ define( function( require ) {
 	}
 	
 	function toggleTagVisible( tagName, visible ) {
-		var shouldBeVisible = ( visible !== undefined ? visible : !isTagVisible( tagName ) );
+		var shouldBeVisible = ( visible !== undefined ? visible : !isTagVisible( tagName ) ),
+			visibleTags;
 		
 		$.each( tags, function( index, tag ) {
 			if ( tag.tag() === tagName ) {
@@ -234,7 +235,13 @@ define( function( require ) {
 			}
 		} );
 		
-		preferences.set( 'visibleTags', getVisibleTags( true ) );
+		// Get tags of all visible tags.
+		visibleTags = getVisibleTags( true );
+		
+		// Trigger event for changed visibility.
+		Events.publish( 'tags:visible', [ visibleTags ] );
+		
+		preferences.set( 'visibleTags', visibleTags );
 		preferences.save();
 	}
 	

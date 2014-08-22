@@ -1,11 +1,17 @@
 define( function( require ) {
 	'use strict';
 	
-	// Variables.
-	var doneRegExp = /^\[x\]/i;
+	// Extension modules.
+	var Events = require( 'modules/Events' ),
+		SettingsManager = require( 'modules/SettingsManager' ),
+		
+		// Variables.
+		doneRegExp = /^\[x\]/i;
 	
 	// Define todo object.
 	function Todo( todo ) {
+		var todoObject = this;
+		
 		// Use object properties if one was supplied.
 		if ( typeof( todo ) === 'object' ) {
 			this.tag( todo.tag );
@@ -19,6 +25,10 @@ define( function( require ) {
 			this._char = '';
 			this._done = false;
 		}
+		
+		Events.subscribe( 'tags:visible', function( visibleTags ) {
+			todoObject._handleVisibility( visibleTags )
+		} );
 	}
 	
 	// Methods handling tag.
@@ -76,6 +86,21 @@ define( function( require ) {
 		
 		// Set char if one is supplied.
 		this._char = char;
+	}
+	
+	// Methods handling visibility.
+	Todo.prototype.isVisible = function( visible ) {
+		// Return visibility if it is not supplied.
+		if ( visible === undefined ) {
+			return this._visible;
+		}
+		
+		// Set visibility if it is supplied.
+		this._visible = visible;
+	}
+	
+	Todo.prototype._handleVisibility = function( visibleTags ) {
+		this.isVisible( visibleTags.indexOf( this.tag() ) > -1 );
 	}
 	
 	// Return object.
