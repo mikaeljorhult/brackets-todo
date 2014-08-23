@@ -5,7 +5,7 @@ define( function( require ) {
 	var StringUtils = brackets.getModule( 'utils/StringUtils' ),
 		
 		// Extension modules.
-		File = require( 'modules/objects/File' ),
+		Files = require( 'modules/Files' ),
 		Todo = require( 'modules/objects/Todo' ),
 		
 		// Variables.
@@ -43,7 +43,7 @@ define( function( require ) {
 			if ( documentTodos.length > 0 ) {
 				// Create object for new entry in array if none found.
 				if ( index === -1 ) {
-					todos.push( new File() );
+					todos.push( new Files.create() );
 					index = length;
 				}
 				

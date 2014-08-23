@@ -1,8 +1,11 @@
-define( function() {
+define( function( require ) {
 	'use strict';
 	
-	// Variables.
-	var preferences,
+	// Extension modules.
+	var File = require( 'modules/objects/File' ),
+		
+		// Variables.
+		preferences,
 		scope,
 		visibleFiles;
 	
@@ -18,6 +21,13 @@ define( function() {
 		
 		// Get visible files.
 		visibleFiles = preferences.get( 'visibleFiles' );
+	}
+	
+	/**
+	 * Create new file.
+	 */
+	function create() {
+		return new File();
 	}
 	
 	/**
@@ -61,6 +71,8 @@ define( function() {
 	// Return global methods.
 	return {
 		init: init,
+		
+		create: create,
 		
 		clearVisible: clearVisible,
 		isVisible: isVisible,
