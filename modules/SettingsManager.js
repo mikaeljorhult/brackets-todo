@@ -13,15 +13,14 @@ define( function( require ) {
 		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
 		SettingsDialog = require( 'modules/SettingsDialog' ),
-		settings = Defaults.defaultSettings,
-		Tag = require( 'modules/objects/Tag' ),
+		Tags = require( 'modules/Tags' ),
 		
 		// Preferences.
 		preferences = PreferencesManager.getExtensionPrefs( 'mikaeljorhult.bracketsTodo' ),
 		
 		// Variables.
-		visibleFiles,
-		tags = [];
+		settings,
+		visibleFiles;
 	
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
@@ -47,7 +46,7 @@ define( function( require ) {
 			settings = mergeSettings( baseSettings, fileSettings );
 			
 			// Build array of tags.
-			initTags();
+			Tags.init( settings.tags, preferences );
 			
 			// Build regular expression.
 			setupRegExp();
@@ -182,93 +181,6 @@ define( function( require ) {
 		visibleFiles = [];
 	}
 	
-	/**
-	 * Initialize tags according to settings's tags.
-	 * If user have not set the tag's visibility, all tags are visible by default.
-	 */
-	function initTags() {
-		var hiddenTags = preferences.get( 'hiddenTags' );
-		
-		// Remove all tags before adding new ones.
-		tags = [];
-		
-		// Build an array of possible tags.
-		$.each( settings.tags, function( index, tag ) {
-			var newTag = new Tag( {
-				tag: tag,
-				name: tag,
-				count: 0,
-				visible: true
-			} );
-			
-			newTag.isVisible( hiddenTags.indexOf( newTag.tag() ) === -1 );
-			
-			tags.push( newTag );
-		} );
-	}
-
-	function getVisibleTags( onlyNames ) {
-		return getFilteredTags( true, onlyNames );
-	}
-	
-	function getHiddenTags( onlyNames ) {
-		return getFilteredTags( false, onlyNames );
-	}
-	
-	function getFilteredTags( visible, onlyNames ) {
-		var filteredTags;
-		
-		visible = ( visible !== undefined ? visible : true );
-		
-		filteredTags = tags.filter( function( tag ) {
-			return tag.isVisible() === visible;
-		} );
-		
-		if ( onlyNames === true ) {
-			return filteredTags.map( function( tag ) {
-				return tag.tag();
-			} );
-		}
-		
-		return filteredTags;
-	}
-	
-	function getTags() {
-		return tags;
-	}
-	
-	function isTagVisible( tagName ) {
-		var tag;
-		
-		for ( tag in tags ) {
-			if ( tags[ tag ].tag() === tagName ) {
-				return tags[ tag ].isVisible();
-			}
-		}
-		
-		return false;
-	}
-	
-	function toggleTagVisible( tagName, visible ) {
-		var shouldBeVisible = ( visible !== undefined ? visible : !isTagVisible( tagName ) ),
-			hiddenTags;
-		
-		$.each( tags, function( index, tag ) {
-			if ( tag.tag() === tagName ) {
-				tag.isVisible( shouldBeVisible );
-			}
-		} );
-		
-		// Get tags of all visible tags.
-		hiddenTags = getHiddenTags( true );
-		
-		// Trigger event for changed visibility.
-		Events.publish( 'tags:visible', [ hiddenTags ] );
-		
-		preferences.set( 'hiddenTags', hiddenTags, { location: { scope: 'project' } } );
-		preferences.save();
-	}
-	
 	function isExtensionEnabled() {
 		return preferences.get( 'enabled' );
 	}
@@ -299,9 +211,9 @@ define( function( require ) {
 		clearVisibleFiles: clearVisibleFiles,
 		
 		// APIs about visible tag.
-		isTagVisible: isTagVisible,
-		getTags: getTags,
-		toggleTagVisible: toggleTagVisible,
+		isTagVisible: Tags.isVisible,
+		getTags: Tags.getAll,
+		toggleTagVisible: Tags.toggleVisible,
 		
 		// APIs about extension.
 		isExtensionEnabled: isExtensionEnabled,
