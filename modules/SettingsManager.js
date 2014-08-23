@@ -10,6 +10,7 @@ define( function( require ) {
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
 		Events = require( 'modules/Events' ),
+		Files = require( 'modules/Files' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
 		SettingsDialog = require( 'modules/SettingsDialog' ),
@@ -19,17 +20,13 @@ define( function( require ) {
 		preferences = PreferencesManager.getExtensionPrefs( 'mikaeljorhult.bracketsTodo' ),
 		
 		// Variables.
-		settings,
-		visibleFiles;
+		settings;
 	
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
 	preferences.definePreference( 'visibleFiles', 'object', [] );
 	preferences.definePreference( 'hiddenTags', 'object', [] );
 	preferences.definePreference( 'userSettings', 'object', {} );
-	
-	// All files are not visible by default.
-	visibleFiles = preferences.get( 'visibleFiles' );
 	
 	/**
 	 * Check for settings file, settings from setting dialog and load if it exists.
@@ -47,6 +44,9 @@ define( function( require ) {
 			
 			// Build array of tags.
 			Tags.init( settings.tags, preferences );
+			
+			// Initialize files.
+			Files.init( settings.scope, preferences );
 			
 			// Build regular expression.
 			setupRegExp();
@@ -143,44 +143,6 @@ define( function( require ) {
 		} );
 	}
 	
-	/**
-	 * Return if file should be expanded or not.
-	 */
-	function fileVisible( path ) {
-		return ( settings.search.scope === 'project' ? visibleFiles.indexOf( path ) > -1 : true );
-	}
-	
-	/**
-	 * Toggle if file should be expanded or not.
-	 */
-	function toggleFileVisible( path, state ) {
-		var alreadyVisible = fileVisible( path );
-		
-		// Check if already visible if visibility not provided as parameter.
-		state = ( state === undefined ? !alreadyVisible : state );
-
-		// Toggle visibility state.
-		if ( state ) {
-			// Show if already visible.
-			if ( !alreadyVisible ) {
-				visibleFiles.push( path );
-			}
-		} else {
-			// Hide if already visible.
-			if ( alreadyVisible ) {
-				visibleFiles.splice( visibleFiles.indexOf( path ), 1 );
-			}
-		}
-		
-		// Save visibility state.
-		preferences.set( 'visibleFiles', visibleFiles );
-		preferences.save();
-	}
-	
-	function clearVisibleFiles() {
-		visibleFiles = [];
-	}
-	
 	function isExtensionEnabled() {
 		return preferences.get( 'enabled' );
 	}
@@ -194,7 +156,7 @@ define( function( require ) {
 	$( ProjectManager ).on( 'projectOpen.todo', function() {
 		loadSettings( function() {
 			// Reset file visibility.
-			clearVisibleFiles();
+			Files.clearVisible();
 		} );
 	} );
 	
@@ -206,9 +168,9 @@ define( function( require ) {
 		showSettingsDialog: showSettingsDialog,
 		
 		// APIs about visible file.
-		fileVisible: fileVisible,
-		toggleFileVisible: toggleFileVisible,
-		clearVisibleFiles: clearVisibleFiles,
+		fileVisible: Files.isVisible,
+		toggleFileVisible: Files.toggleVisible,
+		clearVisibleFiles: Files.clearVisible,
 		
 		// APIs about visible tag.
 		isTagVisible: Tags.isVisible,
