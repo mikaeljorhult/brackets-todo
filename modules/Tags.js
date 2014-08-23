@@ -13,8 +13,6 @@ define( function( require ) {
 	 * Initialize tags by building array of tag objects.
 	 */
 	function init( newTags, prefs ) {
-		var hiddenTags = prefs.get( 'hiddenTags' );
-		
 		// Cache preferences object.
 		preferences = prefs;
 		
@@ -23,19 +21,28 @@ define( function( require ) {
 		
 		// Build an array of possible tags.
 		$.each( newTags, function( index, tag ) {
-			var newTag = new Tag( {
+			// Add tag to array af tags.
+			tags.push( create( {
 				tag: tag,
 				name: tag,
 				count: 0,
 				visible: true
-			} );
-			
-			// Set visibility state for newly created tag.
-			newTag.isVisible( hiddenTags.indexOf( newTag.tag() ) === -1 );
-			
-			// Add tag to array af tags.
-			tags.push( newTag );
+			} ) );
 		} );
+	}
+	
+	/**
+	 * Create tag from object.
+	 */
+	function create( tag ) {
+		var hiddenTags = preferences.get( 'hiddenTags' ),
+			newTag = new Tag( tag );
+		
+		// Set visibility state for tag.
+		newTag.isVisible( hiddenTags.indexOf( newTag.tag() ) === -1 );
+		
+		// Return created tag.
+		return newTag;
 	}
 	
 	/**
@@ -125,7 +132,7 @@ define( function( require ) {
 		// Trigger event for changed visibility.
 		Events.publish( 'tags:visible', [ hiddenTags ] );
 		
-		// Save tags of hidden tags
+		// Save array of hidden tags in current project.
 		preferences.set( 'hiddenTags', hiddenTags, { location: { scope: 'project' } } );
 		preferences.save();
 	}
