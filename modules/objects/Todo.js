@@ -98,8 +98,8 @@ define( function( require ) {
 		this._visible = visible;
 	}
 	
-	Todo.prototype._handleVisibility = function( visibleTags ) {
-		this.isVisible( visibleTags.indexOf( this.tag() ) > -1 );
+	Todo.prototype._handleVisibility = function( hiddenTags ) {
+		this.isVisible( hiddenTags.indexOf( this.tag() ) === -1 );
 	}
 	
 	// Return object.

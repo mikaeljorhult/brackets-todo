@@ -26,7 +26,7 @@ define( function( require ) {
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
 	preferences.definePreference( 'visibleFiles', 'object', [] );
-	preferences.definePreference( 'visibleTags', 'object', [] );
+	preferences.definePreference( 'hiddenTags', 'object', [] );
 	preferences.definePreference( 'userSettings', 'object', {} );
 	
 	// All files are not visible by default.
@@ -187,7 +187,7 @@ define( function( require ) {
 	 * If user have not set the tag's visibility, all tags are visible by default.
 	 */
 	function initTags() {
-		var visibleTags = preferences.get( 'visibleTags' );
+		var hiddenTags = preferences.get( 'hiddenTags' );
 		
 		// Remove all tags before adding new ones.
 		tags = [];
@@ -201,24 +201,36 @@ define( function( require ) {
 				visible: true
 			} );
 			
-			newTag.isVisible( visibleTags.indexOf( newTag.tag() ) > -1 );
+			newTag.isVisible( hiddenTags.indexOf( newTag.tag() ) === -1 );
 			
 			tags.push( newTag );
 		} );
 	}
 
 	function getVisibleTags( onlyNames ) {
-		var visible = tags.filter( function( tag ) {
-				return tag.isVisible();
-			} );
+		return getFilteredTags( true, onlyNames );
+	}
+	
+	function getHiddenTags( onlyNames ) {
+		return getFilteredTags( false, onlyNames );
+	}
+	
+	function getFilteredTags( visible, onlyNames ) {
+		var filteredTags;
+		
+		visible = ( visible !== undefined ? visible : true );
+		
+		filteredTags = tags.filter( function( tag ) {
+			return tag.isVisible() === visible;
+		} );
 		
 		if ( onlyNames === true ) {
-			return visible.map( function( tag ) {
+			return filteredTags.map( function( tag ) {
 				return tag.tag();
 			} );
 		}
 		
-		return visible;
+		return filteredTags;
 	}
 	
 	function getTags() {
@@ -239,7 +251,7 @@ define( function( require ) {
 	
 	function toggleTagVisible( tagName, visible ) {
 		var shouldBeVisible = ( visible !== undefined ? visible : !isTagVisible( tagName ) ),
-			visibleTags;
+			hiddenTags;
 		
 		$.each( tags, function( index, tag ) {
 			if ( tag.tag() === tagName ) {
@@ -248,12 +260,12 @@ define( function( require ) {
 		} );
 		
 		// Get tags of all visible tags.
-		visibleTags = getVisibleTags( true );
+		hiddenTags = getHiddenTags( true );
 		
 		// Trigger event for changed visibility.
-		Events.publish( 'tags:visible', [ visibleTags ] );
+		Events.publish( 'tags:visible', [ hiddenTags ] );
 		
-		preferences.set( 'visibleTags', visibleTags );
+		preferences.set( 'hiddenTags', hiddenTags, { location: { scope: 'project' } } );
 		preferences.save();
 	}
 	
