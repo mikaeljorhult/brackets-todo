@@ -21,13 +21,29 @@ define( function( require ) {
 		
 		// Build an array of possible tags.
 		$.each( newTags, function( index, tag ) {
-			// Add tag to array af tags.
-			tags.push( create( {
-				tag: tag,
-				name: tag,
+			var newTag = {
 				count: 0,
 				visible: true
-			} ) );
+			};
+			
+			// Check if tag is an object or string.
+			if ( typeof( tag ) === 'object' ) {
+				// Get tag and color from object.
+				newTag = {
+					tag: tag.name,
+					name: cleanTagName( tag.name ),
+					color: tag.color
+				};
+			} else {
+				// Use string value as tag and name.
+				newTag = {
+					tag: tag,
+					name: cleanTagName( tag ),
+				};
+			}
+			
+			// Add tag to array af tags.
+			tags.push( create( newTag ) );
 		} );
 	}
 	
@@ -48,7 +64,16 @@ define( function( require ) {
 	/**
 	 * Return array of all available tags.
 	 */
-	function getAll() {
+	function getAll( onlyNames ) {
+		// Return only names if requested.
+		if ( onlyNames === true ) {
+			// Return array of only tags of tags array.
+			return tags.map( function( tag ) {
+				return tag.tag();
+			} );
+		}
+		
+		// Return tags as objects.
 		return tags;
 	}
 	
@@ -138,10 +163,28 @@ define( function( require ) {
 	}
 	
 	/**
+	 * Get color of a tag.
+	 */
+	function getColor( tagName ) {
+		var tag;
+		
+		// Go through all tags to find requested one.
+		for ( tag in tags ) {
+			// Return visibility state of tag if found in array.
+			if ( tags[ tag ].tag() === cleanTagName( tagName ) ) {
+				return tags[ tag ].color();
+			}
+		}
+		
+		// Tag was not found.
+		return false;
+	}
+	
+	/**
 	 * Clean tag name for comparisons.
 	 */
 	function cleanTagName( name ) {
-		return name.replace( /[^a-zA-Z]/g, '' ).toLowerCase();
+		return name.split( ':', 1 )[ 0 ].replace( /[^a-zA-Z]/g, '' ).toLowerCase();
 	}
 	
 	// Return global methods.
@@ -153,6 +196,8 @@ define( function( require ) {
 		getVisible: getVisible,
 		
 		isVisible: isVisible,
-		toggleVisible: toggleVisible
+		toggleVisible: toggleVisible,
+		
+		getColor: getColor
 	};
 } );

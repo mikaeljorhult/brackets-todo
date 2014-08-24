@@ -123,7 +123,7 @@ define( function( require ) {
 	function setupRegExp() {
 		// Setup regular expression.
 		ParseUtils.setExpression( new RegExp(
-			settings.regex.prefix + settings.tags.join( '|' ) + settings.regex.suffix,
+			settings.regex.prefix + Tags.getAll( true ).join( '|' ) + settings.regex.suffix,
 			'g' + ( settings.case !== false ? '' : 'i' )
 		) );
 	}
