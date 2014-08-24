@@ -19,6 +19,8 @@ define( function( require ) {
 			this._path = '';
 			this._todos = [];
 		}
+		
+		this._expanded = false;
 	}
 	
 	// Methods handling file name.
@@ -81,6 +83,17 @@ define( function( require ) {
 		
 		// Check if file has any visible todos after filtering.
 		return false;
+	}
+	
+	// Methods handling expanded/collapsed.
+	File.prototype.isExpanded = function( expanded ) {
+		// Return expanded state if it is not supplied.
+		if ( expanded === undefined ) {
+			return this._expanded;
+		}
+		
+		// Set expanded state if it is supplied.
+		this._expanded = expanded;
 	}
 	
 	// Return object.

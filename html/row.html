@@ -1,5 +1,5 @@
 {{ #files }}
-	<tr class="file{{ #visible }} expanded{{ /visible }}{{ ^visible }} collapsed{{ /visible }}" data-file="{{ path }}">
+	<tr class="file{{ #isExpanded }} expanded{{ /isExpanded }}{{ ^isExpanded }} collapsed{{ /isExpanded }}" data-file="{{ path }}">
 		<td>
 			<div class="file-name">
 				<span class="jstree-sprite disclosure-triangle"></span>{{{ name }}}

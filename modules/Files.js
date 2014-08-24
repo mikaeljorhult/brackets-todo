@@ -7,7 +7,7 @@ define( function( require ) {
 		// Variables.
 		preferences,
 		scope,
-		visibleFiles;
+		expandedFiles;
 	
 	/**
 	 * Initialize tags by building array of tag objects.
@@ -20,7 +20,7 @@ define( function( require ) {
 		scope = searchScope;
 		
 		// Get visible files.
-		visibleFiles = preferences.get( 'visibleFiles' );
+		expandedFiles = preferences.get( 'expandedFiles' );
 	}
 	
 	/**
@@ -33,39 +33,39 @@ define( function( require ) {
 	/**
 	 * Return if file should be expanded or not.
 	 */
-	function isVisible( path ) {
-		return ( scope === 'project' ? visibleFiles.indexOf( path ) > -1 : true );
+	function isExpanded( path ) {
+		return ( scope === 'project' ? expandedFiles.indexOf( path ) > -1 : true );
 	}
 	
 	/**
 	 * Toggle if file should be expanded or not.
 	 */
-	function toggleVisible( path, state ) {
-		var alreadyVisible = isVisible( path );
+	function toggleExpanded( path, state ) {
+		var alreadyExpanded = isExpanded( path );
 		
 		// Check if already visible if visibility not provided as parameter.
-		state = ( state === undefined ? !alreadyVisible : state );
+		state = ( state === undefined ? !alreadyExpanded : state );
 
 		// Toggle visibility state.
 		if ( state ) {
 			// Show if not already visible.
-			if ( !alreadyVisible ) {
-				visibleFiles.push( path );
+			if ( !alreadyExpanded ) {
+				expandedFiles.push( path );
 			}
 		} else {
 			// Hide if already visible.
-			if ( alreadyVisible ) {
-				visibleFiles.splice( visibleFiles.indexOf( path ), 1 );
+			if ( alreadyExpanded ) {
+				expandedFiles.splice( expandedFiles.indexOf( path ), 1 );
 			}
 		}
 		
 		// Save visibility state.
-		preferences.set( 'visibleFiles', visibleFiles, { location: { scope: 'project' } } );
+		preferences.set( 'expandedFiles', expandedFiles, { location: { scope: 'project' } } );
 		preferences.save();
 	}
 	
-	function clearVisible() {
-		visibleFiles = [];
+	function clearExpanded() {
+		expandedFiles = [];
 	}
 	
 	// Return global methods.
@@ -74,8 +74,8 @@ define( function( require ) {
 		
 		create: create,
 		
-		clearVisible: clearVisible,
-		isVisible: isVisible,
-		toggleVisible: toggleVisible
+		clearExpanded: clearExpanded,
+		isExpanded: isExpanded,
+		toggleExpanded: toggleExpanded
 	};
 } );

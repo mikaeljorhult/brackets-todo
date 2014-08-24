@@ -139,7 +139,7 @@ define( function( require, exports, module ) {
 			} ).always( function() {
 				// Add file visibility state.
 				$.each( todoArray, function( index, file ) {
-					file.visible = SettingsManager.fileVisible( file.path() );
+					file.isExpanded( SettingsManager.fileExpanded( file.path() ) );
 				} );
 				
 				// Store array of todos.
@@ -221,7 +221,7 @@ define( function( require, exports, module ) {
 			length = todos.length;
 		
 		for ( index = 0; index < length; index++ ) {
-			todos[ index ].visible = SettingsManager.fileVisible( todos[ index ].path() );
+			todos[ index ].isExpanded( SettingsManager.fileExpanded( todos[ index ].path() ) );
 		}
 		
 		return todos;
@@ -320,8 +320,8 @@ define( function( require, exports, module ) {
 				SettingsManager.loadSettings();
 			} else {
 				// Move visibility state to new file.
-				SettingsManager.toggleFileVisible( newName, SettingsManager.fileVisible( oldName ) );
-				SettingsManager.toggleFileVisible( oldName, false );
+				SettingsManager.toggleFileExpanded( newName, SettingsManager.fileExpanded( oldName ) );
+				SettingsManager.toggleFileExpanded( oldName, false );
 				
 				// If not .todo, parse all files.
 				run();
@@ -374,7 +374,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// Remove file from visibility list.
-				SettingsManager.toggleFileVisible( deletedPath, false );
+				SettingsManager.toggleFileExpanded( deletedPath, false );
 				
 				// Parse path that was deleted to remove from list.
 				setTodos( ParseUtils.removeFile( deletedPath, todos ) );
@@ -424,7 +424,7 @@ define( function( require, exports, module ) {
 					.toggleClass( 'collapsed' );
 				
 				// Toggle file visibility.
-				SettingsManager.toggleFileVisible( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
+				SettingsManager.toggleFileExpanded( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
 			} )
 			.on( 'click', '.comment', function() {
 				var $this = $( this );

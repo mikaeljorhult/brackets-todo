@@ -24,7 +24,7 @@ define( function( require ) {
 	
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
-	preferences.definePreference( 'visibleFiles', 'object', [] );
+	preferences.definePreference( 'expandedFiles', 'object', [] );
 	preferences.definePreference( 'hiddenTags', 'object', [] );
 	preferences.definePreference( 'userSettings', 'object', {} );
 	
@@ -46,7 +46,7 @@ define( function( require ) {
 			Tags.init( settings.tags, preferences );
 			
 			// Initialize files.
-			Files.init( settings.scope, preferences );
+			Files.init( settings.search.scope, preferences );
 			
 			// Build regular expression.
 			setupRegExp();
@@ -156,7 +156,7 @@ define( function( require ) {
 	$( ProjectManager ).on( 'projectOpen.todo', function() {
 		loadSettings( function() {
 			// Reset file visibility.
-			Files.clearVisible();
+			Files.clearExpanded();
 		} );
 	} );
 	
@@ -168,9 +168,9 @@ define( function( require ) {
 		showSettingsDialog: showSettingsDialog,
 		
 		// APIs about visible file.
-		fileVisible: Files.isVisible,
-		toggleFileVisible: Files.toggleVisible,
-		clearVisibleFiles: Files.clearVisible,
+		fileExpanded: Files.isExpanded,
+		toggleFileExpanded: Files.toggleExpanded,
+		clearExpandedFiles: Files.clearExpanded,
 		
 		// APIs about visible tag.
 		isTagVisible: Tags.isVisible,
