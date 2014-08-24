@@ -24,7 +24,7 @@ define( function( require ) {
 			// Add tag to array af tags.
 			tags.push( create( {
 				tag: tag,
-				name: tag,
+				name: cleanTagName( tag ),
 				count: 0,
 				visible: true
 			} ) );
@@ -48,7 +48,16 @@ define( function( require ) {
 	/**
 	 * Return array of all available tags.
 	 */
-	function getAll() {
+	function getAll( onlyNames ) {
+		// Return only names if requested.
+		if ( onlyNames === true ) {
+			// Return array of only tags of tags array.
+			return tags.map( function( tag ) {
+				return tag.tag();
+			} );
+		}
+		
+		// Return tags as objects.
 		return tags;
 	}
 	
@@ -141,7 +150,7 @@ define( function( require ) {
 	 * Clean tag name for comparisons.
 	 */
 	function cleanTagName( name ) {
-		return name.replace( /[^a-zA-Z]/g, '' ).toLowerCase();
+		return name.split( ':', 1 )[ 0 ].replace( /[^a-zA-Z]/g, '' ).toLowerCase();
 	}
 	
 	// Return global methods.
