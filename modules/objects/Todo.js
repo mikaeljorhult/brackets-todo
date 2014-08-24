@@ -3,6 +3,7 @@ define( function( require ) {
 	
 	// Extension modules.
 	var Events = require( 'modules/Events' ),
+		Tags = require( 'modules/Tags' ),
 		
 		// Variables.
 		doneRegExp = /^\[x\]/i;
@@ -25,6 +26,10 @@ define( function( require ) {
 			this._done = false;
 		}
 		
+		// Check if tag is visible.
+		this.isVisible( Tags.isVisible( todo.tag ) );
+		
+		// Subscribe to changes in tag visibility.
 		Events.subscribe( 'tags:visible', function( visibleTags ) {
 			todoObject._handleVisibility( visibleTags )
 		} );

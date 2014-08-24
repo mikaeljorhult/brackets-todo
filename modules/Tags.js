@@ -101,7 +101,7 @@ define( function( require ) {
 		// Go through all tags to find requested one.
 		for ( tag in tags ) {
 			// Return visibility state of tag if found in array.
-			if ( tags[ tag ].tag() === tagName ) {
+			if ( tags[ tag ].tag() === cleanTagName( tagName ) ) {
 				return tags[ tag ].isVisible();
 			}
 		}
@@ -114,7 +114,7 @@ define( function( require ) {
 	 * Toggle visibility state of tag.
 	 */
 	function toggleVisible( tagName, visible ) {
-		var shouldBeVisible = ( visible !== undefined ? visible : !isVisible( tagName ) ),
+		var shouldBeVisible = ( visible !== undefined ? visible : !isVisible( cleanTagName( tagName ) ) ),
 			hiddenTags;
 		
 		// Go through all tags to find requested one.
@@ -135,6 +135,13 @@ define( function( require ) {
 		// Save array of hidden tags in current project.
 		preferences.set( 'hiddenTags', hiddenTags, { location: { scope: 'project' } } );
 		preferences.save();
+	}
+	
+	/**
+	 * Clean tag name for comparisons.
+	 */
+	function cleanTagName( name ) {
+		return name.replace( /[^a-zA-Z]/g, '' ).toLowerCase();
 	}
 	
 	// Return global methods.
