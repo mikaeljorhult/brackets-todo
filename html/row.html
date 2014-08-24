@@ -11,7 +11,7 @@
 						<tr class="comment{{ #done }} done{{ /done }}" data-file="{{ path }}" data-line="{{ line }}" data-char="{{ char }}">
 							<td class="line">{{ line }}</td>
 							<td class="tag">
-								<span class="{{ tag }}">{{ tag }}</span>
+								<span class="{{ tag }}" style="background-color: {{ color }};">{{ tag }}</span>
 							</td>
 							<td class="message">{{ comment }}</td>
 						</tr>

@@ -29,6 +29,9 @@ define( function( require ) {
 		// Check if tag is visible.
 		this.isVisible( Tags.isVisible( todo.tag ) );
 		
+		// Get tag color.
+		this.color( Tags.getColor( todo.tag ) );
+		
 		// Subscribe to changes in tag visibility.
 		Events.subscribe( 'tags:visible', function( visibleTags ) {
 			todoObject._handleVisibility( visibleTags )
@@ -103,6 +106,17 @@ define( function( require ) {
 		this._visible = visible;
 	}
 	
+	// Methods handling color.
+	Todo.prototype.color = function( color ) {
+		// Return color if no color is supplied.
+		if ( color === undefined ) {
+			return this._color;
+		}
+		
+		this._color = color;
+	}
+	
+	// Listeners.
 	Todo.prototype._handleVisibility = function( hiddenTags ) {
 		this.isVisible( hiddenTags.indexOf( this.tag() ) === -1 );
 	}

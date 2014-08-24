@@ -16,6 +16,7 @@ define( function( require ) {
 		if ( typeof( tag ) === 'object' ) {
 			this.tag( tag.tag );
 			this.name( tag.name );
+			this.color( tag.color );
 			this.count( tag.count );
 			this.isVisible( tag.visible );
 		} else {
@@ -89,7 +90,7 @@ define( function( require ) {
 		}
 		
 		// Set color if one is supplied and valid.
-		if ( /(^#?[0-9A-F]{6}$)|(^#?[0-9A-F]{3}$)/i.test( color ) ) {
+		if ( /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test( color ) ) {
 			this._color = color;
 		}
 	}
