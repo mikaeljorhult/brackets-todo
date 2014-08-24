@@ -12,9 +12,6 @@ define( function( require ) {
 	
 	// Define tag object.
 	function Tag( tag ) {
-		// Set default color.
-		this._color = defaultColors.default;
-		
 		// Use object properties if one was supplied.
 		if ( typeof( tag ) === 'object' ) {
 			this.tag( tag.tag );
@@ -26,6 +23,18 @@ define( function( require ) {
 			this._name = '';
 			this._count = 0;
 			this._visibility = true;
+		}
+		
+		// Set color if none already set.
+		if ( this._color === undefined ) {
+			// Use tag color if one is defined otherwise use default.
+			if ( defaultColors.hasOwnProperty( this.tag() ) ) {
+				// Current tag has a default color.
+				this.color( defaultColors[ this.tag() ] );
+			} else {
+				// Default to default color.
+				this._color = defaultColors.default;
+			}
 		}
 	}
 	
