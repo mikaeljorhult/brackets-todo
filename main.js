@@ -11,6 +11,7 @@ define( function( require, exports, module ) {
 	// Get dependencies.
 	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
+		NativeApp = brackets.getModule( 'utils/NativeApp' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
@@ -415,6 +416,12 @@ define( function( require, exports, module ) {
 						SettingsManager.showSettingsDialog();
 					}
 				} );
+			} )
+			.on( 'click', 'a[ rel="external" ]', function( e ) {
+				// Open link in default browser.
+				NativeApp.openURLInDefaultBrowser( $( this ).data( 'href' ) );
+				
+				return false;
 			} )
 			.on( 'click', '.file', function() {
 				var $this = $( this );

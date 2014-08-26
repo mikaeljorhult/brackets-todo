@@ -64,7 +64,7 @@ define( function( require ) {
 		if ( github !== undefined ) {
 			comment = comment.replace( 
 				issueRegExp,
-				'<a href="https://github.com/{{ github.user }}/{{ github.repository }}/issues/$1">$&</a>'
+				'<a rel="external" data-href="https://github.com/{{ github.user }}/{{ github.repository }}/issues/$1">$&</a>'
 					.replace( '{{ github.user }}', github.user )
 					.replace( '{{ github.repository }}', github.repository )
 			);
