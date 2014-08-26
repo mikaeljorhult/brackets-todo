@@ -11,6 +11,7 @@ define( function( require, exports, module ) {
 	// Get dependencies.
 	var Async = brackets.getModule( 'utils/Async' ),
 		Menus = brackets.getModule( 'command/Menus' ),
+		NativeApp = brackets.getModule( 'utils/NativeApp' ),
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
@@ -29,6 +30,7 @@ define( function( require, exports, module ) {
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
+		Settings = require( 'modules/Settings' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
 		
@@ -167,7 +169,7 @@ define( function( require, exports, module ) {
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
+		var project = ( Settings.get().search.scope === 'project' ? true : false ),
 			resultsHTML = Mustache.render( todoResultsTemplate, {
 				todos: renderTodo()
 			} );
@@ -340,7 +342,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// No need to do anything if scope is project.
-				if ( SettingsManager.getSettings().search.scope === 'project' ) {
+				if ( Settings.get().search.scope === 'project' ) {
 					// Look for current file in list.
 					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
 					
@@ -414,6 +416,12 @@ define( function( require, exports, module ) {
 						SettingsManager.showSettingsDialog();
 					}
 				} );
+			} )
+			.on( 'click', 'a[ rel="external" ]', function() {
+				// Open link in default browser.
+				NativeApp.openURLInDefaultBrowser( $( this ).data( 'href' ) );
+				
+				return false;
 			} )
 			.on( 'click', '.file', function() {
 				var $this = $( this );

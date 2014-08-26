@@ -51,13 +51,16 @@ define( function( require ) {
 			// Build regular expression.
 			setupRegExp();
 			
+			// Publish event.
+			Events.publish( 'settings:changed', [ settings ] );
+			
 			// Trigger callback.
 			if ( callback ) {
 				callback();
 			}
 			
 			// Publish event.
-			Events.publish( 'settings:loaded' );
+			Events.publish( 'settings:loaded', [ settings ] );
 		} );
 	}
 	
@@ -164,7 +167,6 @@ define( function( require ) {
 	return {
 		// APIs about settings. 
 		loadSettings: loadSettings,
-		getSettings: getSettings,
 		showSettingsDialog: showSettingsDialog,
 		
 		// APIs about visible file.

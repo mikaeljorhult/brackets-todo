@@ -8,7 +8,7 @@ define( function( require, exports ) {
 		
 		// Todo modules.
 		Paths = require( 'modules/Paths' ),
-		SettingsManager = require( 'modules/SettingsManager' );
+		Settings = require( 'modules/Settings' );
 	
 	/**
 	 * Return all files to be parsed.
@@ -35,10 +35,10 @@ define( function( require, exports ) {
 			}
 			
 			// Get files for parsing.
-			if ( SettingsManager.getSettings().search.scope === 'project' ) {
+			if ( Settings.get().search.scope === 'project' ) {
 				// Go through all exclude filters for folders and compare to current file path.
-				for ( i = 0, length = SettingsManager.getSettings().search.excludeFolders.length; i < length; i++ ) {
-					searchString = SettingsManager.getSettings().search.excludeFolders[ i ];
+				for ( i = 0, length = Settings.get().search.excludeFolders.length; i < length; i++ ) {
+					searchString = Settings.get().search.excludeFolders[ i ];
 					
 					// If root level is indicated (by first character being a slash) replace it with ^
 					// to prevent matching subdirectories.
@@ -53,8 +53,8 @@ define( function( require, exports ) {
 				}
 				
 				// Go through all exclude filters for files and compare to current file name.
-				for ( i = 0, length = SettingsManager.getSettings().search.excludeFiles.length; i < length; i++ ) {
-					searchString = SettingsManager.getSettings().search.excludeFiles[ i ];
+				for ( i = 0, length = Settings.get().search.excludeFiles.length; i < length; i++ ) {
+					searchString = Settings.get().search.excludeFiles[ i ];
 					
 					// Check for matches in filename.
 					if ( fileName.indexOf( searchString ) > -1 ) {
