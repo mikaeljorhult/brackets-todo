@@ -7,13 +7,19 @@ define( function( require ) {
 		// Variables.
 		settings = {};
 	
+	/**
+	 * Return current settings.prototype*/
+	function get() {
+		return settings;
+	};
+	
 	// Subscribe to changes of settings.
 	Events.subscribe( 'settings:changed', function( newSettings ) {
 		settings = newSettings;
 	} );
 	
-	// Return current settings.
-	return function() {
-		return settings;
+	// Return global methods.
+	return {
+		get: get
 	};
 } );

@@ -53,7 +53,7 @@ define( function( require ) {
 	
 	// Methods handling comment.
 	Todo.prototype.comment = function( comment ) {
-		var github = Settings().github;
+		var github = Settings.get().github;
 		
 		// Return comment if no new comment is supplied.
 		if ( comment === undefined ) {
