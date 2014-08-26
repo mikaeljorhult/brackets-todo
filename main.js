@@ -29,6 +29,7 @@ define( function( require, exports, module ) {
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
+		Settings = require( 'modules/Settings' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
 		
@@ -167,7 +168,7 @@ define( function( require, exports, module ) {
 	 * Take found todos and add them to panel. 
 	 */
 	function printTodo() {
-		var project = ( SettingsManager.getSettings().search.scope === 'project' ? true : false ),
+		var project = ( Settings().search.scope === 'project' ? true : false ),
 			resultsHTML = Mustache.render( todoResultsTemplate, {
 				todos: renderTodo()
 			} );
@@ -340,7 +341,7 @@ define( function( require, exports, module ) {
 				}
 				
 				// No need to do anything if scope is project.
-				if ( SettingsManager.getSettings().search.scope === 'project' ) {
+				if ( Settings().search.scope === 'project' ) {
 					// Look for current file in list.
 					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
 					
