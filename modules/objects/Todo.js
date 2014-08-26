@@ -3,10 +3,12 @@ define( function( require ) {
 	
 	// Extension modules.
 	var Events = require( 'modules/Events' ),
+		Settings = require( 'modules/Settings' ),
 		Tags = require( 'modules/Tags' ),
 		
 		// Variables.
-		doneRegExp = /^\[x\]/i;
+		doneRegExp = /^\[x\]/i,
+		issueRegExp = /#(\d+)/i;
 	
 	// Define todo object.
 	function Todo( todo ) {
@@ -51,9 +53,21 @@ define( function( require ) {
 	
 	// Methods handling comment.
 	Todo.prototype.comment = function( comment ) {
+		var github = Settings().github;
+		
 		// Return comment if no new comment is supplied.
 		if ( comment === undefined ) {
 			return this._comment;
+		}
+		
+		// Check for GitHub issues.
+		if ( github !== undefined ) {
+			comment = comment.replace( 
+				issueRegExp,
+				'<a href="https://github.com/{{ github.user }}/{{ github.repository }}/issues/$1">$&</a>'
+					.replace( '{{ github.user }}', github.user )
+					.replace( '{{ github.repository }}', github.repository )
+			);
 		}
 		
 		// Set comment if one is supplied.
