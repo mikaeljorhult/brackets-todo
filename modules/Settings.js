@@ -11,7 +11,7 @@ define( function( require ) {
 	 * Return current settings.prototype*/
 	function get() {
 		return settings;
-	};
+	}
 	
 	// Subscribe to changes of settings.
 	Events.subscribe( 'settings:changed', function( newSettings ) {

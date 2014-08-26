@@ -417,7 +417,7 @@ define( function( require, exports, module ) {
 					}
 				} );
 			} )
-			.on( 'click', 'a[ rel="external" ]', function( e ) {
+			.on( 'click', 'a[ rel="external" ]', function() {
 				// Open link in default browser.
 				NativeApp.openURLInDefaultBrowser( $( this ).data( 'href' ) );
 				
