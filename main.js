@@ -72,15 +72,20 @@ define( function( require, exports, module ) {
 	/** 
 	 * Initialize extension.
 	 */
-	function enableTodo( enabled ) {
+	function enableTodo( enabled, startup ) {
+		// Should extension be enabled or not?
 		if ( enabled ) {
-			SettingsManager.loadSettings( function() {
-				// Show panel.
+			// No need to load settings on startup as it's done on project load.
+			if ( startup === true ) {
+				// Only display panel.
 				Resizer.show( $todoPanel );
-			} );
-			
-			// Set active class on icon.
-			$todoIcon.addClass( 'active' );
+			} else {
+				// Load settings and then show panel.
+				SettingsManager.loadSettings( function() {
+					// Show panel.
+					Resizer.show( $todoPanel );
+				} );
+			}
 		} else {
 			// Hide panel.
 			Resizer.hide( $todoPanel );
@@ -481,7 +486,7 @@ define( function( require, exports, module ) {
 		
 		// Enable extension if loaded last time.
 		if ( SettingsManager.isExtensionEnabled() ) {
-			enableTodo( true );
+			enableTodo( true, true );
 		}
 	} );
 } );
