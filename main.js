@@ -209,12 +209,16 @@ define( function( require, exports, module ) {
 		} );
 	}
 	
+	function sortTodos( beforeFilter ) {
+		return beforeFilter;
+	}
+	
 	/** 
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
 		var resultsHTML = Mustache.render( todoRowTemplate, {
-			files: setTodosVisible( filterTodosByTag( todos ) )
+			files: setTodosVisible( sortTodos( filterTodosByTag( todos ) ) )
 		} );
 		
 		return resultsHTML;
@@ -224,12 +228,10 @@ define( function( require, exports, module ) {
 	 * Keep file visibility as before after file changed.
 	 */
 	function setTodosVisible( todos ) {
-		var index = 0,
-			length = todos.length;
-		
-		for ( index = 0; index < length; index++ ) {
-			todos[ index ].isExpanded( SettingsManager.fileExpanded( todos[ index ].path() ) );
-		}
+		// Go through each file and expand where file was last expanded.
+		$.each( todos, function( index, file ) {
+			file.isExpanded( SettingsManager.fileExpanded( file.path() ) );
+		} );
 		
 		return todos;
 	}
