@@ -27,6 +27,7 @@ define( function( require, exports, module ) {
 		
 		// Todo modules.
 		Events = require( 'modules/Events' ),
+		Files = require( 'modules/Files' ),
 		FileManager = require( 'modules/FileManager' ),
 		ParseUtils = require( 'modules/ParseUtils' ),
 		Paths = require( 'modules/Paths' ),
@@ -146,7 +147,7 @@ define( function( require, exports, module ) {
 			} ).always( function() {
 				// Add file visibility state.
 				$.each( todoArray, function( index, file ) {
-					file.isExpanded( SettingsManager.fileExpanded( file.path() ) );
+					file.isExpanded( Files.isExpanded( file.path() ) );
 				} );
 				
 				// Store array of todos.
@@ -210,6 +211,29 @@ define( function( require, exports, module ) {
 	}
 	
 	function sortTodos( beforeFilter ) {
+		// Go through each file for tasks.
+		$.each( todos, function( index, file ) {
+			var todoArray = file.todos();
+			
+			// Sort tasks by done status.
+			file.todos( todoArray.sort( function( a, b ) {
+				// Use line to differentiate between to tasks with same status.
+				if ( a.isDone() === b.isDone() ) {
+					return ( a.line() < b.line() ? -1 : 1 );
+				} else {
+					// One of the tasks are done. Check which one.
+					if ( a.isDone() ) {
+						return 1;
+					} else if ( b.isDone() ) {
+						return -1;
+					}
+				}
+				
+				// Will not ever happen.
+				return 0;
+			} ) );
+		} );
+		
 		return beforeFilter;
 	}
 	
@@ -230,7 +254,7 @@ define( function( require, exports, module ) {
 	function setTodosVisible( todos ) {
 		// Go through each file and expand where file was last expanded.
 		$.each( todos, function( index, file ) {
-			file.isExpanded( SettingsManager.fileExpanded( file.path() ) );
+			file.isExpanded( Files.isExpanded( file.path() ) );
 		} );
 		
 		return todos;
@@ -329,8 +353,8 @@ define( function( require, exports, module ) {
 				SettingsManager.loadSettings();
 			} else {
 				// Move visibility state to new file.
-				SettingsManager.toggleFileExpanded( newName, SettingsManager.fileExpanded( oldName ) );
-				SettingsManager.toggleFileExpanded( oldName, false );
+				Files.toggleExpanded( newName, Files.isExpanded( oldName ) );
+				Files.toggleExpanded( oldName, false );
 				
 				// If not .todo, parse all files.
 				run();
@@ -439,7 +463,7 @@ define( function( require, exports, module ) {
 					.toggleClass( 'collapsed' );
 				
 				// Toggle file visibility.
-				SettingsManager.toggleFileExpanded( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
+				Files.toggleExpanded( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
 			} )
 			.on( 'click', '.comment', function() {
 				var $this = $( this );

@@ -169,11 +169,6 @@ define( function( require ) {
 		loadSettings: loadSettings,
 		showSettingsDialog: showSettingsDialog,
 		
-		// APIs about visible file.
-		fileExpanded: Files.isExpanded,
-		toggleFileExpanded: Files.toggleExpanded,
-		clearExpandedFiles: Files.clearExpanded,
-		
 		// APIs about visible tag.
 		isTagVisible: Tags.isVisible,
 		getTags: Tags.getAll,
