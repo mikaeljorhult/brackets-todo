@@ -469,7 +469,7 @@ define( function( require, exports, module ) {
 				var $this = $( this );
 				
 				// Open file that todo originate from.
-				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.data( 'file' ) } ).done( function() {
+				CommandManager.execute( Commands.FILE_OPEN, { fullPath: $this.parents( '.file' ).data( 'file' ) } ).done( function() {
 					// Set cursor position at start of todo.
 					EditorManager.getCurrentFullEditor()
 						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ), true );
