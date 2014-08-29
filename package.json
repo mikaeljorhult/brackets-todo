@@ -17,7 +17,7 @@
 		"brackets": ">=0.37.0"
 	},
 	"i18n": [
-		"de", "en", "es", "fr", "gl", "it", "sv", "zh"
+		"de", "en", "es", "fr", "gl", "it", "sv", "uk", "zh"
 	],
 	"devDependencies": {
 		"gulp": "^3.8.6",
