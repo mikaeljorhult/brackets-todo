@@ -8,7 +8,8 @@ define( function( require ) {
 		
 		// Variables.
 		doneRegExp = /^\[x\]/i,
-		issueRegExp = /#(\d+)/i;
+		issueRegExp = /#(\d+)/i,
+		mentionRegExp = /@(\w+)/i;
 	
 	// Define todo object.
 	function Todo( todo ) {
@@ -53,25 +54,12 @@ define( function( require ) {
 	
 	// Methods handling comment.
 	Todo.prototype.comment = function( comment ) {
-		var github = Settings.get().github;
-		
 		// Return comment if no new comment is supplied.
 		if ( comment === undefined ) {
 			return this._comment;
 		}
-		
-		// Check for GitHub issues.
-		if ( github !== undefined ) {
-			comment = comment.replace( 
-				issueRegExp,
-				'<a rel="external" data-href="https://github.com/{{ github.user }}/{{ github.repository }}/issues/$1">$&</a>'
-					.replace( '{{ github.user }}', github.user )
-					.replace( '{{ github.repository }}', github.repository )
-			);
-		}
-		
 		// Set comment if one is supplied.
-		this._comment = comment.replace( doneRegExp, '' );
+		this._comment = processComment( comment );
 		
 		// Check and save done status.
 		this.isDone( doneRegExp.test( comment ) );
@@ -128,6 +116,44 @@ define( function( require ) {
 		}
 		
 		this._color = color;
+	}
+	
+	// Processing methods.
+	function processComment( comment ) {
+		// Remove done status.
+		comment = comment.replace( doneRegExp, '' );
+		
+		// Link mentions and issues.
+		comment = processGithub( comment );
+		
+		// Return processed comment.
+		return comment;
+	}
+	
+	function processGithub( comment ) {
+		var github = Settings.get().github;
+		
+		// Check if GitHub information is specified in settings.
+		if ( github !== undefined ) {
+			// Link mentions to user profile on GitHub.
+			comment = comment.replace( 
+				mentionRegExp,
+				'<a rel="external" data-href="https://github.com/$1">$&</a>'
+			);
+			
+			// Make sure that both user and repository is specified in settings.
+			if ( github.user !== undefined && github.repository !== undefined ) {
+				// Link to issues on GitHub.
+				comment = comment.replace(
+					issueRegExp,
+					'<a rel="external" data-href="https://github.com/{{ github.user }}/{{ github.repository }}/issues/$1">$&</a>'
+						.replace( '{{ github.user }}', github.user )
+						.replace( '{{ github.repository }}', github.repository )
+				);
+			}
+		}
+		
+		return comment;
 	}
 	
 	// Listeners.
