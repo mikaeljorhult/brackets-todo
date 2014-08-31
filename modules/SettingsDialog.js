@@ -98,17 +98,13 @@ define( function( require, exports ) {
 	}
 	
 	function markInvalidFields( fields ) {
-		var field;
-		
 		// Reset invalid fields.
 		$dialog.find( 'input' ).removeClass( 'invalid' );
 		
 		// Add class to each invalid field.
-		for ( field in fields ) {
-			if ( fields.hasOwnProperty( field ) ) {
-				$( 'input[ name="' + fields[ field ] + '"]', $dialog ).addClass( 'invalid' );
-			}
-		}
+		fields.forEach( function( field ) {
+			$( 'input[ name="' + field + '"]', $dialog ).addClass( 'invalid' );
+		} );
 	}
 	
 	function handleButton( buttonId, callback ) {
