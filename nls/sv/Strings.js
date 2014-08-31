@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Kommaseparerade hela, eller del av, mappnamn att exkludera från sökning.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Filer",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Kommaseparerade hela, eller del av, filnamn att exkludera från sökning.",
+	SETTINGS_DIALOG_SORTING_FILTERING:     "Sortering och filtrering",
+	SETTINGS_DIALOG_SORT_DONE:             "Flytta slutförda uppgifter till slutet av listan.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Spara till .todo",
 	SETTINGS_DIALOG_RESET:                 "Återställ"
 } );
