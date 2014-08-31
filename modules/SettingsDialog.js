@@ -1,4 +1,4 @@
-define( function( require, exports ) {
+define( function( require ) {
 	'use strict';
 
 	// Get module dependencies.
@@ -34,6 +34,9 @@ define( function( require, exports ) {
 				scope: $( 'input[ name="todo-settings-scope" ]:checked', $dialog ).val(),
 				excludeFolders: splitByComma( $( '#todo-settings-exclude-folders', $dialog ).val() ),
 				excludeFiles: splitByComma( $( '#todo-settings-exclude-files', $dialog ).val() )
+			},
+			sort: {
+				done: $( '#todo-settings-sort-done', $dialog ).prop( 'checked' )
 			}
 		};
 	}
@@ -42,16 +45,23 @@ define( function( require, exports ) {
 	 * Initialize dialog values.
 	 */
 	function initValues( settings ) {
+		// Regular expression.
 		$( '#todo-settings-regex-prefix' ).val( settings.regex.prefix );
 		$( '#todo-settings-regex-suffix' ).val( settings.regex.suffix );
 		$( '#todo-settings-tags' ).val( settings.tags.join( ', ' ) );
 		
+		// Case sensitive.
 		$( '#todo-settings-case' ).prop( 'checked', settings.case );
-
+		
+		// Search scope.
 		$( 'input[ name="todo-settings-scope" ][ value="' + settings.search.scope + '" ]' ).prop( 'checked', true );
 		
+		// Excludes.
 		$( '#todo-settings-exclude-folders' ).val( settings.search.excludeFolders.join( ', ' ) );
 		$( '#todo-settings-exclude-files' ).val( settings.search.excludeFiles.join( ', ' ) );
+		
+		// Sorting and filtering.
+		$( '#todo-settings-sort-done' ).prop( 'checked', ( settings.sort !== undefined && settings.sort.done !== undefined ? settings.sort.done : true ) );
 	}
 	
 	/**
@@ -155,29 +165,31 @@ define( function( require, exports ) {
 	/**
 	 * Exposed method to show dialog.
 	 */
-	exports.show = function( settings, callback ) {
-		// Compile dialog template.
-		var compiledTemplate = Mustache.render( settingsDialogTemplate, {
-			Strings: Strings
-		} );
-		
-		// Save dialog to variable.
-		dialog = Dialogs.showModalDialogUsingTemplate( compiledTemplate, false );
-		$dialog = dialog.getElement();
-		
-		// Initialize dialog values.
-		initValues( settings );
-		
-		// Register event listeners.
-		$dialog
-			.on( 'click', '.reset-preferences', function() {
-				initValues( Defaults.defaultSettings );
-			} )
-			.on( 'click', '.dialog-button', function() {
-				var buttonId = $( this ).data( 'button-id' );
-				
-				// Handle closing dialog.
-				handleButton( buttonId, callback );
+	return {
+		show: function( settings, callback ) {
+			// Compile dialog template.
+			var compiledTemplate = Mustache.render( settingsDialogTemplate, {
+				Strings: Strings
 			} );
+			
+			// Save dialog to variable.
+			dialog = Dialogs.showModalDialogUsingTemplate( compiledTemplate, false );
+			$dialog = dialog.getElement();
+			
+			// Initialize dialog values.
+			initValues( settings );
+			
+			// Register event listeners.
+			$dialog
+				.on( 'click', '.reset-preferences', function() {
+					initValues( Defaults.defaultSettings );
+				} )
+				.on( 'click', '.dialog-button', function() {
+					var buttonId = $( this ).data( 'button-id' );
+					
+					// Handle closing dialog.
+					handleButton( buttonId, callback );
+				} );
+		}
 	};
 } );

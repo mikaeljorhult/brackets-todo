@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Full or part of folder names, separated by commas, which should be excluded from search.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Files",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Full or part of file names, separated by commas, which should be excluded from search.",
+	SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Save to .todo",
 	SETTINGS_DIALOG_RESET:                 "Reset"
 } );

@@ -1,4 +1,4 @@
-define( function( require, exports ) {
+define( function() {
 	'use strict';
 	
 	// Define default preferences and settings.
@@ -17,10 +17,15 @@ define( function( require, exports ) {
 				scope: 'current',
 				excludeFolders: [],
 				excludeFiles: []
+			},
+			sort: {
+				done: true
 			}
 		};
 	
 	// Make variables accessible.
-	exports.defaultPreferences = defaultPreferences;
-	exports.defaultSettings = defaultSettings;
+	return {
+		defaultPreferences: defaultPreferences,
+		defaultSettings: defaultSettings
+	};
 } );

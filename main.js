@@ -212,27 +212,32 @@ define( function( require, exports, module ) {
 	}
 	
 	function sortTodos( beforeFilter ) {
+		var sortDone = Settings.get().sort.done;
+		
 		// Go through each file for tasks.
 		$.each( todos, function( index, file ) {
 			var todoArray = file.todos();
 			
-			// Sort tasks by done status.
-			file.todos( todoArray.sort( function( a, b ) {
-				// Use line to differentiate between to tasks with same status.
-				if ( a.isDone() === b.isDone() ) {
-					return ( a.line() < b.line() ? -1 : 1 );
-				} else {
-					// One of the tasks are done. Check which one.
-					if ( a.isDone() ) {
-						return 1;
-					} else if ( b.isDone() ) {
-						return -1;
+			// Sort tasks by done status if enabled in settings.
+			if ( sortDone ) {
+				// Replace old todos with sorted array.
+				file.todos( todoArray.sort( function( a, b ) {
+					// Use line to differentiate between to tasks with same status.
+					if ( a.isDone() === b.isDone() ) {
+						return ( a.line() < b.line() ? -1 : 1 );
+					} else {
+						// One of the tasks are done. Check which one.
+						if ( a.isDone() ) {
+							return 1;
+						} else if ( b.isDone() ) {
+							return -1;
+						}
 					}
-				}
-				
-				// Will not ever happen.
-				return 0;
-			} ) );
+					
+					// Will not ever happen.
+					return 0;
+				} ) );
+			}
 		} );
 		
 		return beforeFilter;
