@@ -24,8 +24,8 @@ define( function( require ) {
 	
 	// Define preferences.
 	preferences.definePreference( 'enabled', 'boolean', false );
-	preferences.definePreference( 'expandedFiles', 'object', [] );
-	preferences.definePreference( 'hiddenTags', 'object', [] );
+	preferences.definePreference( 'expandedFiles', 'array', [] );
+	preferences.definePreference( 'hiddenTags', 'array', [] );
 	preferences.definePreference( 'userSettings', 'object', {} );
 	
 	/**

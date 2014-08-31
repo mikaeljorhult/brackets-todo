@@ -76,6 +76,7 @@ define( function( require ) {
 		
 		// Go through each comment and only return those of visible tags.
 		for ( todo in this._todos ) {
+			// Return true if a visible todo is found.
 			if ( this._todos[ todo ].isVisible() ) {
 				return true;
 			}

@@ -34,6 +34,10 @@ define( function( require ) {
 	 * Return if file should be expanded or not.
 	 */
 	function isExpanded( path ) {
+		// Get visible files.
+		expandedFiles = preferences.get( 'expandedFiles' );
+		
+		// Return expanded state.
 		return ( scope === 'project' ? expandedFiles.indexOf( path ) > -1 : true );
 	}
 	
