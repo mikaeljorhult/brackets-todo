@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Todos ou parte dos nomes dos cartafoles, separados por comas, que deben ser excluidos da búsqueda.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Arquivos",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Todos ou parte dos nomes dos arquivos, separados por comas, que deben ser excluidos da búsqueda.",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Gardar en .todo",
 	SETTINGS_DIALOG_RESET:                 "Restablecer"
 } );

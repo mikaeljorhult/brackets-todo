@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "在搜索中需要排除的文件夹名，多个名字之间使用逗号分隔，可以填写完整的文件夹名，或者只是文件夹名的一部分。",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "要排除的文件",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "在搜索中需要排除的文件名，多个名字之间使用逗号分隔，可以填写完整的文件名，或者只是文件名的一部分。比如.css。",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "保存到.todo",
 	SETTINGS_DIALOG_RESET:                 "重置"
 } );

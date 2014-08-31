@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Dossiers qui seront exclus de la recherche.indiquer le nom des dossiers ou une partie du nom, séparés par des virgules.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Fichiers",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Fichiers qui seront exclus de la recherche.indiquer le nom des fichiers ou une partie du nom, séparés par des virgules.",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Enregistrer le fichier .todo",
 	SETTINGS_DIALOG_RESET:                 "Reset"
 } );

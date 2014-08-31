@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Completo o parte di nomi delle cartelle, separati da virgole, che devono essere esclusi dalla ricerca.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "File",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Completo o parte di nomi di file, separati da virgole, che devono essere esclusi dalla ricerca.",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Salvare .todo",
 	SETTINGS_DIALOG_RESET:                 "Reset"
 } );

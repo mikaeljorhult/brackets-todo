@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Повні або часткові назви тек як мають бути виключені (розділені комами).",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Файли",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Повні або часткові назви файлів як мають бути виключені (розділені комами).",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "Зберегти до .todo",
 	SETTINGS_DIALOG_RESET:                 "Скинути"
 } );

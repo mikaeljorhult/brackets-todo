@@ -33,6 +33,8 @@ define( {
 	SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: "Komplette oder teilweise Ordnernamen, durch Komma getrennt, die von der Suche ausgeschlossen werden.",
 	SETTINGS_DIALOG_EXCLUDE_FILES:         "Dateien",
 	SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:   "Komplette oder teilweise Dateinamen, durch Komma getrennt, die von der Suche ausgeschlossen werden.",
+	// SETTINGS_DIALOG_SORTING_FILTERING:     "Sorting and filtering",
+	// SETTINGS_DIALOG_SORT_DONE:             "Move done tasks to bottom of list.",
 	SETTINGS_DIALOG_SAVE_FILE:             "In .todo speichern",
 	SETTINGS_DIALOG_RESET:                 "Zurücksetzen"
 } );
