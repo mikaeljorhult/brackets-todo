@@ -1,17 +1,22 @@
 define( function( require ) {
 	'use strict';
 	
-	// Variables.
-	var defaultColors = {
-		default: '#555',
-		fixme: '#c95353',
-		future: '#5a99c3',
-		note: '#696',
-		todo: '#d95',
-	};
+	// Extension modules.
+	var Events = require( 'modules/Events' ),
+		
+		// Variables.
+		defaultColors = {
+			default: '#555',
+			fixme: '#c95353',
+			future: '#5a99c3',
+			note: '#696',
+			todo: '#d95',
+		};
 	
 	// Define tag object.
 	function Tag( tag ) {
+		var tagObject = this;
+		
 		// Use object properties if one was supplied.
 		if ( typeof( tag ) === 'object' ) {
 			this.tag( tag.tag );
@@ -38,6 +43,11 @@ define( function( require ) {
 				this._color = defaultColors.default;
 			}
 		}
+		
+		// Subscribe to changes in tag visibility.
+		Events.subscribe( 'tags:visible', function( hiddenTags ) {
+			tagObject._handleVisibility( hiddenTags )
+		} );
 	}
 	
 	// Methods handling tag.
@@ -118,6 +128,11 @@ define( function( require ) {
 		
 		// Set tag if one is supplied.
 		this._visibility = visibility;
+	}
+	
+	// Listeners.
+	Tag.prototype._handleVisibility = function( hiddenTags ) {
+		this.isVisible( hiddenTags.indexOf( this.tag() ) === -1 );
 	}
 	
 	// Return object.

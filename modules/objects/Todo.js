@@ -36,8 +36,8 @@ define( function( require ) {
 		this.color( Tags.getColor( todo.tag ) );
 		
 		// Subscribe to changes in tag visibility.
-		Events.subscribe( 'tags:visible', function( visibleTags ) {
-			todoObject._handleVisibility( visibleTags )
+		Events.subscribe( 'tags:visible', function( hiddenTags ) {
+			todoObject._handleVisibility( hiddenTags )
 		} );
 	}
 	

@@ -6,16 +6,13 @@ define( function( require ) {
 		Tag = require( 'modules/objects/Tag' ),
 		
 		// Variables.
-		preferences,
-		tags = [];
+		tags = [],
+		hiddenTags = localStorage.getItem( 'hiddenTags' ) || [];
 	
 	/**
 	 * Initialize tags by building array of tag objects.
 	 */
-	function init( newTags, prefs ) {
-		// Cache preferences object.
-		preferences = prefs;
-		
+	function init( newTags ) {
 		// Remove all tags before adding new ones.
 		tags = [];
 		
@@ -51,8 +48,7 @@ define( function( require ) {
 	 * Create tag from object.
 	 */
 	function create( tag ) {
-		var hiddenTags = preferences.get( 'hiddenTags' ),
-			newTag = new Tag( tag );
+		var newTag = new Tag( tag );
 		
 		// Set visibility state for tag.
 		newTag.isVisible( hiddenTags.indexOf( newTag.tag() ) === -1 );
@@ -135,31 +131,15 @@ define( function( require ) {
 		return false;
 	}
 	
-	/**
-	 * Toggle visibility state of tag.
-	 */
-	function toggleVisible( tagName, visible ) {
-		var shouldBeVisible = ( visible !== undefined ? visible : !isVisible( cleanTagName( tagName ) ) ),
-			hiddenTags;
+	function saveHidden( hidden ) {
+		// Save in session.
+		hiddenTags = hidden;
 		
-		// Go through all tags to find requested one.
-		$.each( tags, function( index, tag ) {
-			
-			// Set visibility state of tag if found in array.
-			if ( tag.tag() === tagName ) {
-				tag.isVisible( shouldBeVisible );
-			}
-		} );
-		
-		// Get tags of all visible tags.
-		hiddenTags = getHidden( true );
+		// Save in persitent storage.
+		localStorage.setItem( 'hiddenTags', JSON.stringify( hidden ) );
 		
 		// Trigger event for changed visibility.
-		Events.publish( 'tags:visible', [ hiddenTags ] );
-		
-		// Save array of hidden tags in current project.
-		preferences.set( 'hiddenTags', hiddenTags, { location: { scope: 'project' } } );
-		preferences.save();
+		Events.publish( 'tags:visible', [ hidden ] );
 	}
 	
 	/**
@@ -196,7 +176,7 @@ define( function( require ) {
 		getVisible: getVisible,
 		
 		isVisible: isVisible,
-		toggleVisible: toggleVisible,
+		saveHidden: saveHidden,
 		
 		getColor: getColor
 	};

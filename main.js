@@ -34,6 +34,7 @@ define( function( require, exports, module ) {
 		Settings = require( 'modules/Settings' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
+		Tags = require( 'modules/Tags' ),
 		
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
@@ -491,8 +492,10 @@ define( function( require, exports, module ) {
 				var $this = $( this )
 					.toggleClass( 'visible' );
 				
-				// Toggle tag visibility.
-				SettingsManager.toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
+				// Save names of hidden tags.
+				Tags.saveHidden( $.makeArray( $this.parent().children().not( '.visible' ).map( function() {
+					return $( this ).data( 'name' );
+				} ) ) );
 				
 				// Update list of comments.
 				Events.publish( 'todos:updated' );
