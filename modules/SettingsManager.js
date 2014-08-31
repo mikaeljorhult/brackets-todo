@@ -46,7 +46,7 @@ define( function( require ) {
 			Tags.init( settings.tags, preferences );
 			
 			// Initialize files.
-			Files.init( settings.search.scope, preferences );
+			Files.init( settings.search.scope );
 			
 			// Build regular expression.
 			setupRegExp();
@@ -157,10 +157,7 @@ define( function( require ) {
 	
 	// Reload settings when new project is loaded.
 	$( ProjectManager ).on( 'projectOpen.todo', function() {
-		loadSettings( function() {
-			// Reset file visibility.
-			Files.clearExpanded();
-		} );
+		loadSettings();
 	} );
 	
 	// Return global methods.
@@ -172,7 +169,6 @@ define( function( require ) {
 		// APIs about visible tag.
 		isTagVisible: Tags.isVisible,
 		getTags: Tags.getAll,
-		toggleTagVisible: Tags.toggleVisible,
 		
 		// APIs about extension.
 		isExtensionEnabled: isExtensionEnabled,

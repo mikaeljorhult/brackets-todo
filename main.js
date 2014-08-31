@@ -34,6 +34,7 @@ define( function( require, exports, module ) {
 		Settings = require( 'modules/Settings' ),
 		SettingsManager = require( 'modules/SettingsManager' ),
 		Strings = require( 'modules/Strings' ),
+		Tags = require( 'modules/Tags' ),
 		
 		// Mustache templates.
 		todoPanelTemplate = require( 'text!html/panel.html' ),
@@ -352,10 +353,6 @@ define( function( require, exports, module ) {
 			if ( newName === todoPath || oldName === todoPath ) {
 				SettingsManager.loadSettings();
 			} else {
-				// Move visibility state to new file.
-				Files.toggleExpanded( newName, Files.isExpanded( oldName ) );
-				Files.toggleExpanded( oldName, false );
-				
 				// If not .todo, parse all files.
 				run();
 			}
@@ -455,15 +452,15 @@ define( function( require, exports, module ) {
 				return false;
 			} )
 			.on( 'click', '.file', function() {
-				var $this = $( this );
-				
 				// Change classes and toggle visibility of todos.
-				$this
+				$( this )
 					.toggleClass( 'expanded' )
 					.toggleClass( 'collapsed' );
 				
-				// Toggle file visibility.
-				Files.toggleExpanded( $this.data( 'file' ), $this.hasClass( 'expanded' ) );
+				// Store array of expanded files.
+				Files.saveExpanded( $.makeArray( $todoPanel.find( '.file.expanded' ).map( function() {
+					return $( this ).data( 'file' );
+				} ) ) );
 			} )
 			.on( 'click', '.comment', function() {
 				var $this = $( this );
@@ -495,8 +492,10 @@ define( function( require, exports, module ) {
 				var $this = $( this )
 					.toggleClass( 'visible' );
 				
-				// Toggle tag visibility.
-				SettingsManager.toggleTagVisible( $this.data( 'name' ), $this.hasClass( 'visible' ) );
+				// Save names of hidden tags.
+				Tags.saveHidden( $.makeArray( $this.parent().children().not( '.visible' ).map( function() {
+					return $( this ).data( 'name' );
+				} ) ) );
 				
 				// Update list of comments.
 				Events.publish( 'todos:updated' );

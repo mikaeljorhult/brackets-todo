@@ -14,13 +14,13 @@ define( function( require ) {
 			this._name = file.name;
 			this._path = file.path;
 			this._todos = file.todos;
+			this._expanded = file.expanded;
 		} else {
 			this._name = '';
 			this._path = '';
 			this._todos = [];
+			this._expanded = false;
 		}
-		
-		this._expanded = false;
 	}
 	
 	// Methods handling file name.
