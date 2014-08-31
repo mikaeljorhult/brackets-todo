@@ -9,7 +9,7 @@ define( function( require ) {
 		// Variables.
 		doneRegExp = /^\[x\]/i,
 		issueRegExp = /#(\d+)/i,
-		mentionRegExp = /@(\w+)/i;
+		mentionRegExp = /@([\w|-]+)/i;
 	
 	// Define todo object.
 	function Todo( todo ) {
