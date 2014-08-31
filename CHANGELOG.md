@@ -1,9 +1,10 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.6.1 - Unreleased
+## 0.7.0 - Unreleased
 * Allow modifying tag colors.
-* Recognize and link to ssues on GitHub.
+* Allow sorting by done status.
+* Recognize and link to GitHub issues and mentions.
 * Ukrainian translation. Thanks to Maks Lyashuk (@probil).
 * Update to italian translation. Thanks to Denisov21 (@Denisov21).
 
