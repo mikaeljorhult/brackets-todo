@@ -5,22 +5,15 @@ define( function( require ) {
 	var File = require( 'modules/objects/File' ),
 		
 		// Variables.
-		preferences,
 		scope,
-		expandedFiles;
+		expandedFiles = JSON.parse( localStorage.getItem( 'expandedFiles' ) ) || [];
 	
 	/**
 	 * Initialize tags by building array of tag objects.
 	 */
-	function init( searchScope, prefs ) {
-		// Cache preferences object.
-		preferences = prefs;
-		
+	function init( searchScope ) {
 		// Store search scope.
 		scope = searchScope;
-		
-		// Get visible files.
-		expandedFiles = preferences.get( 'expandedFiles' );
 	}
 	
 	/**
@@ -34,42 +27,19 @@ define( function( require ) {
 	 * Return if file should be expanded or not.
 	 */
 	function isExpanded( path ) {
-		// Get visible files.
-		expandedFiles = preferences.get( 'expandedFiles' );
-		
 		// Return expanded state.
 		return ( scope === 'project' ? expandedFiles.indexOf( path ) > -1 : true );
 	}
 	
 	/**
-	 * Toggle if file should be expanded or not.
+	 * Save paths to expanded files.
 	 */
-	function toggleExpanded( path, state ) {
-		var alreadyExpanded = isExpanded( path );
+	function saveExpanded( expanded ) {
+		// Save in session.
+		expandedFiles = expanded;
 		
-		// Check if already visible if visibility not provided as parameter.
-		state = ( state === undefined ? !alreadyExpanded : state );
-
-		// Toggle visibility state.
-		if ( state ) {
-			// Show if not already visible.
-			if ( !alreadyExpanded ) {
-				expandedFiles.push( path );
-			}
-		} else {
-			// Hide if already visible.
-			if ( alreadyExpanded ) {
-				expandedFiles.splice( expandedFiles.indexOf( path ), 1 );
-			}
-		}
-		
-		// Save visibility state.
-		preferences.set( 'expandedFiles', expandedFiles, { location: { scope: 'project' } } );
-		preferences.save();
-	}
-	
-	function clearExpanded() {
-		expandedFiles = [];
+		// Save in persitent storage.
+		localStorage.setItem( 'expandedFiles', JSON.stringify( expanded ) );
 	}
 	
 	// Return global methods.
@@ -78,8 +48,7 @@ define( function( require ) {
 		
 		create: create,
 		
-		clearExpanded: clearExpanded,
 		isExpanded: isExpanded,
-		toggleExpanded: toggleExpanded
+		saveExpanded: saveExpanded
 	};
 } );

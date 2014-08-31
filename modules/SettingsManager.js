@@ -157,10 +157,7 @@ define( function( require ) {
 	
 	// Reload settings when new project is loaded.
 	$( ProjectManager ).on( 'projectOpen.todo', function() {
-		loadSettings( function() {
-			// Reset file visibility.
-			Files.clearExpanded();
-		} );
+		loadSettings();
 	} );
 	
 	// Return global methods.
