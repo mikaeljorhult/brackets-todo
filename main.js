@@ -403,9 +403,6 @@ define( function( require, exports, module ) {
 					SettingsManager.loadSettings();
 				}
 				
-				// Remove file from visibility list.
-				SettingsManager.toggleFileExpanded( deletedPath, false );
-				
 				// Parse path that was deleted to remove from list.
 				setTodos( ParseUtils.removeFile( deletedPath, todos ) );
 			} );
