@@ -64,12 +64,12 @@ define( function( require ) {
 	/**
 	 * Return array of all available tags.
 	 */
-	function getAll( onlyNames ) {
+	function getAll( property ) {
 		// Return only names if requested.
-		if ( onlyNames === true ) {
+		if ( typeof( property ) === 'string' ) {
 			// Return array of only tags of tags array.
 			return tags.map( function( tag ) {
-				return tag.tag();
+				return tag[ property ]();
 			} );
 		}
 		

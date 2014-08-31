@@ -21,6 +21,7 @@ define( function( require ) {
 			this.isVisible( tag.visible );
 		} else {
 			this._tag = '';
+			this._regexp = '';
 			this._name = '';
 			this._count = 0;
 			this._visibility = true;
@@ -56,6 +57,9 @@ define( function( require ) {
 			this.color( parts[ 1 ] );
 		}
 		
+		// Set tag RegExp.
+		this._regexp = parts[ 0 ];
+		
 		// Set tag if one is supplied.
 		this._tag = parts[ 0 ].replace( /[^a-zA-Z]/g, '' ).toLowerCase();
 	}
@@ -69,6 +73,16 @@ define( function( require ) {
 		
 		// Set tag if one is supplied.
 		this._name = name.replace( /[^a-zA-Z]/g, '' );
+	}
+	
+	Tag.prototype.regexp = function( regexp ) {
+		// Return name if no new tag is supplied.
+		if ( regexp === undefined ) {
+			return this._regexp;
+		}
+		
+		// Set tag if one is supplied.
+		this._regexp = regexp;
 	}
 	
 	// Methods handling count.
