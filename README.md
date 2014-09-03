@@ -66,6 +66,8 @@ before the text of the task.
 
 `// TODO: [x]This task is done.`
 
+Tasks can be sorted so that done tasks is moved to the bottom of the list by checking that option in the settings dialog.
+
 
 ## Custom Settings
 The extensions settings can be overridden by adding a `.todo` file in your project folder. This is a simple 
