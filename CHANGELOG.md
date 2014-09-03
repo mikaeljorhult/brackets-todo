@@ -1,7 +1,7 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.7.0 - Unreleased
+## 0.7.0 - 2014-09-03
 * Allow modifying tag colors.
 * Allow sorting by done status.
 * Recognize and link to GitHub issues and mentions.
