@@ -146,6 +146,21 @@ covers some common formats.
 }
 ```
 
+
+### Tag Colors
+
+The default tags each has a default color but they can be overridden using the settings dialog or a `.todo` file. This is either done by either defining the tag as a string, separating tag name and color with a colon character, or by defining the tag as a object, with a name and a color property.
+
+```json
+{
+	"tags": [
+		"TODO:#d95",
+		{ "name": "NOTE", "color": "#696" }
+	]
+}
+```
+
+
 ### Exclude files and folders
 
 Files and folders may be excluded from searches by defining the properties excludeFolders and excludeFiles 
