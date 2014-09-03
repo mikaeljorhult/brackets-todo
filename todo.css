@@ -56,23 +56,6 @@
 	border-radius: .5em;
 }
 
-/*--- TAGS STYLING ---*/
-.brackets-todo .tag .todo {
-	background-color: #d95;
-}
-
-.brackets-todo .tag .note {
-	background-color: #696;
-}
-
-.brackets-todo .tag .fixme {
-	background-color: #c95353;
-}
-
-.brackets-todo .tag .future {
-	background-color: #5a99c3;
-}
-
 /*--- ICON ---*/
 #brackets-todo-icon {
 	background-image: url( 'images/todo-icon.svg' );
