@@ -123,11 +123,25 @@ define( function( require ) {
 		// Remove done status.
 		comment = comment.replace( doneRegExp, '' );
 		
+		// Strip potentially harmful HTML.
+		comment = stripHTML( comment );
+		
 		// Link mentions and issues.
 		comment = processGithub( comment );
 		
 		// Return processed comment.
 		return comment;
+	}
+	
+	function stripHTML( comment ) {
+		// Create container element.
+		var container = document.createElement( 'div' );
+		
+		// Parse the comment through HTML output.
+		container.innerHTML = comment;
+		
+		// Return the output in the container as text.
+		return container.textContent || container.innerText;
 	}
 	
 	function processGithub( comment ) {
