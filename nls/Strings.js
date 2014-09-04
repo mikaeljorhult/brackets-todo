@@ -8,7 +8,7 @@ define( function( require, exports, module ) {
 		fr: true,
 		gl: true,
 		it: true,
-        ru: true,
+		ru: true,
 		sv: true,
 		uk: true,
 		zh: true
