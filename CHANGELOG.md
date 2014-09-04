@@ -1,6 +1,11 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.1 - 2014-09-04
+* Strip HTML from comments to avoid pontentially harmful code.
+* Russian translation. Thanks to Dis Shishkov (@disshishkov).
+* Update to french translation. Thanks to rainje (@rainje).
+
 ## 0.7.0 - 2014-09-03
 * Allow modifying tag colors.
 * Allow sorting by done status.
