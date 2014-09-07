@@ -369,8 +369,8 @@ define( function( require, exports, module ) {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
 				
-				// Bail if no files are open.
-				if ( !currentDocument ) {
+				// Bail if no files are open or settings have not yet been loaded.
+				if ( !currentDocument || Settings.get().search === undefined ) {
 					return;
 				}
 				
