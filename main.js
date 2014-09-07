@@ -16,7 +16,7 @@ define( function( require, exports, module ) {
 		Commands = brackets.getModule( 'command/Commands' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
-		PanelManager = brackets.getModule( 'view/PanelManager' ),
+		WorkspaceManager = brackets.getModule( 'view/WorkspaceManager' ),
 		Resizer = brackets.getModule( 'utils/Resizer' ),
 		AppInit = brackets.getModule( 'utils/AppInit' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
@@ -421,7 +421,7 @@ define( function( require, exports, module ) {
 			} );
 		
 		// Create and cache todo panel.
-		PanelManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
+		WorkspaceManager.createBottomPanel( 'mikaeljorhult.bracketsTodo.panel', $( todoHTML ), 100 );
 		$todoPanel = $( '#brackets-todo' );
 		
 		// Close panel when close button is clicked.
