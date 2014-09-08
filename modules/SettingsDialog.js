@@ -5,7 +5,7 @@ define( function( require ) {
 	var CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
 		Dialogs = brackets.getModule( 'widgets/Dialogs' ),
-		EditorManager = brackets.getModule( 'editor/EditorManager' ),
+		MainViewManager = brackets.getModule( 'view/MainViewManager' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
 		
@@ -150,7 +150,7 @@ define( function( require ) {
 					// Open newly created file.
 					CommandManager.execute( Commands.FILE_OPEN, { fullPath: todoPath } ).done( function() {
 						// Set focus on editor.
-						EditorManager.focusEditor();
+						MainViewManager.focusActivePane();
 					} );
 				} );
 				

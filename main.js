@@ -15,6 +15,7 @@ define( function( require, exports, module ) {
 		CommandManager = brackets.getModule( 'command/CommandManager' ),
 		Commands = brackets.getModule( 'command/Commands' ),
 		EditorManager = brackets.getModule( 'editor/EditorManager' ),
+		MainViewManager = brackets.getModule( 'view/MainViewManager' ),
 		DocumentManager = brackets.getModule( 'document/DocumentManager' ),
 		WorkspaceManager = brackets.getModule( 'view/WorkspaceManager' ),
 		Resizer = brackets.getModule( 'utils/Resizer' ),
@@ -474,7 +475,7 @@ define( function( require, exports, module ) {
 						.setCursorPos( $this.data( 'line' ) - 1, $this.data( 'char' ), true );
 					
 					// Set focus on editor.
-					EditorManager.focusEditor();
+					MainViewManager.focusActivePane();
 				} );
 				
 				return false;
