@@ -9,7 +9,10 @@ define( function( require ) {
 		// Variables.
 		doneRegExp = /^\[x\]/i,
 		issueRegExp = /#(\d+)/i,
-		mentionRegExp = /@([\w|-]+)/i;
+		mentionRegExp = /@([\w|-]+)/i,
+		labelRegExp = /--([\w|-]+)/gi,
+		
+		labels = [];
 	
 	// Define todo object.
 	function Todo( todo ) {
@@ -129,6 +132,9 @@ define( function( require ) {
 		// Link mentions and issues.
 		comment = processGithub( comment );
 		
+		// Extract labels.
+		comment = processLabels( comment );
+		
 		// Return processed comment.
 		return comment;
 	}
@@ -166,6 +172,21 @@ define( function( require ) {
 				);
 			}
 		}
+		
+		return comment;
+	}
+	
+	function processLabels( comment ) {
+		var matchArray;
+		
+		// Go through each matched label.
+		while ( ( matchArray = labelRegExp.exec( comment ) ) !== null ) {
+			// Add match to array of labels.
+			labels.push( matchArray[ 1 ] );
+		}
+		
+		// Remove all labels from comment.
+		comment = comment.replace( labelRegExp, '' );
 		
 		return comment;
 	}
