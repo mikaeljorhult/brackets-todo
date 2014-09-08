@@ -9,11 +9,15 @@ define( function( require ) {
 		// Variables.
 		doneRegExp = /^\[x\]/i,
 		issueRegExp = /#(\d+)/i,
-		mentionRegExp = /@([\w|-]+)/i;
+		mentionRegExp = /@([\w|-]+)/i,
+		labelRegExp = /--([\w|-]+)/gi;
 	
 	// Define todo object.
 	function Todo( todo ) {
 		var todoObject = this;
+		
+		// Array of labels.
+		this._labels = [];
 		
 		// Use object properties if one was supplied.
 		if ( typeof( todo ) === 'object' ) {
@@ -59,7 +63,7 @@ define( function( require ) {
 			return this._comment;
 		}
 		// Set comment if one is supplied.
-		this._comment = processComment( comment );
+		this._comment = this.processComment( comment );
 		
 		// Check and save done status.
 		this.isDone( doneRegExp.test( comment ) );
@@ -118,22 +122,36 @@ define( function( require ) {
 		this._color = color;
 	}
 	
+	// Methods handling labels.
+	Todo.prototype.labels = function() {
+		// Return array of labels.
+		return this._labels;
+	}
+	
+	Todo.prototype.addLabel = function( label ) {
+		// Add label to array.
+		this._labels.push( label );
+	}
+	
 	// Processing methods.
-	function processComment( comment ) {
+	Todo.prototype.processComment = function( comment ) {
 		// Remove done status.
 		comment = comment.replace( doneRegExp, '' );
 		
 		// Strip potentially harmful HTML.
-		comment = stripHTML( comment );
+		comment = this._stripHTML( comment );
 		
 		// Link mentions and issues.
-		comment = processGithub( comment );
+		comment = this._processGithub( comment );
+		
+		// Extract labels.
+		comment = this._processLabels( comment );
 		
 		// Return processed comment.
 		return comment;
 	}
 	
-	function stripHTML( comment ) {
+	Todo.prototype._stripHTML = function( comment ) {
 		// Create container element.
 		var container = document.createElement( 'div' );
 		
@@ -144,7 +162,7 @@ define( function( require ) {
 		return container.textContent || container.innerText;
 	}
 	
-	function processGithub( comment ) {
+	Todo.prototype._processGithub = function( comment ) {
 		var github = Settings.get().github;
 		
 		// Check if GitHub information is specified in settings.
@@ -166,6 +184,21 @@ define( function( require ) {
 				);
 			}
 		}
+		
+		return comment;
+	}
+	
+	Todo.prototype._processLabels = function( comment ) {
+		var matchArray;
+		
+		// Go through each matched label.
+		while ( ( matchArray = labelRegExp.exec( comment ) ) !== null ) {
+			// Add match to array of labels.
+			this.addLabel( matchArray[ 1 ] );
+		}
+		
+		// Remove all labels from comment.
+		comment = comment.replace( labelRegExp, '' );
 		
 		return comment;
 	}
