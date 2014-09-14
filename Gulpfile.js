@@ -9,4 +9,14 @@ gulp.task( 'lint', function() {
 		.pipe( plugins.jscs() );
 } );
 
+gulp.task( 'sprite', function() {
+	return gulp.src( 'images/svg/*.svg' )
+		.pipe( plugins.svgSprites( {
+			mode: 'symbols',
+			svg: { symbols: 'sprite.svg' },
+			preview: false
+		} ) )
+		.pipe( gulp.dest( 'images' ) );
+} );
+
 gulp.task( 'default', [ 'lint' ] );
