@@ -89,9 +89,26 @@
 .brackets-todo .icons a {
 	width: 18px;
 	height: 18px;
-	background: transparent url( 'images/sprite.svg' ) no-repeat left top;
 	line-height: 1;
+	text-align: center;
 	border-radius: 3px;
+}
+
+.brackets-todo .icons svg {
+	width: 13px;
+	height: 13px;
+	vertical-align: middle;
+	fill: #3e3e3e;
+	pointer-events: none;
+}
+
+.brackets-todo .expand-all svg {
+	width: 15px;
+	height: 15px;
+}
+
+.dark .brackets-todo .icons svg {
+	fill: #ccc;
 }
 
 .brackets-todo .icons a:hover {
@@ -99,16 +116,8 @@
 	background-color: #fff;
 }
 
-.brackets-todo .icons .collapse-all {
-	background-position: left top;
-}
-
-.brackets-todo .icons .expand-all {
-	background-position: left -18px;
-}
-
-.brackets-todo .icons .indicator {
-	background-position: left -36px;
+.dark .brackets-todo .icons a:hover {
+	background-color: #000;
 }
 
 .brackets-todo .tags {
@@ -179,6 +188,7 @@
 
 .brackets-todo-settings-dialog legend {
 	margin: 0 0 .25em;
+	color: inherit;
 }
 
 .brackets-todo-settings-dialog input {

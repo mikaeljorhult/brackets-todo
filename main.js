@@ -310,7 +310,8 @@ define( function( require, exports, module ) {
 		// Render and return toolbar.
 		return Mustache.render( todoToolbarTemplate, {
 			tags: tags,
-			strings: Strings
+			strings: Strings,
+			imagesPath: require.toUrl( 'images/' )
 		} );
 	}
 	
