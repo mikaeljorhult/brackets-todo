@@ -1,7 +1,8 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.8.0 - Unreleased
+## 0.8.0 - 2014-10-11
+* Support for dark themes.
 * Attach labels to each comment.
 * Use new split view methods when opening files.
 
