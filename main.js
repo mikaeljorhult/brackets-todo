@@ -89,6 +89,8 @@ define( function( require, exports, module ) {
 					Resizer.show( $todoPanel );
 				} );
 			}
+			
+			$todoIcon.addClass( 'active' );
 		} else {
 			// Hide panel.
 			Resizer.hide( $todoPanel );
