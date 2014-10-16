@@ -1,6 +1,6 @@
 define( {
 	// EXTENSION.
-	EXTENSION_NAME: "Tehtävät",
+	EXTENSION_NAME: "Todo",
 	
 	// GENERAL.
 	YES:    "Kyllä",
@@ -16,7 +16,7 @@ define( {
 	REFRESH:      "Päivitä",
 	
 	// SETTINGS DIALOG.
-	SETTINGS_DIALOG_TITLE:                 "Tehtävien asetukset",
+	SETTINGS_DIALOG_TITLE:                 "Todo-asetukset",
 	SETTINGS_DIALOG_REGEX:                 "Säännöllinen lauseke",
 	SETTINGS_DIALOG_REGEX_PREFIX:          "Etuliite",
 	SETTINGS_DIALOG_REGEX_PREFIX_TITLE:    "Säännöllinen lauseke, joka täsmää kommentin alun kanssa. Tue eri kieltä muokkaamalla sitä.",
