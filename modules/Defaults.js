@@ -8,8 +8,8 @@ define( function() {
 		},
 		defaultSettings = {
 			regex: {
-				prefix: '(?:\\/\\*|\\/\\/|#) *@?(',
-				suffix: '):? *(.*?) ?(?=\\*/|\\n|$)',
+				prefix: '(?:<!--|\\/\\*|\\/\\/|#) *@?(',
+				suffix: '):? *(.*?) ?(?=-->|\\*/|\\n|$)',
 			},
 			tags: [ 'TODO', 'NOTE', 'FIX ?ME', 'CHANGES', 'FUTURE' ],
 			case: false,
