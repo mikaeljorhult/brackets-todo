@@ -321,7 +321,9 @@ define( function( require, exports, module ) {
 	 * Listen for save or refresh and look for todos when needed.
 	 */
 	function registerListeners() {
-		var $documentManager = $( DocumentManager );
+		var $mainViewManager = $( MainViewManager ),
+			$documentManager = $( DocumentManager );
+			
 		
 		// Listeners bound to Todo modules.
 		Events.subscribe( 'settings:loaded', function() {
@@ -368,42 +370,44 @@ define( function( require, exports, module ) {
 		} );
 		
 		// Listeners bound to Brackets modules.
-		$documentManager
-			.on( 'currentDocumentChange.todo', function() {
-				var currentDocument = DocumentManager.getCurrentDocument(),
-					$scrollTarget;
-				
-				// Bail if no files are open or settings have not yet been loaded.
-				if ( !currentDocument || Settings.get().search === undefined ) {
-					return;
-				}
-				
-				// No need to do anything if scope is project.
-				if ( Settings.get().search.scope === 'project' ) {
-					// Look for current file in list.
-					$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
-					
-					// If there's a target, scroll to it.
-					if ( $scrollTarget.length > 0 ) {
-						// Close all auto-opened files before opening another.
-						$scrollTarget.siblings( '.auto-opened' )
-							.trigger( 'click' )
-							.removeClass( 'auto-opened' );
-						
-						// No need to open it if already open.
-						if ( !$scrollTarget.hasClass( 'expanded' ) ) {
-							$scrollTarget.trigger( 'click' );
-							$scrollTarget.addClass( 'auto-opened' );
-						}
-						
-						// Scroll to target.
-						$todoPanel.children( '.table-container' ).scrollTop( $scrollTarget.position().top );
+		$mainViewManager
+			.on( 'currentFileChange.todo', function() {
+					var currentDocument = DocumentManager.getCurrentDocument(),
+						$scrollTarget;
+
+					// Bail if no files are open or settings have not yet been loaded.
+					if ( !currentDocument || Settings.get().search === undefined ) {
+						return;
 					}
-				} else {
-					// Empty stored todos and parse current document.
-					setTodos( ParseUtils.parseFile( currentDocument, [] ) );
-				}
-			} )
+
+					// No need to do anything if scope is project.
+					if ( Settings.get().search.scope === 'project' ) {
+						// Look for current file in list.
+						$scrollTarget = $todoPanel.find( '.file' ).filter( '[data-file="' + currentDocument.file.fullPath + '"]' );
+
+						// If there's a target, scroll to it.
+						if ( $scrollTarget.length > 0 ) {
+							// Close all auto-opened files before opening another.
+							$scrollTarget.siblings( '.auto-opened' )
+								.trigger( 'click' )
+								.removeClass( 'auto-opened' );
+
+							// No need to open it if already open.
+							if ( !$scrollTarget.hasClass( 'expanded' ) ) {
+								$scrollTarget.trigger( 'click' );
+								$scrollTarget.addClass( 'auto-opened' );
+							}
+
+							// Scroll to target.
+							$todoPanel.children( '.table-container' ).scrollTop( $scrollTarget.position().top );
+						}
+					} else {
+						// Empty stored todos and parse current document.
+						setTodos( ParseUtils.parseFile( currentDocument, [] ) );
+					}
+				} );
+		
+		$documentManager			
 			.on( 'pathDeleted.todo', function( event, deletedPath ) {
 				var todoPath = Paths.todoFile();
 				
