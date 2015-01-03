@@ -371,7 +371,7 @@ define( function( require, exports, module ) {
 		
 		// Listeners bound to Brackets modules.
 		$mainViewManager
-			.on( 'currentFileChange.todo', function() {
+			.on( 'activeEditorChange.todo', function() {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
 
