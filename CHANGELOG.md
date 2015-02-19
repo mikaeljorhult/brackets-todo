@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.8.1 - Unreleased
 * Use new MainViewManager for file change listeners. Thanks to Pete Nykänen (@petetnt).
+* Update to german translation. Thanks to Sebastian Herrmann (@herrherrmann).
 
 ## 0.8.0 - 2014-10-11
 * Support for dark themes.
