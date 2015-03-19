@@ -320,11 +320,7 @@ define( function( require, exports, module ) {
 	/**
 	 * Listen for save or refresh and look for todos when needed.
 	 */
-	function registerListeners() {
-		var $mainViewManager = $( MainViewManager ),
-			$documentManager = $( DocumentManager );
-			
-		
+	function registerListeners() {		
 		// Listeners bound to Todo modules.
 		Events.subscribe( 'settings:loaded', function() {
 			// Empty array of files.
@@ -370,7 +366,7 @@ define( function( require, exports, module ) {
 		} );
 		
 		// Listeners bound to Brackets modules.
-		$mainViewManager
+		MainViewManager
 			.on( 'currentFileChange.todo', function() {
 				var currentDocument = DocumentManager.getCurrentDocument(),
 					$scrollTarget;
@@ -407,7 +403,7 @@ define( function( require, exports, module ) {
 				}
 			} );
 		
-		$documentManager			
+		DocumentManager			
 			.on( 'pathDeleted.todo', function( event, deletedPath ) {
 				var todoPath = Paths.todoFile();
 				
