@@ -34,7 +34,7 @@ define( function() {
 	}
 	
 	// Reload settings when new project is loaded.
-	$( ProjectManager ).on( 'projectOpen.todo', function() {
+	ProjectManager.on( 'projectOpen.todo', function() {
 		projectRoot = ProjectManager.getProjectRoot().fullPath;
 	} );
 	
