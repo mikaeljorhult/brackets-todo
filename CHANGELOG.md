@@ -1,7 +1,8 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.8.1 - Unreleased
+## 0.8.1 - 2015-04-05
+* Use Brackets internal events dispatcher. Thanks to Pete Nykänen (@petetnt).
 * Use new MainViewManager for file change listeners. Thanks to Pete Nykänen (@petetnt).
 * Update to german translation. Thanks to Sebastian Herrmann (@herrherrmann).
 
