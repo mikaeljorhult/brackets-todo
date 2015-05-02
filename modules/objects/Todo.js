@@ -10,7 +10,8 @@ define( function( require ) {
 		doneRegExp = /^\[x\]/i,
 		issueRegExp = /#(\d+)/i,
 		mentionRegExp = /@([\w|-]+)/i,
-		labelRegExp = /--([\w|-]+)/gi;
+		labelRegExp = /--([\w|-]+)/gi,
+		tickRegExp = /`([^`]+)`/g;
 	
 	// Define todo object.
 	function Todo( todo ) {
@@ -151,7 +152,20 @@ define( function( require ) {
 		return comment;
 	}
 	
+	Todo.prototype._escapeBacktickedText = function( match, p1 ) {
+		var replacement = p1
+			.replace( /\&/g, '&amp;amp;' )
+			.replace( /\</g, '&amp;lt;' )
+			.replace( /\>/g, '&amp;gt;' );
+		return '`' + replacement + '`';
+	}
+	
 	Todo.prototype._stripHTML = function( comment ) {
+		// Escape ampersands and angle brackets
+		if ( tickRegExp.test( comment ) ) {
+			comment = comment.replace( tickRegExp, this._escapeBacktickedText );
+		}
+		
 		// Create container element.
 		var container = document.createElement( 'div' );
 		
