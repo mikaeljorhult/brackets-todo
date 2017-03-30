@@ -8,6 +8,7 @@ define( function( require ) {
 		MainViewManager = brackets.getModule( 'view/MainViewManager' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		FileUtils = brackets.getModule( 'file/FileUtils' ),
+        TemplateEngine = brackets.getModule( 'thirdparty/mustache/mustache' ),
 		
 		// Extension modules.
 		Defaults = require( 'modules/Defaults' ),
@@ -168,7 +169,7 @@ define( function( require ) {
 	return {
 		show: function( settings, callback ) {
 			// Compile dialog template.
-			var compiledTemplate = Mustache.render( settingsDialogTemplate, {
+			var compiledTemplate = TemplateEngine.render( settingsDialogTemplate, {
 				Strings: Strings
 			} );
 			

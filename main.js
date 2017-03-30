@@ -22,7 +22,8 @@ define( function( require, exports, module ) {
 		AppInit = brackets.getModule( 'utils/AppInit' ),
 		FileSystem = brackets.getModule( 'filesystem/FileSystem' ),
 		ExtensionUtils = brackets.getModule( 'utils/ExtensionUtils' ),
-		
+		TemplateEngine = brackets.getModule( 'thirdparty/mustache/mustache' ),
+
 		// Extension basics.
 		COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable',
 		
@@ -180,7 +181,7 @@ define( function( require, exports, module ) {
 	 */
 	function printTodo() {
 		var project = ( Settings.get().search.scope === 'project' ? true : false ),
-			resultsHTML = Mustache.render( todoResultsTemplate, {
+			resultsHTML = TemplateEngine.render( todoResultsTemplate, {
 				todos: renderTodo()
 			} );
 		
@@ -250,7 +251,7 @@ define( function( require, exports, module ) {
 	 * Render HTML for each file row. 
 	 */
 	function renderTodo() {
-		var resultsHTML = Mustache.render( todoRowTemplate, {
+		var resultsHTML = TemplateEngine.render( todoRowTemplate, {
 			files: setTodosVisible( sortTodos( filterTodosByTag( todos ) ) )
 		} );
 		
@@ -310,7 +311,7 @@ define( function( require, exports, module ) {
 		} );
 		
 		// Render and return toolbar.
-		return Mustache.render( todoToolbarTemplate, {
+		return TemplateEngine.render( todoToolbarTemplate, {
 			tags: tags,
 			strings: Strings,
 			imagesPath: require.toUrl( 'images/' )
@@ -419,7 +420,7 @@ define( function( require, exports, module ) {
 	
 	// Register panel and setup event listeners.
 	AppInit.appReady( function() {
-		var todoHTML = Mustache.render( todoPanelTemplate, {
+		var todoHTML = TemplateEngine.render( todoPanelTemplate, {
 				tools: renderTools(),
 				strings: Strings
 			} );
