@@ -11,6 +11,7 @@ define( function( require, exports, module ) {
 		it: true,
 		ru: true,
 		sv: true,
+		tr: true,
 		uk: true,
 		zh: true
 	};
