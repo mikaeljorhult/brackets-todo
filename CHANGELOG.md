@@ -1,10 +1,14 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.2 - Unreleased
+* Use Mustache module instead of deprecated global object.
+* Turkish translation. Thanks to Nazim Can Altinova (@canaltinova).
+
 ## 0.8.1 - 2015-04-05
 * Use Brackets internal events dispatcher. Thanks to Pete Nykänen (@petetnt).
 * Use new MainViewManager for file change listeners. Thanks to Pete Nykänen (@petetnt).
-* Update to german translation. Thanks to Sebastian Herrmann (@herrherrmann).
+* Update to German translation. Thanks to Sebastian Herrmann (@herrherrmann).
 
 ## 0.8.0 - 2014-10-11
 * Support for dark themes.
