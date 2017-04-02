@@ -494,10 +494,25 @@ define( function( require, exports, module ) {
 				$todoPanel.find( '.file.collapsed' )
 					.trigger( 'click' );
 			} )
-			.on( 'click', '.tags a', function() {
-				// Show or hide clicked tag.
-				var $this = $( this )
-					.toggleClass( 'visible' );
+			.on( 'click', '.tags a', function( event ) {
+				var $this = $(this);
+				
+				if ( !event.ctrlKey ) {
+					// Show or hide clicked tag.
+					$this.toggleClass( 'visible' );
+				} else {
+					var numberOfVisibleTags = $this.parent().children( '.visible' ).length;
+					
+					if ( ( $this.hasClass( 'visible' ) && numberOfVisibleTags === 1 ) || numberOfVisibleTags === 0 ) {
+						// Show all tags but this one.
+						$this.parent().children().addClass( 'visible' );
+						$this.removeClass( 'visible' );
+					} else {
+						// Hide all tags but this one.
+						$this.parent().children().removeClass( 'visible' );
+						$this.addClass( 'visible' );
+					}
+				}
 				
 				// Save names of hidden tags.
 				Tags.saveHidden( $.makeArray( $this.parent().children().not( '.visible' ).map( function() {
