@@ -1,29 +1,45 @@
 {
-	"name": "mikaeljorhult.brackets-todo",
-	"title": "Todo",
-	"description": "Display all TODO comments in current document or project.",
-	"homepage": "https://github.com/mikaeljorhult/brackets-todo",
-	"version": "0.8.2",
-	"author": "Mikael Jorhult <mikael@jorhult.se> (http://jorhult.se)",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/mikaeljorhult/brackets-todo"
-	},
-	"license": {
-		"type": "MIT",
-		"url": "http://mikaeljorhult.mit-license.org/"
-	},
-	"engines": {
-		"brackets": ">=1.1.0"
-	},
-	"i18n": [
-		"de", "en", "es", "fi", "fr", "gl", "it", "ru", "sv", "tr", "uk", "zh"
-	],
-	"devDependencies": {
-		"gulp": "^3.8.6",
-		"gulp-jscs": "^1.1.0",
-		"gulp-jshint": "^1.7.1",
-		"gulp-load-plugins": "^0.5.3",
-		"gulp-svg-sprites": "*"
-	}
+  "name": "mikaeljorhult.brackets-todo",
+  "title": "Todo",
+  "description": "Display all TODO comments in current document or project.",
+  "homepage": "https://github.com/mikaeljorhult/brackets-todo",
+  "version": "0.8.2",
+  "author": "Mikael Jorhult <mikael@jorhult.se> (http://jorhult.se)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikaeljorhult/brackets-todo"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "http://mikaeljorhult.mit-license.org/"
+  },
+  "engines": {
+    "brackets": ">=1.1.0"
+  },
+  "i18n": [
+    "de",
+    "en",
+    "es",
+    "fi",
+    "fr",
+    "gl",
+    "it",
+    "ru",
+    "sv",
+    "tr",
+    "uk",
+    "zh"
+  ],
+  "package-i18n": {
+    "sv": {
+      "description": "Visar samtliga TODO kommentarer i det aktiva dokumentet eller hela projektet."
+    }
+  },
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-jscs": "^1.1.0",
+    "gulp-jshint": "^1.7.1",
+    "gulp-load-plugins": "^0.5.3",
+    "gulp-svg-sprites": "*"
+  }
 }
