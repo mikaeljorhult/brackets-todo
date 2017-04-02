@@ -1,0 +1,20 @@
+{
+  "extends": "standard",
+  "env": {
+    "amd": true,
+    "jquery": true
+  },
+  "globals": {
+    "brackets": true
+  },
+  "plugins": [
+    "standard",
+    "promise"
+  ],
+  "rules": {
+    "semi": [
+      "error",
+      "always"
+    ]
+  }
+}
