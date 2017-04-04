@@ -35,6 +35,9 @@
       "description": "Visar samtliga TODO kommentarer i det aktiva dokumentet eller hela projektet."
     }
   },
+  "scripts": {
+    "test": "./node_modules/.bin/eslint . --ext .js"
+  },
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-standard": "^7.1.0",
