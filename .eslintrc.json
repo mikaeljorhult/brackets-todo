@@ -2,6 +2,7 @@
   "extends": "standard",
   "env": {
     "amd": true,
+    "browser": true,
     "jquery": true
   },
   "globals": {
