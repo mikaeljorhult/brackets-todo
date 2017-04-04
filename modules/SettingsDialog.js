@@ -77,6 +77,7 @@ define(function (require) {
 
     // Test regular expression.
     try {
+      /* eslint-disable */
       new RegExp(
         values.regex.prefix + 'TEST' +
         values.regex.suffix
