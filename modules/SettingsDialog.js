@@ -81,6 +81,7 @@ define(function (require) {
         values.regex.prefix + 'TEST' +
         values.regex.suffix
       );
+      /* eslint-enable */
     } catch (error) {
       validationObject.valid = false;
 
