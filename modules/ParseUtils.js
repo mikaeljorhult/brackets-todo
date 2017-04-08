@@ -1,14 +1,11 @@
 define(function (require) {
   'use strict';
 
-  // Get dependencies.
-  var StringUtils = brackets.getModule('utils/StringUtils');
-
-    // Extension modules.
+  // Extension modules.
   var Files = require('modules/Files');
-  var Todo = require('modules/objects/Todo');
+  var Parser = require('modules/Parser');
 
-    // Variables.
+  // Variables.
   var expression;
 
   /**
@@ -28,7 +25,7 @@ define(function (require) {
       text = currentDocument.getText();
 
       // Parse document.
-      documentTodos = parseText(text, StringUtils.getLines(text));
+      documentTodos = parseText(text);
 
       // Check if file has already been added to array.
       for (i = 0, length = todos.length; i < length; i++) {
@@ -61,21 +58,11 @@ define(function (require) {
   /**
    * Go through text and search for matches.
    */
-  function parseText (text, lines) {
-    var matchArray;
+  function parseText (text) {
     var documentTodos = [];
 
     if (expression !== undefined) {
-      // Go through each match in current document.
-      while ((matchArray = expression.exec(text)) !== null) {
-        // Add match to array.
-        documentTodos.push(new Todo({
-          comment: matchArray[2],
-          tag: matchArray[1],
-          line: StringUtils.offsetToLineNum(lines, matchArray.index) + 1,
-          char: matchArray.index - text.lastIndexOf('\n', matchArray.index) - 1
-        }));
-      }
+      documentTodos = Parser.parse(text, expression);
     }
 
     // Return found comments.
