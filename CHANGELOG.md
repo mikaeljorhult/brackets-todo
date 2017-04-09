@@ -1,7 +1,11 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.8.2 - Unreleased
+## 0.8.3 - Unreleased
+* ESLint and Travis CI for linting code.
+* Swedish extension description.
+
+## 0.8.2 - 2017-04-01
 * Use Mustache module instead of deprecated global object.
 * Turkish translation. Thanks to Nazim Can Altinova (@canaltinova).
 
