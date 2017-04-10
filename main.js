@@ -23,6 +23,8 @@ define(function (require, exports, module) {
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
   var TemplateEngine = brackets.getModule('thirdparty/mustache/mustache');
+  var React = brackets.getModule('thirdparty/react');
+  var ReactDOM = brackets.getModule('thirdparty/react-dom');
 
   // Extension basics.
   var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable';
@@ -420,13 +422,11 @@ define(function (require, exports, module) {
 
   // Register panel and setup event listeners.
   AppInit.appReady(function () {
-    var todoHTML = TemplateEngine.render(todoPanelTemplate, {
-      tools: renderTools(),
-      strings: Strings
-    });
+    var rootElement = React.createElement('div', {}, '');
 
     // Create and cache todo panel.
-    WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoHTML), 100);
+    WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoPanelTemplate), 100);
+    ReactDOM.render(rootElement, document.getElementById('brackets-todo'));
     $todoPanel = $('#brackets-todo');
 
     // Close panel when close button is clicked.
