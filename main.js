@@ -39,8 +39,8 @@ define(function (require, exports, module) {
   // Mustache templates.
   var todoPanelTemplate = require('text!html/panel.html');
 
-  // React.
-  var viewToolbar = require('modules/components/Toolbar');
+  // Components.
+  var ToolbarComponent = require('modules/components/Toolbar');
 
   // Setup extension.
   var todos = [];
@@ -234,7 +234,7 @@ define(function (require, exports, module) {
   // Register panel and setup event listeners.
   AppInit.appReady(function () {
     rootElement = React.createElement('div', {},
-      React.createElement(viewToolbar)
+      React.createElement(ToolbarComponent)
     );
 
     // Create and cache todo panel.

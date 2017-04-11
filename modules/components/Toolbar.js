@@ -9,6 +9,7 @@ define(function (require) {
 
   // Components.
   var CloseButton = require('modules/components/CloseButton');
+  var TagList = require('modules/components/TagList');
 
   // Return component.
   return React.createClass({
@@ -17,7 +18,7 @@ define(function (require) {
         React.createElement('div', {className: 'toolbar simple-toolbar-layout'},
           React.createElement('div', {className: 'title'}, Strings.EXTENSION_NAME),
           React.createElement('div', {className: 'tools'},
-            React.createElement('div', {className: 'tags'}, 'Tags'),
+            React.createElement(TagList, {tags: this.props.tags}),
             React.createElement('div', {className: 'settings'}, 'Settings')
           ),
           React.createElement(CloseButton)
