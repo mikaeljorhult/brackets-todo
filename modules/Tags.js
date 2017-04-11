@@ -5,7 +5,7 @@ define(function (require) {
   var Events = require('modules/Events');
   var Tag = require('modules/objects/Tag');
 
-    // Variables.
+  // Variables.
   var tags = [];
   var hiddenTags = localStorage.getItem('hiddenTags') || [];
 

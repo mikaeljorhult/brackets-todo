@@ -18,18 +18,14 @@ define(function (require, exports, module) {
   var MainViewManager = brackets.getModule('view/MainViewManager');
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
-  var Resizer = brackets.getModule('utils/Resizer');
   var AppInit = brackets.getModule('utils/AppInit');
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
-  var TemplateEngine = brackets.getModule('thirdparty/mustache/mustache');
   var React = brackets.getModule('thirdparty/react');
   var ReactDOM = brackets.getModule('thirdparty/react-dom');
 
-  // Extension basics.
-  var COMMAND_ID = 'mikaeljorhult.bracketsTodo.enable';
-
   // Todo modules.
+  var App = require('modules/App');
   var Events = require('modules/Events');
   var Files = require('modules/Files');
   var FileManager = require('modules/FileManager');
@@ -42,72 +38,30 @@ define(function (require, exports, module) {
 
   // Mustache templates.
   var todoPanelTemplate = require('text!html/panel.html');
-  var todoResultsTemplate = require('text!html/results.html');
-  var todoRowTemplate = require('text!html/row.html');
-  var todoToolbarTemplate = require('text!html/tools.html');
+
+  // React.
+  var viewToolbar = require('modules/components/Toolbar');
 
   // Setup extension.
   var todos = [];
   var $todoPanel;
   var $todoIcon = $('<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>');
+  var rootElement;
 
   // Get view menu.
   var menu = Menus.getMenu(Menus.AppMenuBar.VIEW_MENU);
 
   // Register extension.
-  CommandManager.register(Strings.EXTENSION_NAME, COMMAND_ID, toggleTodo);
+  CommandManager.register(Strings.EXTENSION_NAME, App.COMMAND_ID, App.toggle);
 
   // Add command to menu.
   if (menu !== undefined) {
     menu.addMenuDivider();
-    menu.addMenuItem(COMMAND_ID, 'Ctrl-Alt-T');
+    menu.addMenuItem(App.COMMAND_ID, 'Ctrl-Alt-T');
   }
 
   // Load stylesheet.
   ExtensionUtils.loadStyleSheet(module, 'todo.css');
-
-  /**
-   * Set state of extension.
-   */
-  function toggleTodo () {
-    var enabled = SettingsManager.isExtensionEnabled();
-
-    enableTodo(!enabled);
-  }
-
-  /**
-   * Initialize extension.
-   */
-  function enableTodo (enabled, startup) {
-    // Should extension be enabled or not?
-    if (enabled) {
-      // No need to load settings on startup as it's done on project load.
-      if (startup === true) {
-        // Only display panel.
-        Resizer.show($todoPanel);
-      } else {
-        // Load settings and then show panel.
-        SettingsManager.loadSettings(function () {
-          // Show panel.
-          Resizer.show($todoPanel);
-        });
-      }
-
-      $todoIcon.addClass('active');
-    } else {
-      // Hide panel.
-      Resizer.hide($todoPanel);
-
-      // Remove active class from icon.
-      $todoIcon.removeClass('active');
-    }
-
-    // Save enabled state.
-    SettingsManager.setExtensionEnabled(enabled);
-
-    // Mark menu item as enabled/disabled.
-    CommandManager.get(COMMAND_ID).setChecked(enabled);
-  }
 
   /**
    * Main functionality: Find and show comments.
@@ -179,148 +133,6 @@ define(function (require, exports, module) {
   }
 
   /**
-   * Take found todos and add them to panel.
-   */
-  function printTodo () {
-    var project = Settings.get().search.scope === 'project';
-    var resultsHTML = TemplateEngine.render(todoResultsTemplate, {
-      todos: renderTodo()
-    });
-
-    resultsHTML = $(resultsHTML);
-
-    // Show file rows if project search scope.
-    if (project) {
-      $todoPanel.removeClass('current');
-    } else {
-      $todoPanel.addClass('current');
-    }
-
-    // Empty container element and apply results template.
-    $todoPanel.find('.table-container')
-      .empty()
-      .append(resultsHTML);
-  }
-
-  /**
-   * Filter todos by tag.
-   */
-  function filterTodosByTag (beforeFilter) {
-    // Bail if no files are available.
-    if (beforeFilter.length === 0) {
-      return beforeFilter;
-    }
-
-    // Go through each file and only return those with visible comments.
-    return beforeFilter.filter(function (file) {
-      return file.hasVisibleTodos();
-    });
-  }
-
-  function sortTodos (beforeFilter) {
-    var sortDone = Settings.get().sort.done;
-
-    // Go through each file for tasks.
-    $.each(todos, function (index, file) {
-      var todoArray = file.todos();
-
-      // Sort tasks by done status if enabled in settings.
-      if (sortDone) {
-        // Replace old todos with sorted array.
-        file.todos(todoArray.sort(function (a, b) {
-          // Use line to differentiate between to tasks with same status.
-          if (a.isDone() === b.isDone()) {
-            return (a.line() < b.line() ? -1 : 1);
-          } else {
-            // One of the tasks are done. Check which one.
-            if (a.isDone()) {
-              return 1;
-            } else if (b.isDone()) {
-              return -1;
-            }
-          }
-
-          // Will not ever happen.
-          return 0;
-        }));
-      }
-    });
-
-    return beforeFilter;
-  }
-
-  /**
-   * Render HTML for each file row.
-   */
-  function renderTodo () {
-    var resultsHTML = TemplateEngine.render(todoRowTemplate, {
-      files: setTodosVisible(sortTodos(filterTodosByTag(todos)))
-    });
-
-    return resultsHTML;
-  }
-
-  /**
-   * Keep file visibility as before after file changed.
-   */
-  function setTodosVisible (todos) {
-    // Go through each file and expand where file was last expanded.
-    $.each(todos, function (index, file) {
-      file.isExpanded(Files.isExpanded(file.path()));
-    });
-
-    return todos;
-  }
-
-  /**
-   * Count number of occurences of each tag.
-   */
-  function countByTag (tag) {
-    var count = 0;
-
-    // Go through each file.
-    $.each(todos, function (index, file) {
-      // Go through each comment.
-      $.each(file.todos(), function (index, comment) {
-        // If comment is of requested type, add one to count.
-        if (comment.tag() === tag) {
-          count++;
-        }
-      });
-    });
-
-    return count;
-  }
-
-  /**
-   * Update toolbar.
-   */
-  function updateTools () {
-    // Render toolbar and replace old element.
-    $todoPanel.find('.tools')
-      .html(renderTools());
-  }
-
-  /**
-   * Render toolbar.
-   */
-  function renderTools () {
-    var tags = SettingsManager.getTags();
-
-    // Count number of occurences of each tags.
-    $.each(tags, function (index, tag) {
-      tag.count(countByTag(tag.tag()));
-    });
-
-    // Render and return toolbar.
-    return TemplateEngine.render(todoToolbarTemplate, {
-      tags: tags,
-      strings: Strings,
-      imagesPath: require.toUrl('images/')
-    });
-  }
-
-  /**
    * Listen for save or refresh and look for todos when needed.
    */
   function registerListeners () {
@@ -334,8 +146,7 @@ define(function (require, exports, module) {
     });
 
     Events.subscribe('todos:updated', function () {
-      updateTools();
-      printTodo();
+      ReactDOM.render(rootElement, document.getElementById('brackets-todo'));
     });
 
     // Listeners for file changes.
@@ -422,7 +233,9 @@ define(function (require, exports, module) {
 
   // Register panel and setup event listeners.
   AppInit.appReady(function () {
-    var rootElement = React.createElement('div', {}, '');
+    rootElement = React.createElement('div', {},
+      React.createElement(viewToolbar)
+    );
 
     // Create and cache todo panel.
     WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoPanelTemplate), 100);
@@ -431,9 +244,6 @@ define(function (require, exports, module) {
 
     // Close panel when close button is clicked.
     $todoPanel
-      .on('click', '.close', function () {
-        enableTodo(false);
-      })
       .on('click', '.indicator', function () {
         var todoFilePath = Paths.todoFile();
 
@@ -445,7 +255,7 @@ define(function (require, exports, module) {
 
           // Check if the todo file is present.
           if (entry !== undefined) {
-            // Open .todo filein editor.
+            // Open .todo file in editor.
             CommandManager.execute(Commands.FILE_OPEN, {fullPath: todoFilePath}).done(function () {
               // Set focus on editor.
               EditorManager.focusEditor();
@@ -517,12 +327,12 @@ define(function (require, exports, module) {
 
     // Add listener for toolbar icon..
     $todoIcon.click(function () {
-      CommandManager.execute(COMMAND_ID);
+      CommandManager.execute(App.COMMAND_ID);
     }).appendTo('#main-toolbar .buttons');
 
     // Enable extension if loaded last time.
     if (SettingsManager.isExtensionEnabled()) {
-      enableTodo(true, true);
+      App.enable(true, true);
     }
   });
 });
