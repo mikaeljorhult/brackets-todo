@@ -5,8 +5,10 @@ define(function (require) {
   var React = brackets.getModule('thirdparty/react');
 
   // Extension modules.
-  var App = require('modules/App');
   var Strings = require('modules/Strings');
+
+  // Components.
+  var CloseButton = require('modules/components/CloseButton');
 
   // Return component.
   return React.createClass({
@@ -14,12 +16,11 @@ define(function (require) {
       return (
         React.createElement('div', {className: 'toolbar simple-toolbar-layout'},
           React.createElement('div', {className: 'title'}, Strings.EXTENSION_NAME),
-          React.createElement('a', {
-            className: 'close',
-            onClick: function () {
-              App.enable(false);
-            }
-          }, '\u00D7')
+          React.createElement('div', {className: 'tools'},
+            React.createElement('div', {className: 'tags'}, 'Tags'),
+            React.createElement('div', {className: 'settings'}, 'Settings')
+          ),
+          React.createElement(CloseButton)
         )
       );
     }
