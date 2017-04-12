@@ -2,9 +2,7 @@ define(function (require) {
   'use strict';
 
   // Extension modules.
-  var Events = require('modules/Events');
   var Settings = require('modules/Settings');
-  var Tags = require('modules/Tags');
 
   // Variables.
   var doneRegExp = /^\[x\]/i;
@@ -14,8 +12,6 @@ define(function (require) {
 
   // Define todo object.
   function Todo (todo) {
-    var todoObject = this;
-
     // Array of labels.
     this._labels = [];
 
@@ -32,17 +28,6 @@ define(function (require) {
       this._char = '';
       this._done = false;
     }
-
-    // Check if tag is visible.
-    this.isVisible(Tags.isVisible(todo.tag));
-
-    // Get tag color.
-    this.color(Tags.getColor(todo.tag));
-
-    // Subscribe to changes in tag visibility.
-    Events.subscribe('tags:visible', function (hiddenTags) {
-      todoObject._handleVisibility(hiddenTags);
-    });
   }
 
   // Methods handling tag.
