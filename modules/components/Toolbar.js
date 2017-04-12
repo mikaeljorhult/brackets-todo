@@ -9,6 +9,7 @@ define(function (require) {
 
   // Components.
   var CloseButton = require('modules/components/CloseButton');
+  var Icons = require('modules/components/Icons');
   var TagList = require('modules/components/TagList');
 
   // Return component.
@@ -19,7 +20,7 @@ define(function (require) {
           React.createElement('div', {className: 'title'}, Strings.EXTENSION_NAME),
           React.createElement('div', {className: 'tools'},
             React.createElement(TagList, {tags: this.props.tags}),
-            React.createElement('div', {className: 'settings'}, 'Settings')
+            React.createElement(Icons)
           ),
           React.createElement(CloseButton)
         )

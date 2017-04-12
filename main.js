@@ -245,28 +245,6 @@ define(function (require, exports, module) {
 
     // Close panel when close button is clicked.
     $todoPanel
-      .on('click', '.indicator', function () {
-        var todoFilePath = Paths.todoFile();
-
-        // Check if there is a file with the name .todo.
-        FileSystem.resolve(todoFilePath, function (error, entry) {
-          if (error) {
-            console.log(error.stack);
-          }
-
-          // Check if the todo file is present.
-          if (entry !== undefined) {
-            // Open .todo file in editor.
-            CommandManager.execute(Commands.FILE_OPEN, {fullPath: todoFilePath}).done(function () {
-              // Set focus on editor.
-              EditorManager.focusEditor();
-            });
-          } else {
-            // Show settings dialog.
-            SettingsManager.showSettingsDialog();
-          }
-        });
-      })
       .on('click', 'a[ rel="external" ]', function () {
         // Open link in default browser.
         NativeApp.openURLInDefaultBrowser($(this).data('href'));
@@ -298,16 +276,6 @@ define(function (require, exports, module) {
         });
 
         return false;
-      })
-      .on('click', '.collapse-all', function () {
-        // Click all expanded files to collapse them.
-        $todoPanel.find('.file.expanded')
-          .trigger('click');
-      })
-      .on('click', '.expand-all', function () {
-        // Click all collapsed files to expand them.
-        $todoPanel.find('.file.collapsed')
-          .trigger('click');
       })
       .on('click', '.tags a', function () {
         // Show or hide clicked tag.
