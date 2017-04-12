@@ -146,6 +146,12 @@ define(function (require, exports, module) {
     });
 
     Events.subscribe('todos:updated', function () {
+      rootElement = React.createElement('div', {},
+        React.createElement(ToolbarComponent, {
+          tags: SettingsManager.getTags()
+        })
+      );
+
       ReactDOM.render(rootElement, document.getElementById('brackets-todo'));
     });
 
@@ -233,13 +239,8 @@ define(function (require, exports, module) {
 
   // Register panel and setup event listeners.
   AppInit.appReady(function () {
-    rootElement = React.createElement('div', {},
-      React.createElement(ToolbarComponent)
-    );
-
     // Create and cache todo panel.
     WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoPanelTemplate), 100);
-    ReactDOM.render(rootElement, document.getElementById('brackets-todo'));
     $todoPanel = $('#brackets-todo');
 
     // Close panel when close button is clicked.

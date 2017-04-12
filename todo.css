@@ -84,6 +84,7 @@
 	display: inline-block;
 	margin-left: .25em;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .brackets-todo .icons a {

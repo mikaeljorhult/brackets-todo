@@ -3,7 +3,6 @@ define(function (require) {
 
   // Extension modules.
   var Events = require('modules/Events');
-  var Tag = require('modules/objects/Tag');
 
   // Variables.
   var tags = [];
@@ -23,38 +22,16 @@ define(function (require) {
         visible: true
       };
 
-      // Check if tag is an object or string.
-      if (typeof tag === 'object') {
-        // Get tag and color from object.
-        newTag = {
-          tag: tag.name,
-          name: cleanTagName(tag.name),
-          color: tag.color
-        };
-      } else {
-        // Use string value as tag and name.
-        newTag = {
-          tag: tag,
-          name: cleanTagName(tag)
-        };
-      }
+      var value = typeof tag === 'object' ? tag.name : tag;
+
+      newTag.key = cleanTagName(value);
+      newTag.tag = value;
+      newTag.name = cleanTagName(value);
+      newTag.color = tag.color || undefined;
 
       // Add tag to array af tags.
-      tags.push(create(newTag));
+      tags.push(newTag);
     });
-  }
-
-  /**
-   * Create tag from object.
-   */
-  function create (tag) {
-    var newTag = new Tag(tag);
-
-    // Set visibility state for tag.
-    newTag.isVisible(hiddenTags.indexOf(newTag.tag()) === -1);
-
-    // Return created tag.
-    return newTag;
   }
 
   /**
@@ -65,7 +42,7 @@ define(function (require) {
     if (typeof property === 'string') {
       // Return array of only tags of tags array.
       return tags.map(function (tag) {
-        return tag[property]();
+        return tag[property];
       });
     }
 
@@ -105,7 +82,7 @@ define(function (require) {
     if (onlyNames === true) {
       // Return array of only tags of tags array.
       return filteredTags.map(function (tag) {
-        return tag.tag();
+        return tag.tag;
       });
     }
 
@@ -122,7 +99,7 @@ define(function (require) {
     // Go through all tags to find requested one.
     for (tag in tags) {
       // Return visibility state of tag if found in array.
-      if (tags[tag].tag() === cleanTagName(tagName)) {
+      if (tags[tag].tag === cleanTagName(tagName)) {
         return tags[tag].isVisible();
       }
     }
@@ -151,7 +128,7 @@ define(function (require) {
     // Go through all tags to find requested one.
     for (tag in tags) {
       // Return visibility state of tag if found in array.
-      if (tags[tag].tag() === cleanTagName(tagName)) {
+      if (tags[tag].tag === cleanTagName(tagName)) {
         return tags[tag].color();
       }
     }
