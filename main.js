@@ -40,6 +40,7 @@ define(function (require, exports, module) {
   var todoPanelTemplate = require('text!html/panel.html');
 
   // Components.
+  var ResultsTableComponent = require('modules/components/ResultsTable');
   var ToolbarComponent = require('modules/components/Toolbar');
 
   // Setup extension.
@@ -143,8 +144,10 @@ define(function (require, exports, module) {
     Events.subscribe('todos:updated', function () {
       rootElement = React.createElement('div', {},
         React.createElement(ToolbarComponent, {
-          files: Files.get(),
           tags: Tags.get()
+        }),
+        React.createElement(ResultsTableComponent, {
+          files: Files.get()
         })
       );
 
