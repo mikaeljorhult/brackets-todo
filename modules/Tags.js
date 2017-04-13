@@ -32,7 +32,7 @@ define(function (require) {
   /**
    * Return array of all available tags.
    */
-  function getAll (property) {
+  function get (property) {
     // Return only names if requested.
     if (typeof property === 'string') {
       // Return array of only tags of tags array.
@@ -55,6 +55,6 @@ define(function (require) {
   // Return global methods.
   return {
     init: init,
-    getAll: getAll
+    get: get
   };
 });

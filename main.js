@@ -106,11 +106,6 @@ define(function (require, exports, module) {
 
         return result.promise();
       }).always(function () {
-        // Add file visibility state.
-        $.each(todoArray, function (index, file) {
-          file.isExpanded(Files.isExpanded(file.path()));
-        });
-
         // Store array of todos.
         setTodos(todoArray);
 
@@ -148,7 +143,8 @@ define(function (require, exports, module) {
     Events.subscribe('todos:updated', function () {
       rootElement = React.createElement('div', {},
         React.createElement(ToolbarComponent, {
-          tags: SettingsManager.getTags()
+          files: Files.get(),
+          tags: Tags.get()
         })
       );
 
@@ -256,11 +252,6 @@ define(function (require, exports, module) {
         $(this)
           .toggleClass('expanded')
           .toggleClass('collapsed');
-
-        // Store array of expanded files.
-        Files.saveExpanded($.makeArray($todoPanel.find('.file.expanded').map(function () {
-          return $(this).data('file');
-        })));
       })
       .on('click', '.comment', function () {
         var $this = $(this);
@@ -279,13 +270,7 @@ define(function (require, exports, module) {
       })
       .on('click', '.tags a', function () {
         // Show or hide clicked tag.
-        var $this = $(this)
-          .toggleClass('visible');
-
-        // Save names of hidden tags.
-        Tags.saveHidden($.makeArray($this.parent().children().not('.visible').map(function () {
-          return $(this).data('name');
-        })));
+        $(this).toggleClass('visible');
 
         // Update list of comments.
         Events.publish('todos:updated');

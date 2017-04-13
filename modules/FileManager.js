@@ -6,7 +6,7 @@ define(function (require, exports) {
   var LanguageManager = brackets.getModule('language/LanguageManager');
   var ProjectManager = brackets.getModule('project/ProjectManager');
 
-    // Todo modules.
+  // Todo modules.
   var Paths = require('modules/Paths');
   var Settings = require('modules/Settings');
 

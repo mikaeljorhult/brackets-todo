@@ -1,54 +1,22 @@
 define(function (require) {
   'use strict';
 
-  // Extension modules.
-  var File = require('modules/objects/File');
+  // Get dependencies.
+  var ProjectManager = brackets.getModule('project/ProjectManager');
 
-  // Variables
-  var scope;
-  var expandedFiles = JSON.parse(localStorage.getItem('expandedFiles')) || [];
+  // Variables.
+  var files = [];
 
-  /**
-   * Initialize tags by building array of tag objects.
-   */
-  function init (searchScope) {
-    // Store search scope.
-    scope = searchScope;
+  function init () {
+
   }
 
-  /**
-   * Create new file.
-   */
-  function create () {
-    return new File();
+  function get () {
+    return files;
   }
 
-  /**
-   * Return if file should be expanded or not.
-   */
-  function isExpanded (path) {
-    // Return expanded state.
-    return (scope === 'project' ? expandedFiles.indexOf(path) > -1 : true);
-  }
-
-  /**
-   * Save paths to expanded files.
-   */
-  function saveExpanded (expanded) {
-    // Save in session.
-    expandedFiles = expanded;
-
-    // Save in persitent storage.
-    localStorage.setItem('expandedFiles', JSON.stringify(expanded));
-  }
-
-  // Return global methods.
   return {
     init: init,
-
-    create: create,
-
-    isExpanded: isExpanded,
-    saveExpanded: saveExpanded
+    get: get
   };
 });

@@ -2,7 +2,6 @@ define(function (require) {
   'use strict';
 
   // Extension modules.
-  var Files = require('modules/Files');
   var Parser = require('modules/Parser');
 
   // Variables.
@@ -29,7 +28,7 @@ define(function (require) {
 
       // Check if file has already been added to array.
       for (i = 0, length = todos.length; i < length; i++) {
-        if (todos[i].path() === fileToMatch) {
+        if (todos[i].path === fileToMatch) {
           // File found in array, store index.
           index = i;
           break;
@@ -40,13 +39,13 @@ define(function (require) {
       if (documentTodos.length > 0) {
         // Create object for new entry in array if none found.
         if (index === -1) {
-          todos.push(Files.create());
+          todos.push({});
           index = length;
         }
 
         // Get any matches and merge with previously found comments.
-        todos[index].path(currentDocument.file.fullPath);
-        todos[index].todos(documentTodos);
+        todos[index].path = currentDocument.file.fullPath;
+        todos[index].todos = documentTodos;
       } else if (index > -1) {
         todos.splice(index, 1);
       }
@@ -93,7 +92,7 @@ define(function (require) {
 
     // Check if file has already been added to array.
     for (i = 0, length = todos.length; i < length; i++) {
-      if (todos[i].path() === path) {
+      if (todos[i].path === path) {
         // File found in array, store index.
         index = i;
         break;

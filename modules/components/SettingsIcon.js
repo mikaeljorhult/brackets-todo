@@ -30,7 +30,7 @@ define(function (require) {
             // Check if there is a file with the name .todo.
             FileSystem.resolve(todoFilePath, function (error, entry) {
               if (error) {
-                console.log(error.stack);
+                console.log(error);
               }
 
               // Check if the .todo file is present.

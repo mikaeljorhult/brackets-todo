@@ -128,7 +128,7 @@ define(function (require) {
   function setupRegExp () {
     // Setup regular expression.
     ParseUtils.setExpression(new RegExp(
-      settings.regex.prefix + Tags.getAll('regexp').join('|') + settings.regex.suffix,
+      settings.regex.prefix + Tags.get('regexp').join('|') + settings.regex.suffix,
       'g' + (settings.case !== false ? '' : 'i')
     ));
   }
@@ -170,7 +170,7 @@ define(function (require) {
 
     // APIs about visible tag.
     isTagVisible: Tags.isVisible,
-    getTags: Tags.getAll,
+    getTags: Tags.get,
 
     // APIs about extension.
     isExtensionEnabled: isExtensionEnabled,
