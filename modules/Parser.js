@@ -1,7 +1,5 @@
-define(function (require) {
+define(function () {
   'use strict';
-
-  var Todo = require('modules/objects/Todo');
 
   /**
    * Go through text and search for matches.
@@ -13,12 +11,12 @@ define(function (require) {
     // Go through each match in current document.
     while ((matches = expression.exec(text)) !== null) {
       // Add match to array.
-      todos.push(new Todo({
-        comment: matches[2],
+      todos.push({
         tag: matches[1],
+        comment: matches[2],
         line: text.substr(0, matches.index).split('\n').length,
         char: matches.index - text.lastIndexOf('\n', matches.index) - 1
-      }));
+      });
     }
 
     // Return found comments.
