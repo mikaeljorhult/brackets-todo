@@ -103,14 +103,14 @@ define(function (require) {
   }
 
   /**
-   * Get the regular epression to use in parsing.
+   * Get the regular expression to use in parsing.
    */
   function getExpression () {
     return expression;
   }
 
   /**
-   * Set the regular epression to use in parsing.
+   * Set the regular expression to use in parsing.
    */
   function setExpression (newExpression) {
     expression = newExpression;

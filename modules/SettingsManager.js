@@ -7,7 +7,7 @@ define(function (require) {
   var PreferencesManager = brackets.getModule('preferences/PreferencesManager');
   var ProjectManager = brackets.getModule('project/ProjectManager');
 
-    // Extension modules.
+  // Extension modules.
   var Defaults = require('modules/Defaults');
   var Events = require('modules/Events');
   var Files = require('modules/Files');
@@ -16,10 +16,10 @@ define(function (require) {
   var SettingsDialog = require('modules/SettingsDialog');
   var Tags = require('modules/Tags');
 
-    // Preferences.
+  // Preferences.
   var preferences = PreferencesManager.getExtensionPrefs('mikaeljorhult.bracketsTodo');
 
-    // Variables.
+  // Variables.
   var settings;
 
   // Define preferences.
@@ -47,7 +47,7 @@ define(function (require) {
       Files.init(settings.search.scope);
 
       // Build regular expression.
-      setupRegExp();
+      settings.expression = setupRegExp();
 
       // Publish event.
       Events.publish('settings:changed', [settings]);
@@ -127,10 +127,10 @@ define(function (require) {
 
   function setupRegExp () {
     // Setup regular expression.
-    ParseUtils.setExpression(new RegExp(
-      settings.regex.prefix + Tags.get('regexp').join('|') + settings.regex.suffix,
+    return new RegExp(
+      settings.regex.prefix + Tags.get().map(function (tag) { return tag.tag; }).join('|') + settings.regex.suffix,
       'g' + (settings.case !== false ? '' : 'i')
-    ));
+    );
   }
 
   /**
@@ -169,7 +169,6 @@ define(function (require) {
     showSettingsDialog: showSettingsDialog,
 
     // APIs about visible tag.
-    isTagVisible: Tags.isVisible,
     getTags: Tags.get,
 
     // APIs about extension.
