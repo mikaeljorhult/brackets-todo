@@ -8,7 +8,7 @@ define(function () {
   };
   var defaultSettings = {
     regex: {
-      prefix: '(?:<!--|\\/\\*|\\/\\/|#) *@?(',
+      prefix: '(?:<!--|\\/\\*|\\/\\/|#|--) *@?(',
       suffix: '):? *(.*?) ?(?=-->|\\*/|\\n|$)'
     },
     tags: ['TODO', 'NOTE', 'FIX ?ME', 'CHANGES', 'FUTURE'],
