@@ -12,8 +12,6 @@ define(function (require, exports, module) {
   var Menus = brackets.getModule('command/Menus');
   var NativeApp = brackets.getModule('utils/NativeApp');
   var CommandManager = brackets.getModule('command/CommandManager');
-  var Commands = brackets.getModule('command/Commands');
-  var EditorManager = brackets.getModule('editor/EditorManager');
   var MainViewManager = brackets.getModule('view/MainViewManager');
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
@@ -178,21 +176,6 @@ define(function (require, exports, module) {
         $(this)
           .toggleClass('expanded')
           .toggleClass('collapsed');
-      })
-      .on('click', '.comment', function () {
-        var $this = $(this);
-
-        // Open file that todo originate from.
-        CommandManager.execute(Commands.FILE_OPEN, {fullPath: $this.parents('.file').data('file')}).done(function () {
-          // Set cursor position at start of todo.
-          EditorManager.getCurrentFullEditor()
-            .setCursorPos($this.data('line') - 1, $this.data('char'), true);
-
-          // Set focus on editor.
-          MainViewManager.focusActivePane();
-        });
-
-        return false;
       })
       .on('click', '.tags a', function () {
         // Show or hide clicked tag.

@@ -4,7 +4,7 @@ define(function () {
   /**
    * Go through text and search for matches.
    */
-  function parse (text, expression, file) {
+  function parse (text, expression, path) {
     var matches;
     var todos = [];
 
@@ -15,11 +15,12 @@ define(function () {
         tag: matches[1],
         comment: matches[2],
         line: text.substr(0, matches.index).split('\n').length,
-        char: matches.index - text.lastIndexOf('\n', matches.index) - 1
+        char: matches.index - text.lastIndexOf('\n', matches.index) - 1,
+        path: path
       };
 
       // Assign key based on file name as well as line and column numbers.
-      todo.key = file + ':' + todo.line + ':' + todo.char;
+      todo.key = path + ':' + todo.line + ':' + todo.char;
 
       // Add match to array.
       todos.push(todo);

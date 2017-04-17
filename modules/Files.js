@@ -45,7 +45,7 @@ define(function (require) {
         }
 
         // Get todos from file.
-        file.todos = Parser.parse(data, expression, file.name);
+        file.todos = Parser.parse(data, expression, file.file.fullPath);
 
         // Move on to next file.
         result.resolve();
