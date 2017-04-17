@@ -14,7 +14,7 @@ define(function (require) {
   var Strings = require('modules/Strings');
 
   // Icons.
-  var iconCog = require('text!images/svg/cog.svg');
+  var iconCog = require('text!images/cog.svg');
 
   // Return component.
   return React.createClass({
