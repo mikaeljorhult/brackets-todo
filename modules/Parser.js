@@ -1,6 +1,9 @@
 define(function () {
   'use strict';
 
+  // Variables.
+  var doneRegExp = /^\[x\]/i;
+
   /**
    * Go through text and search for matches.
    */
@@ -21,6 +24,10 @@ define(function () {
 
       // Assign key based on file name as well as line and column numbers.
       todo.key = path + ':' + todo.line + ':' + todo.char;
+
+      // Set done status and remove it from comment text.
+      todo.done = doneRegExp.test(todo.comment);
+      todo.comment = todo.comment.replace(doneRegExp, '');
 
       // Add match to array.
       todos.push(todo);
