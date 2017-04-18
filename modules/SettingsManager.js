@@ -69,7 +69,7 @@ define(function (require) {
     // Check if .todo exists in current project.
     fileEntry.exists(function (error, exists) {
       if (error) {
-        console.log(error.stack);
+        console.log(error);
       }
 
       // Only load settings from .todo if it exists.
@@ -166,9 +166,6 @@ define(function (require) {
     // APIs about settings.
     loadSettings: loadSettings,
     showSettingsDialog: showSettingsDialog,
-
-    // APIs about visible tag.
-    getTags: Tags.get,
 
     // APIs about extension.
     isExtensionEnabled: isExtensionEnabled,
