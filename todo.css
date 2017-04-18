@@ -1,3 +1,15 @@
+/*--- RESIZABLE ---*/
+.brackets-todo {
+	padding-bottom: 1rem;
+}
+
+.brackets-todo-container,
+.brackets-todo-container > div,
+.brackets-todo-container .table-container {
+	height: 100%;
+}
+
+/*--- TABLES ---*/
 .brackets-todo table {
 	width: 100%;
 	position: relative;

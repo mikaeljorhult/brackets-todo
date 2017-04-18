@@ -11,8 +11,10 @@ define(function (require) {
   return React.createClass({
     render: function () {
       return (
-        React.createElement('table', {className: 'table table-condensed table-striped'},
-          React.createElement(FileList, {files: this.props.files})
+        React.createElement('div', {className: 'table-container resizable-content'},
+          React.createElement('table', {className: 'table table-condensed table-striped'},
+            React.createElement(FileList, {files: this.props.files})
+          )
         )
       );
     }

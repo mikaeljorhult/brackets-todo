@@ -72,7 +72,7 @@ define(function (require, exports, module) {
         })
       );
 
-      ReactDOM.render(rootElement, document.getElementById('brackets-todo'));
+      ReactDOM.render(rootElement, document.getElementById('brackets-todo-container'));
     });
 
     // Listeners for file changes.
