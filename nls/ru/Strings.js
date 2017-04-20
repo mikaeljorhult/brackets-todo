@@ -35,6 +35,7 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Полные или частичные имена файлов, разделённые запятыми, которые должны быть исключены из поиска.',
   SETTINGS_DIALOG_SORTING_FILTERING: 'Сортировка и фильтрация',
   SETTINGS_DIALOG_SORT_DONE: 'Переместить выполненные задачи вниз списка.',
+  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
   SETTINGS_DIALOG_SAVE_FILE: 'Сохранить в .todo',
   SETTINGS_DIALOG_RESET: 'Сбросить'
 });

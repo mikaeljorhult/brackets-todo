@@ -35,6 +35,7 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Komplette oder teilweise Dateinamen, durch Komma getrennt, die von der Suche ausgeschlossen werden.',
   SETTINGS_DIALOG_SORTING_FILTERING: 'Sortierung und Filter',
   SETTINGS_DIALOG_SORT_DONE: 'Bewege abgeschlossene Aufgaben an das Ende der Liste.',
+  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
   SETTINGS_DIALOG_SAVE_FILE: 'In .todo speichern',
   SETTINGS_DIALOG_RESET: 'Zurücksetzen'
 });

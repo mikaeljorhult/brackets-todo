@@ -35,6 +35,7 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Virgül ile ayrılmış biçimde, aramaya dahil edilmeyecek dosya isimlerinin tamamı veya bir kısmı.',
   SETTINGS_DIALOG_SORTING_FILTERING: 'Sıralama ve filtreleme',
   SETTINGS_DIALOG_SORT_DONE: 'Yapılan görevleri listenin sonuna taşı.',
+  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
   SETTINGS_DIALOG_SAVE_FILE: '.todo\'ya kaydet',
   SETTINGS_DIALOG_RESET: 'Sıfırla'
 });

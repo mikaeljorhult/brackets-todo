@@ -35,6 +35,7 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Niiden tiedostojen nimet, jotka pitäisi sulkea hausta pois, kokonaan tai osittain, pilkuilla erotettuina.',
   SETTINGS_DIALOG_SORTING_FILTERING: 'Järjestely ja suodatus',
   SETTINGS_DIALOG_SORT_DONE: 'Siirrä valmiit tehtävät listan alaosaan.',
+  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
   SETTINGS_DIALOG_SAVE_FILE: 'Tallenna .todo-tiedostoon',
   SETTINGS_DIALOG_RESET: 'Tyhjennä'
 });

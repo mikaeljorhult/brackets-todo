@@ -35,6 +35,7 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Tout ou partie des noms de fichiers, séparés par des virgules, qui devraient être exclus de la recherche.',
   SETTINGS_DIALOG_SORTING_FILTERING: 'Tris et filtres',
   SETTINGS_DIALOG_SORT_DONE: 'Déplacer les tâches terminées à la fin de la liste.',
+  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
   SETTINGS_DIALOG_SAVE_FILE: 'Enregistrer le fichier .todo',
   SETTINGS_DIALOG_RESET: 'Réinitialiser'
 });
