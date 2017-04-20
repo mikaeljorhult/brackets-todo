@@ -20,6 +20,9 @@ define(function () {
     },
     sort: {
       done: true
+    },
+    hide: {
+      done: true
     }
   };
 

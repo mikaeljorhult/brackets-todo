@@ -38,6 +38,9 @@ define(function (require) {
       },
       sort: {
         done: $('#todo-settings-sort-done', $dialog).prop('checked')
+      },
+      hide: {
+        done: $('#todo-settings-hide-done', $dialog).prop('checked')
       }
     };
   }
@@ -63,6 +66,7 @@ define(function (require) {
 
     // Sorting and filtering.
     $('#todo-settings-sort-done').prop('checked', (settings.sort !== undefined && settings.sort.done !== undefined ? settings.sort.done : true));
+    $('#todo-settings-hide-done').prop('checked', (settings.hide !== undefined && settings.hide.done !== undefined ? settings.hide.done : true));
   }
 
   /**
