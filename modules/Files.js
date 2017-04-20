@@ -46,6 +46,7 @@ define(function (require) {
 
         // Get todos from file.
         file.todos = Parser.parse(data, expression, file.file.fullPath);
+        file.todos = sort(file.todos);
 
         // Move on to next file.
         result.resolve();
@@ -61,6 +62,19 @@ define(function (require) {
       // Parsing is done. Publish event.
       Events.publish('todos:updated');
     });
+  }
+
+  function sort (todos) {
+    // Sort todos if requested.
+    if (Settings.get().sort.done) {
+      return todos.sort(function (a, b) {
+        // Sort by completion status and then line number.
+        return a.done - b.done ||
+          a.line - b.line;
+      });
+    }
+
+    return todos;
   }
 
   return {
