@@ -42,9 +42,6 @@ define(function (require) {
       // Build array of tags.
       Tags.init(settings.tags, preferences);
 
-      // Initialize files.
-      Files.init(settings.search.scope);
-
       // Build regular expression.
       settings.expression = setupRegExp();
 

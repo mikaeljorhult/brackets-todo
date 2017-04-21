@@ -90,8 +90,13 @@ define(function (require) {
     return todos;
   }
 
+  Events.subscribe('settings:loaded', function () {
+    refresh();
+  });
+
   return {
     init: init,
-    get: get
+    get: get,
+    refresh: refresh
   };
 });
