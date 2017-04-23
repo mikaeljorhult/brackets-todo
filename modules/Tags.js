@@ -6,6 +6,13 @@ define(function (require) {
 
   // Variables.
   var tags = [];
+  var colors = {
+    default: '#555',
+    fixme: '#c95353',
+    future: '#5a99c3',
+    note: '#696',
+    todo: '#d95'
+  };
 
   /**
    * Initialize tags by building array of tag objects.
@@ -23,6 +30,7 @@ define(function (require) {
         key: cleanValue,
         tag: value,
         name: cleanValue,
+        color: tag.color || colors[cleanValue] || colors.default,
         count: 0,
         visible: true
       };

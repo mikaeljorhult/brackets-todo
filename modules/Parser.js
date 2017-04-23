@@ -1,5 +1,8 @@
-define(function () {
+define(function (require) {
   'use strict';
+
+  // Todo modules.
+  var TagUtils = require('modules/TagUtils');
 
   // Variables.
   var doneRegExp = /^\[x\]/i;
@@ -15,7 +18,7 @@ define(function () {
     while ((matches = expression.exec(text)) !== null) {
       // Construct basic object.
       var todo = {
-        tag: matches[1],
+        tag: TagUtils.clean(matches[1]),
         comment: matches[2],
         line: text.substr(0, matches.index).split('\n').length,
         char: matches.index - text.lastIndexOf('\n', matches.index) - 1,

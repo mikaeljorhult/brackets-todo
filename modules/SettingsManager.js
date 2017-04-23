@@ -10,7 +10,6 @@ define(function (require) {
   // Extension modules.
   var Defaults = require('modules/Defaults');
   var Events = require('modules/Events');
-  var Files = require('modules/Files');
   var Paths = require('modules/Paths');
   var SettingsDialog = require('modules/SettingsDialog');
   var Tags = require('modules/Tags');

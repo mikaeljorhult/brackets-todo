@@ -36,7 +36,12 @@ define(function (require) {
             this.props.line
           ),
           React.createElement('td', {className: 'tag'},
-            React.createElement('span', {className: this.props.tag},
+            React.createElement('span', {
+              className: this.props.tag,
+              style: {
+                backgroundColor: this.props.color
+              }
+            },
               this.props.tag
             )
           ),

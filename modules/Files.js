@@ -10,9 +10,11 @@ define(function (require) {
   var FileUtils = require('modules/FileUtils');
   var Parser = require('modules/Parser');
   var Settings = require('modules/Settings');
+  var Tags = require('modules/Tags');
 
   // Variables.
   var files = [];
+  var colors = [];
 
   function init () {
     refresh();
@@ -23,8 +25,17 @@ define(function (require) {
   }
 
   function refresh () {
+    var tags = Tags.get();
+
     ProjectManager.getAllFiles(FileUtils.filter()).done(function (filteredFiles) {
       files = filteredFiles.map(FileUtils.map);
+
+      // Cache color of tags.
+      tags.forEach(function (tag) {
+        colors[tag.key] = tag.color;
+      });
+
+      // Read files.
       read();
     });
   }
@@ -46,6 +57,7 @@ define(function (require) {
 
         // Get todos from file.
         file.todos = Parser.parse(data, expression, file.file.fullPath);
+        file.todos = color(file.todos);
         file.todos = reject(file.todos);
         file.todos = sort(file.todos);
 
@@ -63,6 +75,15 @@ define(function (require) {
       // Parsing is done. Publish event.
       Events.publish('todos:updated');
     });
+  }
+
+  function color (todos) {
+    // Set color of each todo.
+    todos.forEach(function (todo) {
+      todo.color = colors[todo.tag];
+    });
+
+    return todos;
   }
 
   function reject (todos) {
