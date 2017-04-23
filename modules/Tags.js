@@ -1,6 +1,9 @@
 define(function (require) {
   'use strict';
 
+  // Todo modules.
+  var TagUtils = require('modules/TagUtils');
+
   // Variables.
   var tags = [];
 
@@ -12,14 +15,14 @@ define(function (require) {
     tags = [];
 
     // Build an array of possible tags.
-    $.each(newTags, function (index, tag) {
+    newTags.forEach(function (tag) {
       var value = typeof tag === 'object' ? tag.name : tag;
+      var cleanValue = TagUtils.clean(value);
 
       var newTag = {
-        key: cleanTagName(value),
+        key: cleanValue,
         tag: value,
-        name: cleanTagName(value),
-        color: tag.color || undefined,
+        name: cleanValue,
         count: 0,
         visible: true
       };
@@ -32,24 +35,9 @@ define(function (require) {
   /**
    * Return array of all available tags.
    */
-  function get (property) {
-    // Return only names if requested.
-    if (typeof property === 'string') {
-      // Return array of only tags of tags array.
-      return tags.map(function (tag) {
-        return tag[property];
-      });
-    }
-
-    // Return tags as objects.
+  function get () {
+    // Return tags as array of objects.
     return tags;
-  }
-
-  /**
-   * Clean tag name for comparisons.
-   */
-  function cleanTagName (name) {
-    return name.split(':', 1)[0].replace(/[^a-zA-Z]/g, '').toLowerCase();
   }
 
   // Return global methods.
