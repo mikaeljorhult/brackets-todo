@@ -57,7 +57,6 @@ define(function (require) {
 
         // Get todos from file.
         file.todos = Parser.parse(data, expression, file.file.fullPath);
-        file.todos = color(file.todos);
         file.todos = reject(file.todos);
         file.todos = sort(file.todos);
 
@@ -72,18 +71,11 @@ define(function (require) {
         return file.todos.length > 0;
       });
 
+      process();
+
       // Parsing is done. Publish event.
       Events.publish('todos:updated');
     });
-  }
-
-  function color (todos) {
-    // Set color of each todo.
-    todos.forEach(function (todo) {
-      todo.color = colors[todo.tag];
-    });
-
-    return todos;
   }
 
   function reject (todos) {
@@ -109,6 +101,24 @@ define(function (require) {
     }
 
     return todos;
+  }
+
+  function process () {
+    var count = [];
+
+    // Count tags and set color.
+    files.forEach(function (file) {
+      file.todos.forEach(function (todo) {
+        // Set color of comment.
+        todo.color = colors[todo.tag];
+
+        // Update count of comment tag.
+        count[todo.tag] = count[todo.tag] === undefined ? 1 : count[todo.tag] + 1;
+      });
+    });
+
+    // Store count of tags with Tags module.
+    Tags.count(count);
   }
 
   Events.subscribe('settings:loaded', function () {

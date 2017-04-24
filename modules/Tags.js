@@ -48,9 +48,23 @@ define(function (require) {
     return tags;
   }
 
+  /**
+   * Set count of each tag.
+   */
+  function count (numbers) {
+    // Go through array of counted tags.
+    for (var index in numbers) {
+      // Find tag with key of counted tag.
+      tags.find(function (tag) {
+        return tag.key === index;
+      }).count = numbers[index];
+    }
+  }
+
   // Return global methods.
   return {
     init: init,
-    get: get
+    get: get,
+    count: count
   };
 });
