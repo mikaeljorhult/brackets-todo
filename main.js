@@ -176,13 +176,6 @@ define(function (require, exports, module) {
         $(this)
           .toggleClass('expanded')
           .toggleClass('collapsed');
-      })
-      .on('click', '.tags a', function () {
-        // Show or hide clicked tag.
-        $(this).toggleClass('visible');
-
-        // Update list of comments.
-        Events.publish('todos:updated');
       });
 
     // Setup listeners.

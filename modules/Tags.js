@@ -2,6 +2,7 @@ define(function (require) {
   'use strict';
 
   // Todo modules.
+  var Events = require('modules/Events');
   var TagUtils = require('modules/TagUtils');
 
   // Variables.
@@ -61,10 +62,22 @@ define(function (require) {
     }
   }
 
+  function toggle (key) {
+    var tag = tags.find(function (tag) {
+      return tag.key === key;
+    });
+
+    tag.visible = !tag.visible;
+
+    // Update list of comments.
+    Events.publish('todos:updated');
+  }
+
   // Return global methods.
   return {
     init: init,
     get: get,
-    count: count
+    count: count,
+    toggle: toggle
   };
 });
