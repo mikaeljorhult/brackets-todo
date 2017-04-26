@@ -4,6 +4,9 @@ define(function (require) {
   // Get dependencies.
   var React = brackets.getModule('thirdparty/react');
 
+  // Extension modules.
+  var Tags = require('modules/Tags');
+
   // Components.
   var Todo = require('modules/components/Todo');
 
@@ -16,8 +19,18 @@ define(function (require) {
     },
 
     render: function () {
+      // Get all visible tags.
+      var visibleTags = Tags.get().map(function (tag) {
+        if (tag.visible) {
+          return tag.name;
+        }
+      });
+
       var todoElements = function (todoItem) {
-        return React.createElement(Todo, todoItem);
+        // Only render todos with visible tags.
+        if (visibleTags.indexOf(todoItem.tag) > -1) {
+          return React.createElement(Todo, todoItem);
+        }
       };
 
       return (
