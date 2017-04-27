@@ -1,7 +1,7 @@
 define(function (require) {
   'use strict';
 
-  // Todo modules.
+  // Extension modules.
   var TagUtils = require('modules/TagUtils');
 
   // Variables.

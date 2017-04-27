@@ -5,7 +5,7 @@ define(function (require) {
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var LanguageManager = brackets.getModule('language/LanguageManager');
 
-  // Todo modules.
+  // Extension modules.
   var Paths = require('modules/Paths');
   var Settings = require('modules/Settings');
 

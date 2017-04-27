@@ -4,7 +4,7 @@ define(function () {
   // Get dependencies.
   var ProjectManager = brackets.getModule('project/ProjectManager');
 
-    // Variables.
+  // Variables.
   var projectRoot;
   var todoFile;
 

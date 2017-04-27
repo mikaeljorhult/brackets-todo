@@ -4,7 +4,7 @@ define(function (require) {
   // Extension modules.
   var Events = require('modules/Events');
 
-    // Variables.
+  // Variables.
   var settings = {};
 
   /**
