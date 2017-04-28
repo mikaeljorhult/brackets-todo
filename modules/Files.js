@@ -121,6 +121,17 @@ define(function (require) {
     Tags.count(count);
   }
 
+  function toggle (key) {
+    var file = files.find(function (file) {
+      return file.key === key;
+    });
+
+    file.expanded = !file.expanded;
+
+    // Update list of comments.
+    Events.publish('todos:updated');
+  }
+
   Events.subscribe('settings:loaded', function () {
     refresh();
   });
@@ -128,6 +139,7 @@ define(function (require) {
   return {
     init: init,
     get: get,
-    refresh: refresh
+    refresh: refresh,
+    toggle: toggle
   };
 });
