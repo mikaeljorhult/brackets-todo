@@ -2,6 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
+  var DocumentManager = brackets.getModule('document/DocumentManager');
   var FileUtils = brackets.getModule('file/FileUtils');
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var PreferencesManager = brackets.getModule('preferences/PreferencesManager');
@@ -155,6 +156,35 @@ define(function (require) {
   // Reload settings when new project is loaded.
   ProjectManager.on('projectOpen.todo', function () {
     loadSettings();
+  });
+
+  // Listeners for file changes.
+  FileSystem.on('change.todo', function (event, file) {
+    // Bail if not a file or file is outside current project root.
+    if (file === null || file.isFile !== true || file.fullPath.indexOf(Paths.projectRoot()) === -1) {
+      return false;
+    }
+
+    // Reload settings if .todo of current project was updated.
+    if (file.fullPath === Paths.todoFile()) {
+      loadSettings();
+    }
+  });
+
+  FileSystem.on('rename.todo', function (event, oldName, newName) {
+    var todoPath = Paths.todoFile();
+
+    // Reload settings if .todo of current project was updated.
+    if (newName === todoPath || oldName === todoPath) {
+      loadSettings();
+    }
+  });
+
+  DocumentManager.on('pathDeleted.todo', function (event, deletedPath) {
+    // Reload settings if .todo of current project was deleted.
+    if (deletedPath === Paths.todoFile()) {
+      loadSettings();
+    }
   });
 
   // Return global methods.

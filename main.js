@@ -82,27 +82,9 @@ define(function (require, exports, module) {
         return false;
       }
 
-      // Reload settings if .todo of current project was updated.
-      if (file.fullPath === Paths.todoFile()) {
-        SettingsManager.loadSettings();
-      } else {
-        // Get document from path and parse.
-        DocumentManager.getDocumentForPath(file.fullPath).done(function (document) {
-          // setTodos(ParseUtils.parseFile(document, todos));
-        });
-      }
-    });
-
-    FileSystem.on('rename', function (event, oldName, newName) {
-      var todoPath = Paths.todoFile();
-
-      // Reload settings if .todo of current project was updated.
-      if (newName === todoPath || oldName === todoPath) {
-        SettingsManager.loadSettings();
-      } else {
-        // If not .todo, parse all files.
-        // run();
-      }
+      DocumentManager.getDocumentForPath(file.fullPath).done(function (document) {
+        // setTodos(ParseUtils.parseFile(document, todos));
+      });
     });
 
     // Listeners bound to Brackets modules.
@@ -137,21 +119,11 @@ define(function (require, exports, module) {
             // Scroll to target.
             $todoPanel.children('.table-container').scrollTop($scrollTarget.position().top);
           }
-        } else {
-          // Empty stored todos and parse current document.
-          // setTodos(ParseUtils.parseFile(currentDocument, []));
         }
       });
 
     DocumentManager
       .on('pathDeleted.todo', function (event, deletedPath) {
-        var todoPath = Paths.todoFile();
-
-        // Reload settings if .todo of current project was deleted.
-        if (deletedPath === todoPath) {
-          SettingsManager.loadSettings();
-        }
-
         // Parse path that was deleted to remove from list.
         // setTodos(ParseUtils.removeFile(deletedPath, todos));
       });
@@ -170,12 +142,6 @@ define(function (require, exports, module) {
         NativeApp.openURLInDefaultBrowser($(this).data('href'));
 
         return false;
-      })
-      .on('click', '.file', function () {
-        // Change classes and toggle visibility of todos.
-        $(this)
-          .toggleClass('expanded')
-          .toggleClass('collapsed');
       });
 
     // Setup listeners.

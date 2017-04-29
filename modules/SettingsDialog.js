@@ -154,7 +154,10 @@ define(function (require) {
       if (validation.valid === true) {
         // Write settings to .todo as JSON.
         FileUtils.writeText(fileEntry, JSON.stringify(newSettings, null, '\t'), true).done(function () {
-          // Open newly created file.
+          // Load the saved settings.
+          require('modules/SettingsManager').loadSettings();
+
+          // Open created file.
           CommandManager.execute(Commands.FILE_OPEN, {fullPath: todoPath}).done(function () {
             // Set focus on editor.
             MainViewManager.focusActivePane();
