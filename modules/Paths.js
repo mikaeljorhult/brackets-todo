@@ -12,8 +12,6 @@ define(function () {
    * Return path to current project root.
    */
   function getProjectRoot () {
-    projectRoot = projectRoot || ProjectManager.getProjectRoot().fullPath;
-
     return projectRoot;
   }
 
@@ -21,8 +19,6 @@ define(function () {
    * Return path to .todo file in current project root.
    */
   function getTodoFile () {
-    todoFile = todoFile || getProjectRoot() + '.todo';
-
     return todoFile;
   }
 
@@ -36,6 +32,7 @@ define(function () {
   // Reload settings when new project is loaded.
   ProjectManager.on('projectOpen.todo', function () {
     projectRoot = ProjectManager.getProjectRoot().fullPath;
+    todoFile = getProjectRoot() + '.todo';
   });
 
   // Return module.
