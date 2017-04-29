@@ -121,12 +121,6 @@ define(function (require, exports, module) {
           }
         }
       });
-
-    DocumentManager
-      .on('pathDeleted.todo', function (event, deletedPath) {
-        // Parse path that was deleted to remove from list.
-        // setTodos(ParseUtils.removeFile(deletedPath, todos));
-      });
   }
 
   // Register panel and setup event listeners.

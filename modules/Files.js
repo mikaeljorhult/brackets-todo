@@ -3,6 +3,7 @@ define(function (require) {
 
   // Get dependencies.
   var Async = brackets.getModule('utils/Async');
+  var DocumentManager = brackets.getModule('document/DocumentManager');
   var ProjectManager = brackets.getModule('project/ProjectManager');
 
   // Extension modules.
@@ -132,8 +133,30 @@ define(function (require) {
     Events.publish('todos:updated');
   }
 
+  function getFileIndex (path) {
+    return files.findIndex(function (file) {
+      return file.path === path;
+    });
+  }
+
+  function deletePath (path) {
+    var index = getFileIndex(path);
+
+    // Remove from array if file contained todos.
+    if (index > -1) {
+      files.splice(index, 1);
+
+      // Update list of comments.
+      Events.publish('todos:updated');
+    }
+  }
+
   Events.subscribe('settings:loaded', function () {
     refresh();
+  });
+
+  DocumentManager.on('pathDeleted.todo', function (event, deletedPath) {
+    deletePath(deletedPath);
   });
 
   return {
