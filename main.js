@@ -16,16 +16,14 @@ define(function (require, exports, module) {
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
   var AppInit = brackets.getModule('utils/AppInit');
-  var FileSystem = brackets.getModule('filesystem/FileSystem');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
   var React = brackets.getModule('thirdparty/react');
   var ReactDOM = brackets.getModule('thirdparty/react-dom');
 
-  // Todo modules.
+  // Extension modules.
   var App = require('modules/App');
   var Events = require('modules/Events');
   var Files = require('modules/Files');
-  var Paths = require('modules/Paths');
   var Settings = require('modules/Settings');
   var SettingsManager = require('modules/SettingsManager');
   var Strings = require('modules/Strings');
@@ -73,18 +71,6 @@ define(function (require, exports, module) {
       );
 
       ReactDOM.render(rootElement, document.getElementById('brackets-todo-container'));
-    });
-
-    // Listeners for file changes.
-    FileSystem.on('change', function (event, file) {
-      // Bail if not a file or file is outside current project root.
-      if (file === null || file.isFile !== true || file.fullPath.indexOf(Paths.projectRoot()) === -1) {
-        return false;
-      }
-
-      DocumentManager.getDocumentForPath(file.fullPath).done(function (document) {
-        // setTodos(ParseUtils.parseFile(document, todos));
-      });
     });
 
     // Listeners bound to Brackets modules.
