@@ -1,5 +1,5 @@
 /*!
- * Brackets Todo 0.8.2
+ * Brackets Todo 0.9.0-beta
  * Display all todo comments in current document or project.
  *
  * @author Mikael Jorhult
