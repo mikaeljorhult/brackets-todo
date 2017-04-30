@@ -2,10 +2,13 @@ define(function (require) {
   'use strict';
 
   // Extension modules.
+  var Events = require('modules/Events');
+  var Tags = require('modules/Tags');
   var TagUtils = require('modules/TagUtils');
 
   // Variables.
   var doneRegExp = /^\[x\]/i;
+  var colors = [];
 
   /**
    * Go through text and search for matches.
@@ -28,6 +31,9 @@ define(function (require) {
       // Assign key based on file name as well as line and column numbers.
       todo.key = path + ':' + todo.line + ':' + todo.char;
 
+      // Assign key based on tag color.
+      todo.color = colors[todo.tag];
+
       // Set done status and remove it from comment text.
       todo.done = doneRegExp.test(todo.comment);
       todo.comment = todo.comment.replace(doneRegExp, '');
@@ -39,6 +45,12 @@ define(function (require) {
     // Return found comments.
     return todos;
   }
+
+  Events.subscribe('settings:loaded', function () {
+    Tags.get().forEach(function (tag) {
+      colors[tag.key] = tag.color;
+    });
+  });
 
   // Make variables accessible.
   return {

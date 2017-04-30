@@ -15,7 +15,6 @@ define(function (require) {
 
   // Variables.
   var files = [];
-  var colors = [];
 
   function init () {
     refresh();
@@ -26,15 +25,9 @@ define(function (require) {
   }
 
   function refresh () {
-    var tags = Tags.get();
-
     ProjectManager.getAllFiles(FileUtils.filter()).done(function (filteredFiles) {
       files = filteredFiles.map(FileUtils.map);
 
-      // Cache color of tags.
-      tags.forEach(function (tag) {
-        colors[tag.key] = tag.color;
-      });
 
       // Read files.
       read();
@@ -110,9 +103,6 @@ define(function (require) {
     // Count tags and set color.
     files.forEach(function (file) {
       file.todos.forEach(function (todo) {
-        // Set color of comment.
-        todo.color = colors[todo.tag];
-
         // Update count of comment tag.
         count[todo.tag] = count[todo.tag] === undefined ? 1 : count[todo.tag] + 1;
       });
