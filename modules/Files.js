@@ -134,6 +134,10 @@ define(function (require) {
     });
   }
 
+  function addPath (file) {
+    files.push(FileUtils.map(file));
+  }
+
   function updatePath (path) {
     var index = getFileIndex(path);
 
@@ -166,6 +170,10 @@ define(function (require) {
     // Bail if not a file or file is outside current project root.
     if (file === null || file.isFile !== true || file.fullPath.indexOf(Paths.projectRoot()) === -1) {
       return false;
+    }
+
+    if (getFileIndex(file.fullPath) === -1) {
+      addPath(file);
     }
 
     updatePath(file.fullPath);
