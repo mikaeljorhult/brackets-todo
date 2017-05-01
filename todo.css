@@ -161,17 +161,17 @@
 }
 
 /*--- PROJECT WIDE SEARCH ---*/
-.brackets-todo.current .icons .expand-all,
-.brackets-todo.current .icons .collapse-all,
-.brackets-todo.current .file-name {
+.brackets-todo .current .icons .expand-all,
+.brackets-todo .current .icons .collapse-all,
+.brackets-todo .current .file-name {
 	display: none;
 }
 
-.brackets-todo.current tr.file > td {
+.brackets-todo .current tr.file > td {
 	padding: 0;
 }
 
-.brackets-todo.current .todos {
+.brackets-todo .current .todos {
 	margin-top: 0;
 }
 

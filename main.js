@@ -61,7 +61,10 @@ define(function (require, exports, module) {
    */
   function registerListeners () {
     Events.subscribe('todos:updated', function () {
-      rootElement = React.createElement('div', {},
+      rootElement = React.createElement('div',
+        {
+          className: Settings.get().search.scope
+        },
         React.createElement(ToolbarComponent, {
           tags: Tags.get()
         }),

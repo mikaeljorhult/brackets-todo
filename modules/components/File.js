@@ -6,6 +6,7 @@ define(function (require) {
 
   // Extension modules.
   var Files = require('modules/Files');
+  var Settings = require('modules/Settings');
 
   // Components.
   var TodoList = require('modules/components/TodoList');
@@ -18,12 +19,16 @@ define(function (require) {
 
     render: function () {
       return (
-        React.createElement('tr', {className: 'file ' + (this.props.expanded ? 'expanded' : 'collapsed')},
+        React.createElement('tr',
+          {
+            className: 'file ' + (Settings.get().search.scope !== 'project' || this.props.expanded ? 'expanded' : 'collapsed')
+          },
           React.createElement('td', null,
-            React.createElement('div', {
-              className: 'file-name',
-              onClick: this.clickHandler
-            },
+            React.createElement('div',
+              {
+                className: 'file-name',
+                onClick: this.clickHandler
+              },
               React.createElement('span', {className: 'jstree-sprite disclosure-triangle'}),
               this.props.name
             ),
