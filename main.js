@@ -110,7 +110,7 @@ define(function (require, exports, module) {
   }
 
   // Register panel and setup event listeners.
-  AppInit.appReady(function () {
+  AppInit.htmlReady(function () {
     // Create and cache todo panel.
     WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoPanelTemplate), 100);
     $todoPanel = $('#brackets-todo');
