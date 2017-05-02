@@ -47,6 +47,22 @@ define(function (require) {
         return file.todos.length > 0;
       });
 
+      // Sort file by path.
+      files = files.sort(function (a, b) {
+        var nameA = a.name.toLowerCase();
+        var nameB = b.name.toLowerCase();
+
+        if (nameA < nameB) {
+          return -1;
+        }
+
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
       // Count used tags.
       count();
 
