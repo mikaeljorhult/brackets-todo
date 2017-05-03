@@ -14,12 +14,11 @@ define(function (require) {
    */
   function filter () {
     return function (file) {
+      var settings = Settings.get();
       var relativePath = '^' + Paths.makeRelative(file.parentPath);
       var languageID = LanguageManager.getLanguageForPath(file.fullPath).getId();
       var fileName = file.name;
       var searchString;
-      var i;
-      var length;
 
       // Don't parse files not recognized by Brackets.
       if (['unknown', 'binary', 'image'].indexOf(languageID) > -1) {
@@ -27,15 +26,15 @@ define(function (require) {
       }
 
       // Check against current open file in current search scope.
-      if (Settings.get().search.scope === 'current') {
+      if (settings.search.scope === 'current') {
         return file === MainViewManager.getCurrentlyViewedFile();
       }
 
       // Get files for parsing.
-      if (Settings.get().search.scope === 'project') {
+      if (settings.search.scope === 'project') {
         // Go through all exclude filters for folders and compare to current file path.
-        for (i = 0, length = Settings.get().search.excludeFolders.length; i < length; i++) {
-          searchString = Settings.get().search.excludeFolders[i];
+        for (let i = 0, length = settings.search.excludeFolders.length; i < length; i++) {
+          searchString = settings.search.excludeFolders[i];
 
           // If root level is indicated (by first character being a slash) replace it with ^
           // to prevent matching subdirectories.
@@ -50,8 +49,8 @@ define(function (require) {
         }
 
         // Go through all exclude filters for files and compare to current file name.
-        for (i = 0, length = Settings.get().search.excludeFiles.length; i < length; i++) {
-          searchString = Settings.get().search.excludeFiles[i];
+        for (let i = 0, length = settings.search.excludeFiles.length; i < length; i++) {
+          searchString = settings.search.excludeFiles[i];
 
           // Check for matches in filename.
           if (fileName.indexOf(searchString) > -1) {
