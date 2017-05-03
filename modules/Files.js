@@ -4,6 +4,7 @@ define(function (require) {
   // Get dependencies.
   var Async = brackets.getModule('utils/Async');
   var DocumentManager = brackets.getModule('document/DocumentManager');
+  var MainViewManager = brackets.getModule('view/MainViewManager');
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var ProjectManager = brackets.getModule('project/ProjectManager');
 
@@ -180,6 +181,12 @@ define(function (require) {
 
   Events.subscribe('settings:loaded', function () {
     refresh();
+  });
+
+  MainViewManager.on('currentFileChange.todo', function (event, file) {
+    if (Settings.get().search.scope === 'current') {
+      refresh();
+    }
   });
 
   FileSystem.on('change', function (event, file) {

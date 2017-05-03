@@ -2,8 +2,8 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var DocumentManager = brackets.getModule('document/DocumentManager');
   var LanguageManager = brackets.getModule('language/LanguageManager');
+  var MainViewManager = brackets.getModule('view/MainViewManager');
 
   // Extension modules.
   var Paths = require('modules/Paths');
@@ -24,6 +24,11 @@ define(function (require) {
       // Don't parse files not recognized by Brackets.
       if (['unknown', 'binary', 'image'].indexOf(languageID) > -1) {
         return false;
+      }
+
+      // Check against current open file in current search scope.
+      if (Settings.get().search.scope === 'current') {
+        return file === MainViewManager.getCurrentlyViewedFile();
       }
 
       // Get files for parsing.
@@ -55,9 +60,6 @@ define(function (require) {
         }
 
         return true;
-      } else if (DocumentManager.getCurrentDocument()) {
-        // Get current file if one is open.
-        return file === DocumentManager.getCurrentDocument().file;
       }
 
       return false;
