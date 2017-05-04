@@ -53,13 +53,10 @@ define(function (require) {
    * Set count of each tag.
    */
   function count (numbers) {
-    // Go through array of counted tags.
-    for (var index in numbers) {
-      // Find tag with key of counted tag.
-      tags.find(function (tag) {
-        return tag.key === index;
-      }).count = numbers[index];
-    }
+    // Go through tags and set count.
+    tags.forEach(function (tag) {
+      tag.count = numbers[tag.key] || 0;
+    });
   }
 
   function toggle (key) {
