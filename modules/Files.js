@@ -134,12 +134,14 @@ define(function (require) {
     Tags.count(count);
   }
 
-  function toggle (key) {
+  function toggle (key, expanded) {
     var file = files.find(function (file) {
       return file.key === key;
     });
 
-    file.expanded = !file.expanded;
+    if (file) {
+      file.expanded = expanded || !file.expanded;
+    }
 
     // Update list of comments.
     Events.publish('todos:updated');
@@ -186,6 +188,8 @@ define(function (require) {
   MainViewManager.on('currentFileChange.todo', function (event, file) {
     if (Settings.get().search.scope === 'current') {
       refresh();
+    } else {
+      toggle(file.fullPath, true);
     }
   });
 
