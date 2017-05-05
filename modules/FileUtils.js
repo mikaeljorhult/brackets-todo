@@ -71,6 +71,7 @@ define(function (require) {
       name: Paths.makeRelative(file.fullPath),
       path: file.fullPath,
       expanded: false,
+      autoopened: false,
       file: file
     };
   }

@@ -134,13 +134,14 @@ define(function (require) {
     Tags.count(count);
   }
 
-  function toggle (key, expanded) {
+  function toggle (key) {
     var file = files.find(function (file) {
       return file.key === key;
     });
 
     if (file) {
-      file.expanded = expanded || !file.expanded;
+      file.expanded = file.autoopened ? false : !file.expanded;
+      file.autoopened = false;
     }
 
     // Update list of comments.
@@ -189,7 +190,14 @@ define(function (require) {
     if (Settings.get().search.scope === 'current') {
       refresh();
     } else {
-      toggle(file.fullPath, true);
+      var path = file.fullPath;
+
+      files.forEach(function (file) {
+        file.autoopened = file.path === path;
+      });
+
+      // Update list of comments.
+      Events.publish('todos:updated');
     }
   });
 

@@ -3,6 +3,7 @@ define(function (require) {
 
   // Get dependencies.
   var React = brackets.getModule('thirdparty/react');
+  var ReactDOM = brackets.getModule('thirdparty/react-dom');
 
   // Extension modules.
   var Files = require('modules/Files');
@@ -13,6 +14,13 @@ define(function (require) {
 
   // Return component.
   return React.createClass({
+    componentDidUpdate: function () {
+      if (this.props.autoopened) {
+        var node = ReactDOM.findDOMNode(this);
+        node.scrollIntoView();
+      }
+    },
+
     clickHandler: function () {
       Files.toggle(this.props.path);
     },
@@ -21,7 +29,7 @@ define(function (require) {
       return (
         React.createElement('tr',
           {
-            className: 'file ' + (Settings.get().search.scope !== 'project' || this.props.expanded ? 'expanded' : 'collapsed')
+            className: 'file ' + (Settings.get().search.scope !== 'project' || this.props.autoopened || this.props.expanded ? 'expanded' : 'collapsed')
           },
           React.createElement('td', null,
             React.createElement('div',
