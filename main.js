@@ -12,8 +12,6 @@ define(function (require, exports, module) {
   var Menus = brackets.getModule('command/Menus');
   var NativeApp = brackets.getModule('utils/NativeApp');
   var CommandManager = brackets.getModule('command/CommandManager');
-  var MainViewManager = brackets.getModule('view/MainViewManager');
-  var DocumentManager = brackets.getModule('document/DocumentManager');
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
   var AppInit = brackets.getModule('utils/AppInit');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
@@ -75,41 +73,6 @@ define(function (require, exports, module) {
 
       ReactDOM.render(rootElement, document.getElementById('brackets-todo-container'));
     });
-
-    // Listeners bound to Brackets modules.
-    MainViewManager
-      .on('currentFileChange.todo', function () {
-        var currentDocument = DocumentManager.getCurrentDocument();
-        var $scrollTarget;
-
-        // Bail if no files are open or settings have not yet been loaded.
-        if (!currentDocument || Settings.get().search === undefined) {
-          return;
-        }
-
-        // No need to do anything if scope is project.
-        if (Settings.get().search.scope === 'project') {
-          // Look for current file in list.
-          $scrollTarget = $todoPanel.find('.file').filter('[data-file="' + currentDocument.file.fullPath + '"]');
-
-          // If there's a target, scroll to it.
-          if ($scrollTarget.length > 0) {
-            // Close all auto-opened files before opening another.
-            $scrollTarget.siblings('.auto-opened')
-              .trigger('click')
-              .removeClass('auto-opened');
-
-            // No need to open it if already open.
-            if (!$scrollTarget.hasClass('expanded')) {
-              $scrollTarget.trigger('click');
-              $scrollTarget.addClass('auto-opened');
-            }
-
-            // Scroll to target.
-            $todoPanel.children('.table-container').scrollTop($scrollTarget.position().top);
-          }
-        }
-      });
   }
 
   // Register panel and setup event listeners.
