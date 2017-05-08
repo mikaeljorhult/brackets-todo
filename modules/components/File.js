@@ -12,12 +12,17 @@ define(function (require) {
   // Components.
   var TodoList = require('modules/components/TodoList');
 
+  // Variables.
+  var lastScroll;
+
   // Return component.
   return React.createClass({
     componentDidUpdate: function () {
-      if (this.props.autoopened) {
+      if (this.props.autoopened && lastScroll !== this.props.path) {
         var node = ReactDOM.findDOMNode(this);
         node.scrollIntoView();
+
+        lastScroll = this.props.path;
       }
     },
 
