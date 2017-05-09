@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * Use React for rendering interface.
 * ESLint and Travis CI for linting code.
 * Swedish extension description.
+* Remove links to GitHub mentions and issues.
 
 ## 0.8.2 - 2017-04-01
 * Use Mustache module instead of deprecated global object.

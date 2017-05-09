@@ -212,15 +212,3 @@ Please note that excludes will only work with project wide search scope.
 	}
 }
 ```
-
-### GitHub mentions and issues
-
-By specifying a GitHub user and repository in your project Todo will automatically recognize and link mentions and issues on GitHub using @ and # characters.
-
-```json
-{
-	"github": {
-		"user": "mikaeljorhult",
-		"repository": "brackets-todo"
-	}
-}

@@ -10,7 +10,6 @@ define(function (require, exports, module) {
 
   // Get dependencies.
   var Menus = brackets.getModule('command/Menus');
-  var NativeApp = brackets.getModule('utils/NativeApp');
   var CommandManager = brackets.getModule('command/CommandManager');
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
   var AppInit = brackets.getModule('utils/AppInit');
@@ -35,7 +34,6 @@ define(function (require, exports, module) {
   var ToolbarComponent = require('modules/components/Toolbar');
 
   // Setup extension.
-  var $todoPanel;
   var $todoIcon = $('<a href="#" title="' + Strings.EXTENSION_NAME + '" id="brackets-todo-icon"></a>');
   var rootElement;
 
@@ -54,10 +52,9 @@ define(function (require, exports, module) {
   // Load stylesheet.
   ExtensionUtils.loadStyleSheet(module, 'todo.css');
 
-  /**
-   * Listen for save or refresh and look for todos when needed.
-   */
-  function registerListeners () {
+  // Register event handlers.
+  function registerHandlers () {
+    // Subscribe to all changes to comments.
     Events.subscribe('todos:updated', function () {
       rootElement = React.createElement('div',
         {
@@ -71,34 +68,26 @@ define(function (require, exports, module) {
         })
       );
 
+      // Render content of panel.
       ReactDOM.render(rootElement, document.getElementById('brackets-todo-container'));
     });
   }
 
   // Register panel and setup event listeners.
   AppInit.htmlReady(function () {
-    // Create and cache todo panel.
+    // Create panel.
     WorkspaceManager.createBottomPanel('mikaeljorhult.bracketsTodo.panel', $(todoPanelTemplate), 100);
-    $todoPanel = $('#brackets-todo');
 
-    // Close panel when close button is clicked.
-    $todoPanel
-      .on('click', 'a[ rel="external" ]', function () {
-        // Open link in default browser.
-        NativeApp.openURLInDefaultBrowser($(this).data('href'));
+    // Register event handlers.
+    registerHandlers();
 
-        return false;
-      });
-
-    // Setup listeners.
-    registerListeners();
-
-    // Add listener for toolbar icon..
+    // Add listener for toolbar icon.
     $todoIcon.click(function () {
+      // Toggle panel when icon is clicked.
       CommandManager.execute(App.COMMAND_ID);
     }).appendTo('#main-toolbar .buttons');
 
-    // Enable extension if loaded last time.
+    // Enable extension if enabled last time Brackets was open.
     if (SettingsManager.isExtensionEnabled()) {
       App.enable(true, true);
     }
