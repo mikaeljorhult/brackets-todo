@@ -1,7 +1,0 @@
-{
-	"search": {
-		"scope": "project",
-		"excludeFolders": [ "/vendor" ],
-		"excludeFiles": [ "exclude.css" ]
-	}
-}
