@@ -46,13 +46,16 @@ define(function (require) {
     return todos;
   }
 
+  /**
+   * Cache colors of tags when settings are loaded.
+   */
   Events.subscribe('settings:loaded', function () {
     Tags.get().forEach(function (tag) {
       colors[tag.key] = tag.color;
     });
   });
 
-  // Make variables accessible.
+  // Return module.
   return {
     parse: parse
   };

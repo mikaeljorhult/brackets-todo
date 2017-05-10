@@ -187,7 +187,7 @@ define(function (require) {
     }
   });
 
-  // Return global methods.
+  // Return module.
   return {
     // APIs about settings.
     loadSettings: loadSettings,

@@ -53,6 +53,7 @@ define(function (require) {
     enable(!enabled);
   }
 
+  // Return module.
   return {
     COMMAND_ID: COMMAND_ID,
     enable: enable,

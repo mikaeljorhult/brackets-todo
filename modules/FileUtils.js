@@ -65,6 +65,12 @@ define(function (require) {
     };
   }
 
+  /**
+   * Make object from file object.
+   *
+   * @param file
+   * @returns {Object}
+   */
   function map (file) {
     return {
       key: file.fullPath,
@@ -76,7 +82,7 @@ define(function (require) {
     };
   }
 
-  // Make variables accessible.
+  // Return module.
   return {
     filter: filter,
     map: map

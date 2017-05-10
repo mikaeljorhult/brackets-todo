@@ -19,7 +19,7 @@ define(function (require) {
     settings = newSettings;
   });
 
-  // Return global methods.
+  // Return module.
   return {
     get: get
   };

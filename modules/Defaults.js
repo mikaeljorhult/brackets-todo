@@ -6,6 +6,7 @@ define(function () {
     enabled: false,
     visible: []
   };
+
   var defaultSettings = {
     regex: {
       prefix: '(?:<!--|\\/\\*|\\/\\/|#|--) *@?(',
@@ -26,7 +27,7 @@ define(function () {
     }
   };
 
-  // Make variables accessible.
+  // Return module.
   return {
     defaultPreferences: defaultPreferences,
     defaultSettings: defaultSettings

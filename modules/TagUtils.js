@@ -3,12 +3,15 @@ define(function () {
 
   /**
    * Clean tag name.
+   *
+   * @param tag
+   * @returns {string}
    */
   function clean (tag) {
     return tag.split(':', 1)[0].replace(/[^a-zA-Z]/g, '').toLowerCase();
   }
 
-  // Make variables accessible.
+  // Return module.
   return {
     clean: clean
   };

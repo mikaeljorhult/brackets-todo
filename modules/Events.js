@@ -1,6 +1,7 @@
 define(function () {
   'use strict';
 
+  // Return module.
   return {
     cache: {},
 

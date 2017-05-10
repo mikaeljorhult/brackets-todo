@@ -7,6 +7,7 @@ define(function (require) {
 
   // Variables.
   var tags = [];
+
   var colors = {
     default: '#555',
     fixme: '#c95353',
@@ -17,6 +18,8 @@ define(function (require) {
 
   /**
    * Initialize tags by building array of tag objects.
+   *
+   * @param newTags
    */
   function init (newTags) {
     // Remove all tags before adding new ones.
@@ -59,7 +62,13 @@ define(function (require) {
     });
   }
 
+  /**
+   * Toggle visibility of tag.
+   *
+   * @param key
+   */
   function toggle (key) {
+    // Get tag from array.
     var tag = tags.find(function (tag) {
       return tag.key === key;
     });
@@ -70,7 +79,7 @@ define(function (require) {
     Events.publish('todos:updated');
   }
 
-  // Return global methods.
+  // Return module.
   return {
     init: init,
     get: get,
