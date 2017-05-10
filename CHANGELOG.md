@@ -1,7 +1,7 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.9.0 - Unreleased
+## 0.9.0 - 2017-05-10
 * Use React for rendering interface.
 * ESLint and Travis CI for linting code.
 * Swedish extension description.
