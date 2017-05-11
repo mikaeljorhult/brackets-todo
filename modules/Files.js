@@ -257,6 +257,11 @@ define(function (require) {
    * Event handler when current file is changed.
    */
   MainViewManager.on('currentFileChange.todo', function (event, file) {
+    // Bail if no file is open.
+    if (file === null) {
+      return false;
+    }
+
     // Only one file when current scope, refresh it.
     if (Settings.get().search.scope === 'current') {
       refresh();
