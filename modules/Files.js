@@ -192,6 +192,19 @@ define(function (require) {
   }
 
   /**
+   * Set all files to expanded state.
+   */
+  function expand () {
+    // Expand all files.
+    files.forEach(function (file) {
+      file.expanded = true;
+    });
+
+    // Update list of comments.
+    Events.publish('todos:updated');
+  }
+
+  /**
    * Get array index of path.
    *
    * @param path
@@ -309,6 +322,7 @@ define(function (require) {
     init: init,
     get: get,
     refresh: refresh,
-    toggle: toggle
+    toggle: toggle,
+    expand: expand
   };
 });
