@@ -5,6 +5,7 @@ define(function (require) {
   var React = brackets.getModule('thirdparty/react');
 
   // Components.
+  var CollapseIcon = require('modules/components/CollapseIcon');
   var ExpandIcon = require('modules/components/ExpandIcon');
   var SettingsIcon = require('modules/components/SettingsIcon');
 
@@ -13,6 +14,7 @@ define(function (require) {
     render: function () {
       return (
         React.createElement('div', {className: 'icons'},
+          React.createElement(CollapseIcon),
           React.createElement(ExpandIcon),
           React.createElement(SettingsIcon)
         )

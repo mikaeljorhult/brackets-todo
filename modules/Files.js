@@ -192,6 +192,19 @@ define(function (require) {
   }
 
   /**
+   * Set all files to collapsed state.
+   */
+  function collapse () {
+    // Expand all files.
+    files.forEach(function (file) {
+      file.expanded = false;
+    });
+
+    // Update list of comments.
+    Events.publish('todos:updated');
+  }
+
+  /**
    * Set all files to expanded state.
    */
   function expand () {
@@ -323,6 +336,7 @@ define(function (require) {
     get: get,
     refresh: refresh,
     toggle: toggle,
+    collapse: collapse,
     expand: expand
   };
 });
