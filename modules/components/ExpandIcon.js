@@ -6,6 +6,7 @@ define(function (require) {
 
   // Extension modules.
   var Files = require('modules/Files');
+  var Strings = require('modules/Strings');
 
   // Icons.
   var iconExpand = require('text!images/folder-open.svg');
@@ -16,6 +17,7 @@ define(function (require) {
       return (
         React.createElement('a', {
           className: 'expand',
+          title: Strings.EXPAND_ALL,
           dangerouslySetInnerHTML: {__html: iconExpand},
           onClick: function () {
             Files.expand();

@@ -6,6 +6,7 @@ define(function (require) {
 
   // Extension modules.
   var Files = require('modules/Files');
+  var Strings = require('modules/Strings');
 
   // Icons.
   var iconCollapse = require('text!images/folder.svg');
@@ -16,6 +17,7 @@ define(function (require) {
       return (
         React.createElement('a', {
           className: 'collapse',
+          title: Strings.COLLAPSE_ALL,
           dangerouslySetInnerHTML: {__html: iconCollapse},
           onClick: function () {
             Files.collapse();
