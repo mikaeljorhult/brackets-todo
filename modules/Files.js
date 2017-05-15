@@ -283,13 +283,15 @@ define(function (require) {
    * Event handler when current file is changed.
    */
   MainViewManager.on('currentFileChange.todo', function (event, file) {
-    // Bail if no file is open.
-    if (file === null) {
+    var settings = Settings.get();
+
+    // Bail if no file is open or if settings are not loaded.
+    if (file === null || settings.search === undefined) {
       return false;
     }
 
     // Only one file when current scope, refresh it.
-    if (Settings.get().search.scope === 'current') {
+    if (settings.search.scope === 'current') {
       refresh();
     } else {
       var path = file.fullPath;
