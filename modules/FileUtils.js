@@ -33,7 +33,9 @@ define(function (require) {
       // Get files for parsing.
       if (settings.search.scope === 'project') {
         // Go through all exclude filters for folders and compare to current file path.
-        for (let i = 0, length = settings.search.excludeFolders.length; i < length; i++) {
+
+		  var len = settings.search.excludeFolders.length;
+        for (i=0; i < len; i++) {
           searchString = settings.search.excludeFolders[i];
 
           // If root level is indicated (by first character being a slash) replace it with ^
@@ -49,7 +51,8 @@ define(function (require) {
         }
 
         // Go through all exclude filters for files and compare to current file name.
-        for (let i = 0, length = settings.search.excludeFiles.length; i < length; i++) {
+		  var lgth = settings.search.excludeFiles.length
+        for (i = 0; i < lgth; i++) {
           searchString = settings.search.excludeFiles[i];
 
           // Check for matches in filename.
