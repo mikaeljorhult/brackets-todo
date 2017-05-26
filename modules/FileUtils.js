@@ -34,7 +34,7 @@ define(function (require) {
       if (settings.search.scope === 'project') {
         // Go through all exclude filters for folders and compare to current file path.
 
-		  var len = settings.search.excludeFolders.length;
+	var len = settings.search.excludeFolders.length;
         for (i=0; i < len; i++) {
           searchString = settings.search.excludeFolders[i];
 
@@ -51,7 +51,7 @@ define(function (require) {
         }
 
         // Go through all exclude filters for files and compare to current file name.
-		  var lgth = settings.search.excludeFiles.length
+	var lgth = settings.search.excludeFiles.length
         for (i = 0; i < lgth; i++) {
           searchString = settings.search.excludeFiles[i];
 
