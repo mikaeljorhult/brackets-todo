@@ -177,14 +177,13 @@ define(function (require) {
    * @param key
    */
   function toggle (key) {
-    var file = files.find(function (file) {
-      return file.key === key;
-    });
-
-    // Toggle expanded state if file was found in array.
-    if (file) {
-      file.expanded = file.autoopened ? false : !file.expanded;
-      file.autoopened = false;
+    for (var i = 0, length = files.length; i < length; i++) {
+      // Toggle expanded state if file was found in array.
+      if (files[i].key === key) {
+        files[i].expanded = files[i].autoopened ? false : !files[i].expanded;
+        files[i].autoopened = false;
+        break;
+      }
     }
 
     // Update list of comments.
