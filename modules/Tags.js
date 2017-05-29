@@ -1,6 +1,9 @@
 define(function (require) {
   'use strict';
 
+  // Get dependencies.
+  var _ = brackets.getModule('thirdparty/lodash');
+
   // Todo modules.
   var Events = require('modules/Events');
   var TagUtils = require('modules/TagUtils');
@@ -69,7 +72,7 @@ define(function (require) {
    */
   function toggle (key) {
     // Get tag from array.
-    var tag = tags.find(function (tag) {
+    var tag = _.find(tags, function (tag) {
       return tag.key === key;
     });
 

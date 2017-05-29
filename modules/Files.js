@@ -2,6 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
+  var _ = brackets.getModule('thirdparty/lodash');
   var Async = brackets.getModule('utils/Async');
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var MainViewManager = brackets.getModule('view/MainViewManager');
@@ -177,7 +178,7 @@ define(function (require) {
    * @param key
    */
   function toggle (key) {
-    var file = files.find(function (file) {
+    var file = _.find(files, function (file) {
       return file.key === key;
     });
 
@@ -224,7 +225,7 @@ define(function (require) {
    * @returns {Integer}
    */
   function getFileIndex (path) {
-    return files.findIndex(function (file) {
+    return _.findIndex(files, function (file) {
       return file.path === path;
     });
   }
