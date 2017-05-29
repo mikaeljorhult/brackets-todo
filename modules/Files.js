@@ -2,6 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
+  var _ = brackets.getModule('thirdparty/lodash');
   var Async = brackets.getModule('utils/Async');
   var DocumentManager = brackets.getModule('document/DocumentManager');
   var MainViewManager = brackets.getModule('view/MainViewManager');
@@ -177,13 +178,14 @@ define(function (require) {
    * @param key
    */
   function toggle (key) {
-    for (var i = 0, length = files.length; i < length; i++) {
-      // Toggle expanded state if file was found in array.
-      if (files[i].key === key) {
-        files[i].expanded = files[i].autoopened ? false : !files[i].expanded;
-        files[i].autoopened = false;
-        break;
-      }
+    var file = _.find(files, function (file) {
+      return file.key === key;
+    });
+
+    // Toggle expanded state if file was found in array.
+    if (file) {
+      file.expanded = file.autoopened ? false : !file.expanded;
+      file.autoopened = false;
     }
 
     // Update list of comments.
@@ -223,7 +225,7 @@ define(function (require) {
    * @returns {Integer}
    */
   function getFileIndex (path) {
-    return files.findIndex(function (file) {
+    return _.findIndex(files, function (file) {
       return file.path === path;
     });
   }

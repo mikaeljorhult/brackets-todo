@@ -1,6 +1,9 @@
 define(function (require) {
   'use strict';
 
+  // Get dependencies.
+  var _ = brackets.getModule('thirdparty/lodash');
+
   // Todo modules.
   var Events = require('modules/Events');
   var TagUtils = require('modules/TagUtils');
@@ -69,13 +72,11 @@ define(function (require) {
    */
   function toggle (key) {
     // Get tag from array.
-    for (var i = 0, length = tags.length; i < length; i++) {
-      // Change visibility of tag if found in array.
-      if (tags[i].key === key) {
-        tags[i].visible = !tags[i].visible;
-        break;
-      }
-    }
+    var tag = _.find(tags, function (tag) {
+      return tag.key === key;
+    });
+
+    tag.visible = !tag.visible;
 
     // Update list of comments.
     Events.publish('todos:updated');
