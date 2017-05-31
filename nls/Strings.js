@@ -9,6 +9,7 @@ define(function (require, exports, module) {
     fr: true,
     gl: true,
     it: true,
+    pt: true,
     ru: true,
     sv: true,
     tr: true,
