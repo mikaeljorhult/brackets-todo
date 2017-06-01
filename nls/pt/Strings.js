@@ -7,7 +7,7 @@ define({
   NO: 'Não',
   OK: 'Aceitar',
   CANCEL: 'Cancelar',
-    
+
   // TOOLBAR.
   CONFIGURE: 'Configurações',
   EXPAND_ALL: 'Expandir todos',
