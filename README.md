@@ -58,6 +58,15 @@ Please note that multiline comments will not work. Todo will only return the fir
 
 `# NOTE: This is a comment as well.`
 
+In order to use [JSDoc](http://en.wikipedia.org/wiki/JSDoc) style syntax, you’ll have to create a `.todo` file in the root directory of your project with the following code:
+
+```json
+{
+	"regex": {
+		"prefix": "(?:\\/\\*|\\/\\/|#|\\*) *@?("
+	}
+}
+```
 
 ## Mark tasks as done
 
