@@ -10,7 +10,7 @@ define(function () {
   var defaultSettings = {
     regex: {
       prefix: '(?:<!--|\\/\\*|\\/\\/|#|--) *@?(',
-      suffix: '):? *(.*?) ?(?=-->|\\*/|\\n|$)'
+      suffix: '):? *(.*?) ?(?=\/\*|-->|\*\/|\r\n|\n|\r|$)'
     },
     tags: ['TODO', 'NOTE', 'FIX ?ME', 'CHANGES', 'FUTURE'],
     case: false,
