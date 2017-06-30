@@ -1,7 +1,7 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.9.4 - Unreleased
+## 0.9.4 - 2017-06-30
 * Fix issue with line endings on certain platforms. Thanks to Christopher Carswell (@ccarswell).
 * Portuguese translation. Thanks to Ndot (@Ndot).
 
