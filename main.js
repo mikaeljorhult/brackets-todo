@@ -14,8 +14,7 @@ define(function (require, exports, module) {
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
   var AppInit = brackets.getModule('utils/AppInit');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
-  var React = brackets.getModule('thirdparty/react');
-  var ReactDOM = brackets.getModule('thirdparty/react-dom');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var App = require('modules/App');
@@ -56,20 +55,20 @@ define(function (require, exports, module) {
   function registerHandlers () {
     // Subscribe to all changes to comments.
     Events.subscribe('todos:updated', function () {
-      rootElement = React.createElement('div',
+      rootElement = Preact.createElement('div',
         {
           className: Settings.get().search.scope
         },
-        React.createElement(ToolbarComponent, {
+        Preact.createElement(ToolbarComponent, {
           tags: Tags.get()
         }),
-        React.createElement(ResultsTableComponent, {
+        Preact.createElement(ResultsTableComponent, {
           files: Files.get()
         })
       );
 
       // Render content of panel.
-      ReactDOM.render(rootElement, document.getElementById('brackets-todo-container'));
+      Preact.render(rootElement, document.getElementById('brackets-todo-container'));
     });
   }
 
