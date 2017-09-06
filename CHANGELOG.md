@@ -1,6 +1,9 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.9.5 - 2017-09-06
+* Fix issue with default regular expression. Thanks to nextgensparx (@nextgensparx).
+
 ## 0.9.4 - 2017-06-30
 * Fix issue with line endings on certain platforms. Thanks to Christopher Carswell (@ccarswell).
 * Portuguese translation. Thanks to Ndot (@Ndot).
