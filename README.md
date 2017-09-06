@@ -15,15 +15,15 @@ from the repository. This allows you to try new features that might not have bee
 
 ### Install using Extension Manager
 
-1. Open the the Extension Manager from the File menu.
-2. Click the Available tab i upper left corner.
+1. Open the Extension Manager from the File menu.
+2. Click the Available tab in the upper left corner.
 3. Find Todo in list of extensions (use the search field to filter the list).
 4. Click Install.
 
 ### Install from URL
 
 1. Open the the Extension Manager from the File menu.
-2. Click on Install form URL...
+2. Click on Install from URL...
 3. Copy and paste following URL in the text field: `https://github.com/mikaeljorhult/brackets-todo`
 4. Click Install.
 
