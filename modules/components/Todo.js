@@ -6,10 +6,10 @@ define(function () {
   var Commands = brackets.getModule('command/Commands');
   var EditorManager = brackets.getModule('editor/EditorManager');
   var MainViewManager = brackets.getModule('view/MainViewManager');
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     clickHandler: function (e) {
       var todo = this;
 
@@ -28,15 +28,15 @@ define(function () {
 
     render: function () {
       return (
-        React.createElement('tr', {
+        Preact.createElement('tr', {
           className: 'comment ' + (this.props.done ? 'done' : ''),
           onClick: this.clickHandler
         },
-          React.createElement('td', {className: 'line'},
+          Preact.createElement('td', {className: 'line'},
             this.props.line
           ),
-          React.createElement('td', {className: 'tag'},
-            React.createElement('span', {
+          Preact.createElement('td', {className: 'tag'},
+            Preact.createElement('span', {
               className: this.props.tag,
               style: {
                 backgroundColor: this.props.color
@@ -45,7 +45,7 @@ define(function () {
               this.props.tag
             )
           ),
-          React.createElement('td', {className: 'message'},
+          Preact.createElement('td', {className: 'message'},
             this.props.comment
           )
         )

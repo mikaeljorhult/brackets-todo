@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Strings = require('modules/Strings');
@@ -13,16 +13,16 @@ define(function (require) {
   var TagList = require('modules/components/TagList');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('div', {className: 'toolbar simple-toolbar-layout'},
-          React.createElement('div', {className: 'title'}, Strings.EXTENSION_NAME),
-          React.createElement('div', {className: 'tools'},
-            React.createElement(TagList, {tags: this.props.tags}),
-            React.createElement(Icons)
+        Preact.createElement('div', {className: 'toolbar simple-toolbar-layout'},
+          Preact.createElement('div', {className: 'title'}, Strings.EXTENSION_NAME),
+          Preact.createElement('div', {className: 'tools'},
+            Preact.createElement(TagList, {tags: this.props.tags}),
+            Preact.createElement(Icons)
           ),
-          React.createElement(CloseButton)
+          Preact.createElement(CloseButton)
         )
       );
     }

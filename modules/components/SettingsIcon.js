@@ -6,7 +6,7 @@ define(function (require) {
   var Commands = brackets.getModule('command/Commands');
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var MainViewManager = brackets.getModule('view/MainViewManager');
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Paths = require('modules/Paths');
@@ -17,10 +17,10 @@ define(function (require) {
   var iconCog = require('text!images/cog.svg');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('a', {
+        Preact.createElement('a', {
           className: 'indicator',
           title: Strings.CONFIGURE,
           dangerouslySetInnerHTML: {__html: iconCog},

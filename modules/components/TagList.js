@@ -2,13 +2,13 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Components.
   var Tag = require('modules/components/Tag');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     getDefaultProps: function () {
       return {
         tags: []
@@ -17,11 +17,11 @@ define(function (require) {
 
     render: function () {
       var tagElements = function (tagItem) {
-        return React.createElement(Tag, tagItem);
+        return Preact.createElement(Tag, tagItem);
       };
 
       return (
-        React.createElement('div', {
+        Preact.createElement('div', {
           className: 'tags'
         },
           this.props.tags.map(tagElements)

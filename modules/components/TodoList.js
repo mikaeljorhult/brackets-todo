@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Tags = require('modules/Tags');
@@ -11,7 +11,7 @@ define(function (require) {
   var Todo = require('modules/components/Todo');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     getDefaultProps: function () {
       return {
         todos: []
@@ -29,13 +29,13 @@ define(function (require) {
       var todoElements = function (todoItem) {
         // Only render todos with visible tags.
         if (visibleTags.indexOf(todoItem.tag) > -1) {
-          return React.createElement(Todo, todoItem);
+          return Preact.createElement(Todo, todoItem);
         }
       };
 
       return (
-        React.createElement('table', {className: 'table-striped todos'},
-          React.createElement('tbody', null,
+        Preact.createElement('table', {className: 'table-striped todos'},
+          Preact.createElement('tbody', null,
             this.props.todos.map(todoElements)
           )
         )

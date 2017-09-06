@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Files = require('modules/Files');
@@ -12,10 +12,10 @@ define(function (require) {
   var iconExpand = require('text!images/folder-open.svg');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('a', {
+        Preact.createElement('a', {
           className: 'expand',
           title: Strings.EXPAND_ALL,
           dangerouslySetInnerHTML: {__html: iconExpand},

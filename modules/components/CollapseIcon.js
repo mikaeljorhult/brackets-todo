@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Files = require('modules/Files');
@@ -12,10 +12,10 @@ define(function (require) {
   var iconCollapse = require('text!images/folder.svg');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('a', {
+        Preact.createElement('a', {
           className: 'collapse',
           title: Strings.COLLAPSE_ALL,
           dangerouslySetInnerHTML: {__html: iconCollapse},

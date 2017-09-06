@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Components.
   var CollapseIcon = require('modules/components/CollapseIcon');
@@ -10,13 +10,13 @@ define(function (require) {
   var SettingsIcon = require('modules/components/SettingsIcon');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('div', {className: 'icons'},
-          React.createElement(CollapseIcon),
-          React.createElement(ExpandIcon),
-          React.createElement(SettingsIcon)
+        Preact.createElement('div', {className: 'icons'},
+          Preact.createElement(CollapseIcon),
+          Preact.createElement(ExpandIcon),
+          Preact.createElement(SettingsIcon)
         )
       );
     }

@@ -2,16 +2,16 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var App = require('modules/App');
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     render: function () {
       return (
-        React.createElement('a', {
+        Preact.createElement('a', {
           className: 'close',
           onClick: function () {
             App.enable(false);

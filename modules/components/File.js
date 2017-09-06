@@ -2,8 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var React = brackets.getModule('thirdparty/react');
-  var ReactDOM = brackets.getModule('thirdparty/react-dom');
+  var Preact = brackets.getModule('preact-compat');
 
   // Extension modules.
   var Files = require('modules/Files');
@@ -16,10 +15,10 @@ define(function (require) {
   var lastScroll;
 
   // Return component.
-  return React.createClass({
+  return Preact.createClass({
     componentDidUpdate: function () {
       if (this.props.autoopened && lastScroll !== this.props.path) {
-        var node = ReactDOM.findDOMNode(this);
+        var node = Preact.findDOMNode(this);
         node.scrollIntoView();
 
         lastScroll = this.props.path;
@@ -32,20 +31,20 @@ define(function (require) {
 
     render: function () {
       return (
-        React.createElement('tr',
+        Preact.createElement('tr',
           {
             className: 'file ' + (Settings.get().search.scope !== 'project' || this.props.autoopened || this.props.expanded ? 'expanded' : 'collapsed')
           },
-          React.createElement('td', null,
-            React.createElement('div',
+          Preact.createElement('td', null,
+            Preact.createElement('div',
               {
                 className: 'file-name',
                 onClick: this.clickHandler
               },
-              React.createElement('span', {className: 'jstree-sprite disclosure-triangle'}),
+              Preact.createElement('span', {className: 'jstree-sprite disclosure-triangle'}),
               this.props.name
             ),
-            React.createElement(TodoList, {todos: this.props.todos})
+            Preact.createElement(TodoList, {todos: this.props.todos})
           )
         )
       );
