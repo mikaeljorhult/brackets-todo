@@ -1,6 +1,11 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.0 - Unreleased
+* Require Brackets 1.11.0 so Preact is available.
+* Replace React with Preact. Thanks to Boopesh Mahendran (@boopeshmahendran).
+* Fix typos in Readme. Thanks to Boopesh Mahendran (@boopeshmahendran).
+
 ## 0.9.5 - 2017-09-06
 * Fix issue with default regular expression. Thanks to nextgensparx (@nextgensparx).
 

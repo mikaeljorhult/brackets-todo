@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "engines": {
-    "brackets": ">=1.7.0"
+    "brackets": ">=1.11.0"
   },
   "i18n": [
     "de",
