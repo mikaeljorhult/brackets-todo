@@ -2,7 +2,7 @@ define(function (require) {
   'use strict';
 
   // Get dependencies.
-  var Preact = brackets.getModule('preact-compat');
+  var Preact = brackets.getModule('thirdparty/preact');
 
   // Extension modules.
   var Strings = require('modules/Strings');

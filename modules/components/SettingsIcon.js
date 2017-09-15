@@ -6,7 +6,7 @@ define(function (require) {
   var Commands = brackets.getModule('command/Commands');
   var FileSystem = brackets.getModule('filesystem/FileSystem');
   var MainViewManager = brackets.getModule('view/MainViewManager');
-  var Preact = brackets.getModule('preact-compat');
+  var Preact = brackets.getModule('thirdparty/preact');
 
   // Extension modules.
   var Paths = require('modules/Paths');

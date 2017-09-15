@@ -6,7 +6,7 @@ define(function () {
   var Commands = brackets.getModule('command/Commands');
   var EditorManager = brackets.getModule('editor/EditorManager');
   var MainViewManager = brackets.getModule('view/MainViewManager');
-  var Preact = brackets.getModule('preact-compat');
+  var Preact = brackets.getModule('thirdparty/preact');
 
   // Return component.
   return Preact.createClass({

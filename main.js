@@ -14,7 +14,7 @@ define(function (require, exports, module) {
   var WorkspaceManager = brackets.getModule('view/WorkspaceManager');
   var AppInit = brackets.getModule('utils/AppInit');
   var ExtensionUtils = brackets.getModule('utils/ExtensionUtils');
-  var Preact = brackets.getModule('preact-compat');
+  var Preact = brackets.getModule('thirdparty/preact');
 
   // Extension modules.
   var App = require('modules/App');
