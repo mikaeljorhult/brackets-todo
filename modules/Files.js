@@ -62,7 +62,7 @@ define(function (require) {
     Async.doInParallel(singleFile || files, readFile).always(function () {
       // Remove all files that do not have todos.
       files = files.filter(function (file) {
-        return file.todos.length > 0;
+        return file.todos && file.todos.length > 0;
       });
 
       // Sort file by path.
