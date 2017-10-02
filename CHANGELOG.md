@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.9.7 - Unreleased
-* Fix issue when file dosenät have any comments. Thanks to Pete Nykänen (@petetnt).
+* Fix issue when file dosen't have any comments. Thanks to Pete Nykänen (@petetnt).
 
 ## 0.9.6 - 2017-09-27
 * Require Brackets 1.11.0 so Preact is available.
