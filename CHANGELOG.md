@@ -1,6 +1,9 @@
 # Brackets Todo Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.9.8 - Unreleased
+* Updates to Italian translation. Thanks to laughinginloud (@laughinginloud).
+
 ## 0.9.7 - 2017-10-04
 * Fix issue when file dosen't have any comments. Thanks to Pete Nykänen (@petetnt).
 
