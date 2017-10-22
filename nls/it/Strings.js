@@ -33,9 +33,9 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE: 'Completo o parte di nomi delle cartelle, separati da virgole, che devono essere esclusi dalla ricerca.',
   SETTINGS_DIALOG_EXCLUDE_FILES: 'File',
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE: 'Completo o parte di nomi di file, separati da virgole, che devono essere esclusi dalla ricerca.',
-  // SETTINGS_DIALOG_SORTING_FILTERING: 'Sorting and filtering',
-  // SETTINGS_DIALOG_SORT_DONE: 'Move done tasks to bottom of list.',
-  // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
+  SETTINGS_DIALOG_SORTING_FILTERING: 'Organizzazione e filtraggio',
+  SETTINGS_DIALOG_SORT_DONE: 'Sposta gli incarichi completati in fondo alla lista.',
+  SETTINGS_DIALOG_HIDE_DONE: 'Nascondi gli incarichi completati.',
   SETTINGS_DIALOG_SAVE_FILE: 'Salvare .todo',
   SETTINGS_DIALOG_RESET: 'Reset'
 });
