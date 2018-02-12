@@ -82,11 +82,44 @@ define(function (require) {
     Events.publish('todos:updated');
   }
 
+  /**
+   * Toggle visibility of tags, resulting in either only the given tag being visible or if it's already the only visible, all tags but given being visible.
+   *
+   * @param key
+   */
+  function toggleSolo (key) {
+    // Get tag from array.
+    var tag = _.find(tags, function (tag) {
+      return tag.key === key;
+    });
+    // Get amount of visible tags.
+    var visibleTagCount = tags.filter(function (tag) {
+      return tag.visible;
+    }).length;
+
+    // Check if given tag is the only visible.
+    if (tag.visible && visibleTagCount === 1) {
+      // Show all tags but the given.
+      tags.forEach(function (tag) {
+        tag.visible = tag.key !== key;
+      });
+    } else {
+      // Hide all tags other than the given.
+      tags.forEach(function (tag) {
+        tag.visible = tag.key === key;
+      });
+    }
+
+    // Update list of comments.
+    Events.publish('todos:updated');
+  }
+
   // Return module.
   return {
     init: init,
     get: get,
     count: count,
-    toggle: toggle
+    toggle: toggle,
+    toggleSolo: toggleSolo
   };
 });
