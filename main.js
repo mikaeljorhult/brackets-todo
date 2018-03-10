@@ -63,7 +63,7 @@ define(function (require, exports, module) {
           tags: Tags.get()
         }),
         Preact.createElement(ResultsTableComponent, {
-          files: Files.get()
+          files: Files.getVisible()
         })
       );
 

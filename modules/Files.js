@@ -38,6 +38,26 @@ define(function (require) {
   }
 
   /**
+   * Return array of visible files according to settings.
+   *
+   * @returns {Array}
+   */
+  function getVisible () {
+    var tags = Tags.get();
+    var showDone = !Settings.get().hide.done;
+
+    return files.filter(function (file) {
+      return file.todos.some(function (todo) {
+        var todoTag = tags.find(function (tag) {
+          return tag.key === todo.tag;
+        });
+
+        return (showDone || !todo.done) && todoTag.visible;
+      });
+    });
+  }
+
+  /**
    * Refresh all files in current project.
    */
   function refresh () {
@@ -337,6 +357,7 @@ define(function (require) {
   return {
     init: init,
     get: get,
+    getVisible: getVisible,
     refresh: refresh,
     toggle: toggle,
     collapse: collapse,
