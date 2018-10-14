@@ -38,6 +38,18 @@ define(function (require) {
   }
 
   /**
+   * Returns file by path or null if path is not found.
+   *
+   * @param path
+   * @returns {Object|null}
+   */
+  function getFileByPath (path) {
+    var index = getFileIndex(path);
+
+    return index === -1 ? null : files[index];
+  }
+
+  /**
    * Refresh all files in current project.
    */
   function refresh () {
@@ -337,6 +349,7 @@ define(function (require) {
   return {
     init: init,
     get: get,
+    getFileByPath: getFileByPath,
     refresh: refresh,
     toggle: toggle,
     collapse: collapse,

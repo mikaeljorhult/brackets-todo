@@ -161,6 +161,12 @@
 	padding: 0 .15em;
 }
 
+/*--- STATUS INDICATOR ---*/
+#status-todo-indicator:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 /*--- PROJECT WIDE SEARCH ---*/
 .brackets-todo .current .icons .expand-all,
 .brackets-todo .current .icons .collapse-all,
