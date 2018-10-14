@@ -15,6 +15,9 @@ define({
   SHOW_OR_HIDE: 'Показать/Скрыть',
   REFRESH: 'Обновить',
 
+  // STATUS INDICATOR.
+  // STATUS_INDICATOR_TITLE: 'Displays amount of Todos in active file. Click to show Todos for active file.',
+
   // SETTINGS DIALOG.
   SETTINGS_DIALOG_TITLE: 'Настройки Todo',
   SETTINGS_DIALOG_REGEX: 'Регулярное выражение',
@@ -36,6 +39,8 @@ define({
   SETTINGS_DIALOG_SORTING_FILTERING: 'Сортировка и фильтрация',
   SETTINGS_DIALOG_SORT_DONE: 'Переместить выполненные задачи вниз списка.',
   // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
+  // SETTINGS_DIALOG_INTERFACE: 'Interface',
+  // SETTINGS_DIALOG_SHOW_STATUS_INDICATOR: 'Show button with Todo count in active file in the status bar.',
   SETTINGS_DIALOG_SAVE_FILE: 'Сохранить в .todo',
   SETTINGS_DIALOG_RESET: 'Сбросить'
 });

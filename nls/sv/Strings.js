@@ -15,6 +15,9 @@ define({
   SHOW_OR_HIDE: 'Visa/Dölj',
   REFRESH: 'Uppdatera',
 
+  // STATUS INDICATOR.
+  // STATUS_INDICATOR_TITLE: 'Displays amount of Todos in active file. Click to show Todos for active file.',
+
   // SETTINGS DIALOG.
   SETTINGS_DIALOG_TITLE: 'Inställningar för Todo',
   SETTINGS_DIALOG_REGEX: 'Regular expression',
@@ -36,6 +39,8 @@ define({
   SETTINGS_DIALOG_SORTING_FILTERING: 'Sortering och filtrering',
   SETTINGS_DIALOG_SORT_DONE: 'Flytta slutförda uppgifter till slutet av listan.',
   SETTINGS_DIALOG_HIDE_DONE: 'Dölj slutförda uppgifter.',
+  // SETTINGS_DIALOG_INTERFACE: 'Interface',
+  // SETTINGS_DIALOG_SHOW_STATUS_INDICATOR: 'Show button with Todo count in active file in the status bar.',
   SETTINGS_DIALOG_SAVE_FILE: 'Spara till .todo',
   SETTINGS_DIALOG_RESET: 'Återställ'
 });
