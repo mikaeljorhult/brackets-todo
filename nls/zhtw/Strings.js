@@ -1,21 +1,21 @@
 define({
-  //EXTENSION.
+  // EXTENSION.
   EXTENSION_NAME:'待辦列表', 
   
-  //GENERAL.
+  // GENERAL.
   YES:'是',
   NO:'否',
   OK:'確定',
   CANCEL:'取消',
   
-  //TOOLBAR.
+  // TOOLBAR.
   CONFIGURE:'設定',
   EXPAND_ALL:'展開所有',
   COLLAPSE_ALL:'摺疊所有',
   SHOW_OR_HIDE:'顯示/隱藏',
   REFRESH:'刷新',
   
-  //SETTINGSDIALOG.
+  // SETTINGSDIALOG.
   SETTINGS_DIALOG_TITLE:'Todo設定',
   SETTINGS_DIALOG_REGEX:'正則表達式',
   SETTINGS_DIALOG_REGEX_PREFIX:'正則表達式前輟',
@@ -33,9 +33,9 @@ define({
   SETTINGS_DIALOG_EXCLUDE_FOLDERS_TITLE:'在搜索中需要排除的資料夾名，多個名字之間使用逗號分隔，可以填寫完整的資料夾名，或者只是資料夾名的一部分。',
   SETTINGS_DIALOG_EXCLUDE_FILES:'要排除的檔案',
   SETTINGS_DIALOG_EXCLUDE_FILES_TITLE:'在搜索中需要排除的檔案名，多個名字之間使用逗號分隔，可以填寫完整的檔案名，或者只是檔案名的一部分。比如.css。',
-  //SETTINGS_DIALOG_SORTING_FILTERING:'Sortingandfiltering',
-  //SETTINGS_DIALOG_SORT_DONE:'Movedonetaskstobottomoflist.',
-  //SETTINGS_DIALOG_HIDE_DONE:'Hidecompletedtasks.',
+  // SETTINGS_DIALOG_SORTING_FILTERING:'Sortingandfiltering',
+  // SETTINGS_DIALOG_SORT_DONE:'Movedonetaskstobottomoflist.',
+  // SETTINGS_DIALOG_HIDE_DONE:'Hidecompletedtasks.',
   SETTINGS_DIALOG_SAVE_FILE:'儲存到.todo',
   SETTINGS_DIALOG_RESET:'重設'
 });
