@@ -41,6 +41,9 @@ define(function (require) {
       },
       hide: {
         done: $('#todo-settings-hide-done', $dialog).prop('checked')
+      },
+      interface: {
+        showStatusIndicator: $('#todo-settings-show-status-indicator', $dialog).prop('checked')
       }
     };
   }
@@ -67,6 +70,9 @@ define(function (require) {
     // Sorting and filtering.
     $('#todo-settings-sort-done').prop('checked', (settings.sort !== undefined && settings.sort.done !== undefined ? settings.sort.done : true));
     $('#todo-settings-hide-done').prop('checked', (settings.hide !== undefined && settings.hide.done !== undefined ? settings.hide.done : true));
+
+    // Interface
+    $('#todo-settings-show-status-indicator').prop('checked', (settings.interface !== undefined && settings.interface.showStatusIndicator !== undefined ? settings.interface.showStatusIndicator : true));
   }
 
   /**

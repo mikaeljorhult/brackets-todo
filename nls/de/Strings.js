@@ -15,6 +15,9 @@ define({
   SHOW_OR_HIDE: 'Anzeigen/verstecken',
   REFRESH: 'Aktualisieren',
 
+  // STATUS INDICATOR.
+  // STATUS_INDICATOR_TITLE: 'Displays amount of Todos in active file. Click to show Todos for active file.',
+
   // SETTINGS DIALOG.
   SETTINGS_DIALOG_TITLE: 'Todo-Einstellungen',
   SETTINGS_DIALOG_REGEX: 'Regulärer Ausdruck',
@@ -36,6 +39,8 @@ define({
   SETTINGS_DIALOG_SORTING_FILTERING: 'Sortierung und Filter',
   SETTINGS_DIALOG_SORT_DONE: 'Bewege abgeschlossene Aufgaben an das Ende der Liste.',
   // SETTINGS_DIALOG_HIDE_DONE: 'Hide completed tasks.',
+  // SETTINGS_DIALOG_INTERFACE: 'Interface',
+  // SETTINGS_DIALOG_SHOW_STATUS_INDICATOR: 'Show button with Todo count in active file in the status bar.',
   SETTINGS_DIALOG_SAVE_FILE: 'In .todo speichern',
   SETTINGS_DIALOG_RESET: 'Zurücksetzen'
 });
