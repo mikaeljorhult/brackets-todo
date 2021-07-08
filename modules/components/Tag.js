@@ -10,8 +10,13 @@ define(function (require) {
 
   // Return component.
   return Preact.createClass({
-    clickHandler: function () {
-      Tags.toggle(this.props.name);
+    clickHandler: function (event) {
+      // Check if the control key is down.
+      if (event.ctrlKey) {
+        Tags.toggleSolo(this.props.name);
+      } else {
+        Tags.toggle(this.props.name);
+      }
     },
 
     render: function () {
